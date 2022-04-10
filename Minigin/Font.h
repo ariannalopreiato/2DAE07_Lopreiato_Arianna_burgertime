@@ -1,5 +1,4 @@
 #pragma once
-
 struct _TTF_Font;
 namespace dae
 {
@@ -13,6 +12,7 @@ namespace dae
 		explicit Font(const std::string& fullPath, unsigned int size);
 		~Font();
 
+		//avoid font to be moved or copied anywhere -> RAII takes care of that
 		Font(const Font &) = delete;
 		Font(Font &&) = delete;
 		Font & operator= (const Font &) = delete;

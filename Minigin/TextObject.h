@@ -1,31 +1,36 @@
 #pragma once
 #include "GameObject.h"
 #include "Transform.h"
+#include "Component.h"
 
 namespace dae
 {
 	class Font;
 	class Texture2D;
-	class TextObject final : public GameObject
+	class TextObject final : public Component
 	{
 	public:
-		void Update() override;
-		void Render() const override;
+		void Update(float elapsedSec);
+		void Render() const;
 
 		void SetText(const std::string& text);
 		void SetPosition(float x, float y);
+		void SetColor(SDL_Color color);
 
-		explicit TextObject(const std::string& text, const std::shared_ptr<Font>& font);
-		virtual ~TextObject() = default;
+		TextObject(const std::shared_ptr<GameObject>& gameObject, const std::string& text, const std::shared_ptr<Font>& font);
+		virtual Component* Clone(const std::shared_ptr<GameObject>& gameObject) override;
+
 		TextObject(const TextObject& other) = delete;
 		TextObject(TextObject&& other) = delete;
 		TextObject& operator=(const TextObject& other) = delete;
 		TextObject& operator=(TextObject&& other) = delete;
+
 	private:
 		bool m_NeedsUpdate;
 		std::string m_Text;
-		Transform m_Transform;
+		std::weak_ptr<Transform> m_Transform;
 		std::shared_ptr<Font> m_Font;
 		std::shared_ptr<Texture2D> m_TextTexture;
+		SDL_Color m_Color{ 255,255,255 };
 	};
 }

@@ -8,6 +8,8 @@
 #include "TextObject.h"
 #include "GameObject.h"
 #include "Scene.h"
+#include "FPS.h"
+#include <chrono>
 
 using namespace std;
 
@@ -54,7 +56,27 @@ void dae::Minigin::Initialize()
  */
 void dae::Minigin::LoadGame() const
 {
-	//auto& scene = SceneManager::GetInstance().CreateScene("Demo");
+	//auto& scene = SceneManager::GetInstance().CreateScene("Demo"); //create scene
+
+	//auto go = std::make_shared<GameObject>(); //create game object
+
+	////create components
+	//std::shared_ptr<Texture2D> background{ ResourceManager::GetInstance().LoadTexture("background.jpg") }; 
+	//go->AddComponent(background);
+	//std::shared_ptr<Texture2D> logo{ ResourceManager::GetInstance().LoadTexture("logo.png") };
+	//logo->SetPosition(216, 180);
+	//go->AddComponent(logo);
+	//auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+	//auto to = std::make_shared<TextObject>("Programming 4 Assignment", font);
+	//to->SetPosition(80, 20);
+	//go->AddComponent(to);
+	//std::shared_ptr<FPS> fpsCounter{std::make_shared<FPS>(MsPerFrame)};
+	//go->AddComponent(fpsCounter);
+	//auto fontFps = ResourceManager::GetInstance().LoadFont("Lingua.otf", 18);
+	//auto fpsText = std::make_shared<TextObject>(std::to_string(fpsCounter->GetFPS()) + " FPS", fontFps);
+	//fpsText->SetColor(SDL_Color{ 255, 255, 0 });
+	//go->AddComponent(fpsText);
+	//scene.Add(go);
 }
 
 void dae::Minigin::Cleanup()
@@ -81,11 +103,15 @@ void dae::Minigin::Run()
 
 		// todo: this update loop could use some work.
 		bool doContinue = true;
+		auto lastTime = chrono::high_resolution_clock::now();
 		while (doContinue)
 		{
+			const auto currentTime = chrono::high_resolution_clock::now();
+			float deltaTime = chrono::duration<float>(currentTime - lastTime).count();
 			doContinue = input.ProcessInput();
-			sceneManager.Update();
+			sceneManager.Update(deltaTime);
 			renderer.Render();
+			lastTime = currentTime;
 		}
 	}
 
