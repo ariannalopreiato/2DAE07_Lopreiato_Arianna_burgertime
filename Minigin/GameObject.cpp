@@ -3,44 +3,74 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "InputManager.h"
+#include "Transform.h"
 #include <algorithm>
 
-//------------------------------------- Rule of five ------------------------------------------------
-dae::GameObject::~GameObject()
+dae::GameObject::GameObject()
 {
-	for (size_t i = 0; i < m_Components.size(); ++i)
-	{
-		m_Components.at(i) = nullptr;
-	}
+	//transform component gets created in the constructor to ensure that the game object contains at least one of it
+	m_Transform = std::make_shared<Transform>(std::make_shared<GameObject>(*this)); 
+	m_Components.push_back(m_Transform);
 }
 
-dae::GameObject::GameObject(const GameObject& other) //copy
+//------------------------------------- Rule of five ------------------------------------------------
+//noexcept: function is not allowed to throw exceptions
+
+dae::GameObject::GameObject(const GameObject& other) noexcept //copy
 {
-	m_Children = other.m_Children;
-	m_Components = other.m_Components;
+	for (int i = 0; i < other.m_Components.size(); ++i)
+	{
+		m_Components.push_back(other.m_Components[i]->Clone(std::make_shared<GameObject>(*this)));
+	}
+	for (int i = 0; i < other.m_Children.size(); ++i)
+	{
+		m_Children.push_back(std::make_shared<GameObject>(*other.m_Children[i]));
+	}
 	m_Parent = other.m_Parent;
 }
 
-dae::GameObject::GameObject(GameObject&& other) //move
+dae::GameObject::GameObject(GameObject&& other) noexcept //move
 {
-	m_Children = std::move(other.m_Children);
 	m_Components = std::move(other.m_Components);
+	for (int i = 0; i < other.m_Components.size(); ++i)
+	{
+		m_Components[i]->SetOwner(std::make_shared<GameObject>(*this));
+	}
+	m_Children = std::move(other.m_Children);
+	for (int i = 0; i < other.m_Children.size(); ++i)
+	{
+		m_Children[i]->SetParent(std::make_shared<GameObject>(*this));
+	}
 	m_Parent = std::move(other.m_Parent);
 }
 
-dae::GameObject& dae::GameObject::operator=(const GameObject& other) //copy
+dae::GameObject& dae::GameObject::operator=(const GameObject& other) noexcept //copy
 {
-	m_Children = other.m_Children;
-	m_Components = other.m_Components;
+	for (int i = 0; i < other.m_Components.size(); ++i)
+	{
+		m_Components.push_back(other.m_Components[i]->Clone(std::make_shared<GameObject>(*this)));
+	}
+	for (int i = 0; i < other.m_Children.size(); ++i)
+	{
+		m_Children.push_back(std::make_shared<GameObject>(*other.m_Children[i]));
+	}
 	m_Parent = other.m_Parent;
 	return *this;
 }
 
-dae::GameObject& dae::GameObject::operator=(GameObject&& other) //move
+dae::GameObject& dae::GameObject::operator=(GameObject&& other) noexcept //move
 {
-	m_Children = std::move(other.m_Children);
 	m_Components = std::move(other.m_Components);
-	m_Parent = std::move(other.m_Parent);;
+	for (int i = 0; i < other.m_Components.size(); ++i)
+	{
+		m_Components[i]->SetOwner(std::make_shared<GameObject>(*this));
+	}
+	m_Children = std::move(other.m_Children);
+	for (int i = 0; i < other.m_Children.size(); ++i)
+	{
+		m_Children[i]->SetParent(std::make_shared<GameObject>(*this));
+	}
+	m_Parent = std::move(other.m_Parent);
 	return *this;
 }
 //--------------------------------------------------------------------------------------------------------
@@ -164,5 +194,10 @@ void dae::GameObject::RemoveChildAt(int index)
 void dae::GameObject::RemoveChild(const std::shared_ptr<GameObject>& child)
 {
 	m_Children.erase(std::remove(m_Children.begin(), m_Children.end(), child), m_Children.end());
+}
+
+void dae::GameObject::SetPosition(const float& x, const float& y)
+{
+	m_Transform->SetPosition(x, y, 0.0f);
 }
 //--------------------------------------------------------------------------------------------------------

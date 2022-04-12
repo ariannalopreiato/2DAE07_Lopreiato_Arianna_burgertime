@@ -5,6 +5,7 @@
 
 namespace dae
 {
+	class GameObject;
 	class TextureComponent final : public Component
 	{
 	public:
@@ -13,7 +14,7 @@ namespace dae
 		void Render() const;
 		void SetPosition(float x, float y);
 		std::shared_ptr<Texture2D> GetSDLTexture() const;
-		virtual Component* Clone(const std::shared_ptr<GameObject>& gameObject) override;
+		virtual std::shared_ptr<Component> Clone(const std::shared_ptr<GameObject>& gameObject) override;
 
 	private:
 		std::shared_ptr<Texture2D> m_Texture;

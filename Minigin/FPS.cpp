@@ -18,7 +18,7 @@ int dae::FPS::GetFPS() const
 	return m_Fps;
 }
 
-dae::Component* dae::FPS::Clone(const std::shared_ptr<GameObject>& gameObject)
+std::shared_ptr<dae::Component> dae::FPS::Clone(const std::shared_ptr<GameObject>& gameObject)
 {
-	return new FPS(m_MsPerFrame, gameObject);
+	return std::make_shared<FPS>(m_MsPerFrame, gameObject);
 }

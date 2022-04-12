@@ -12,7 +12,7 @@ void dae::Transform::SetPosition(const float x, const float y, const float z)
 	m_Position.z = z;
 }
 
-dae::Component* dae::Transform::Clone(const std::shared_ptr<GameObject>& gameObject)
+std::shared_ptr<dae::Component> dae::Transform::Clone(const std::shared_ptr<GameObject>& gameObject)
 {
-	return new Transform(gameObject);
+	return std::make_shared<Transform>(gameObject);
 }

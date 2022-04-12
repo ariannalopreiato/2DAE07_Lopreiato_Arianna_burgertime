@@ -14,7 +14,6 @@ namespace dae
 		explicit Texture2D(SDL_Texture* texture);
 		~Texture2D();
 
-		void SetPosition(const float& x, const float& y);
 		SDL_Texture* GetSDLTexture() const;
 
 		Texture2D(const Texture2D&) = delete;
@@ -24,6 +23,5 @@ namespace dae
 
 	private:
 		SDL_Texture* m_Texture;
-		glm::vec3 m_Position;
 	};
 }

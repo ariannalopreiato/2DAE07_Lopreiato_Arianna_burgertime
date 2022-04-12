@@ -7,6 +7,7 @@ namespace dae
 {
 	class Font;
 	class Texture2D;
+	class GameObject;
 	class TextObject final : public Component
 	{
 	public:
@@ -18,7 +19,7 @@ namespace dae
 		void SetColor(SDL_Color color);
 
 		TextObject(const std::shared_ptr<GameObject>& gameObject, const std::string& text, const std::shared_ptr<Font>& font);
-		virtual Component* Clone(const std::shared_ptr<GameObject>& gameObject) override;
+		virtual std::shared_ptr<Component> Clone(const std::shared_ptr<GameObject>& gameObject) override;
 
 		TextObject(const TextObject& other) = delete;
 		TextObject(TextObject&& other) = delete;

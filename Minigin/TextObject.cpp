@@ -4,12 +4,13 @@
 #include "Renderer.h"
 #include "Font.h"
 #include "Texture2D.h"
+#include "GameObject.h"
 
 dae::TextObject::TextObject(const std::shared_ptr<GameObject>& gameObject, const std::string& text, const std::shared_ptr<Font>& font)
 	: Component(gameObject)
 	, m_NeedsUpdate(true), m_Text(text), m_Font(font), m_TextTexture(nullptr)
 {
-	//m_Transform = gameObject->GetComponent<Transform>();
+	m_Transform = gameObject->GetComponent<Transform>();
 }
 
 void dae::TextObject::Update(float)
@@ -58,8 +59,8 @@ void dae::TextObject::SetColor(SDL_Color color)
 	m_Color = color;
 }
 
-dae::Component* dae::TextObject::Clone(const std::shared_ptr<dae::GameObject>& gameObject)
+std::shared_ptr<dae::Component> dae::TextObject::Clone(const std::shared_ptr<dae::GameObject>& gameObject)
 {
-	return new TextObject(gameObject, m_Text, m_Font);
+	return std::make_shared<TextObject>(gameObject, m_Text, m_Font);
 }
 
