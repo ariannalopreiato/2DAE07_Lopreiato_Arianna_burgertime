@@ -4,17 +4,10 @@
 #include "Command.h"
 #include <XInput.h>
 #include <array>
+#include "ControllerButton.h"
 
 namespace dae
 {
-	enum class ControllerButton
-	{
-		ButtonA = XINPUT_GAMEPAD_A,
-		ButtonB = XINPUT_GAMEPAD_B,
-		ButtonX = XINPUT_GAMEPAD_X,
-		ButtonY = XINPUT_GAMEPAD_Y
-	};
-
 	struct FullCommand
 	{
 		FullCommand(std::unique_ptr<Command> command, ControllerButton button)
