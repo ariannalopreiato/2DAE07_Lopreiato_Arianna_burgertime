@@ -201,10 +201,13 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="structs.h" />
     <ClInclude Include="TextObject.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="utils.h" />
+    <ClInclude Include="Vector2f.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Command.cpp" />
@@ -235,10 +238,13 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="structs.cpp" />
     <ClCompile Include="TextObject.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="utils.cpp" />
+    <ClCompile Include="Vector2f.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
