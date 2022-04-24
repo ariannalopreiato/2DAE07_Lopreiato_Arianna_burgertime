@@ -197,12 +197,18 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutputPath) 
   <ItemGroup>
     <ClCompile Include="BurgerTime.cpp" />
     <ClCompile Include="CommandManager.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Ingredient.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
+    <ClCompile Include="Plate.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommandManager.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Ingredient.h" />
     <ClInclude Include="MoveCommand.h" />
+    <ClInclude Include="Plate.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
