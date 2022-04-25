@@ -20,3 +20,10 @@ void CommandManager::SetMoveCommandsController(dae::ControllerButton buttonUp, d
 	input.AddCommandController(std::move(m_MoveLeft), buttonLeft, playerIdx);
 	input.AddCommandController(std::move(m_MoveRight), buttonRight, playerIdx);
 }
+
+void CommandManager::SetAttackCommandController(dae::ControllerButton attack)
+{
+	int playerIdx = m_Player.lock()->GetPlayerIdx();
+	auto& input = dae::InputManager::GetInstance();
+	input.AddCommandController(std::move(m_Attack), attack, playerIdx);
+}

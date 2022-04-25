@@ -22,6 +22,7 @@ public:
 	const Texture2D& GetTexture();
 	const int& GetPoints();
 	const Rectf& GetEnemyHitBox();
+	bool IsEnemyStunned();
 
 protected:
 	int m_Points;
@@ -29,5 +30,6 @@ protected:
 	EnemyType m_Type;
 	Vector2f m_Velocity{ 0.0f, 0.0f };
 	Texture2D* m_EnemyTexture;
+	bool m_IsStunned{ false };
 };
 

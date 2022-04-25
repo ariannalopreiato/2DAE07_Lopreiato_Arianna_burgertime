@@ -38,3 +38,8 @@ const Rectf& Enemy::GetEnemyHitBox()
 {
 	return m_EnemyHitBox;
 }
+
+bool Enemy::IsEnemyStunned()
+{
+	return m_IsStunned;
+}

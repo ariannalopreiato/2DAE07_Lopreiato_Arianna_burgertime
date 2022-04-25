@@ -1,7 +1,7 @@
 #pragma once
 namespace dae
 {
-	template <typename T>
+	template <typename T> //CRTP : curiously recurring template pattern 
 	class Singleton
 	{
 	public:
