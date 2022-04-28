@@ -25,7 +25,7 @@ private:
 	Point2f m_Position;
 	int m_Width{ 80 };
 	bool m_IsFalling{ false };
-	std::vector<Enemy> m_OverlappingEnemies;
+	//std::vector<Enemy> m_OverlappingEnemies;
 };
 
 

@@ -5,6 +5,7 @@ namespace dae
 {
 	class Texture2D;
 	class Font;
+	class SoundSystem;
 	class ResourceManager final : public Singleton<ResourceManager>
 	{
 	public:

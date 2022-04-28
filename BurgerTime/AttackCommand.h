@@ -12,7 +12,5 @@ public:
 	void Execute() override;
 
 private:
-	float m_X;
-	float m_Y;
 	std::weak_ptr<Player> m_Player;
 };

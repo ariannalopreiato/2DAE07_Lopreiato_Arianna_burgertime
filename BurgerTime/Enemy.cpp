@@ -24,10 +24,10 @@ bool Enemy::IsDead() const
 	return false;
 }
 
-const Texture2D& Enemy::GetTexture()
-{
-	return *m_EnemyTexture;
-}
+//const Texture2D& Enemy::GetTexture()
+//{
+//	return *m_EnemyTexture;
+//}
 
 const int& Enemy::GetPoints()
 {

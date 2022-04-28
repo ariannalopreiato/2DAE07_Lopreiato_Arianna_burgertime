@@ -34,12 +34,13 @@ void Ingredient::IngredientFall(Point2f newPosition)
     m_IsFalling = false;
 }
 
-bool Ingredient::IsOverlappedByEnemy(const Enemy& enemy)
+bool Ingredient::IsOverlappedByEnemy(const Enemy&)
 {
-    if (/*dae::utils::IsOverlapping()*/true)
-    {
-        m_OverlappingEnemies.push_back(enemy);
-        return true;
-    }
+    //if (/*dae::utils::IsOverlapping()*/false)
+    //{
+    //    m_OverlappingEnemies.push_back(enemy);
+    //    return true;
+    //}
+    //return false;
     return false;
 }

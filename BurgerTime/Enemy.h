@@ -19,7 +19,7 @@ public:
 	virtual void Render() const = 0;
 	bool DoHitTest(const Rectf& player) const;
 	bool IsDead() const;
-	const Texture2D& GetTexture();
+	//const Texture2D& GetTexture();
 	const int& GetPoints();
 	const Rectf& GetEnemyHitBox();
 	bool IsEnemyStunned();
@@ -29,7 +29,7 @@ protected:
 	Rectf m_EnemyHitBox;
 	EnemyType m_Type;
 	Vector2f m_Velocity{ 0.0f, 0.0f };
-	Texture2D* m_EnemyTexture;
+	///Texture2D* m_EnemyTexture;
 	bool m_IsStunned{ false };
 };
 

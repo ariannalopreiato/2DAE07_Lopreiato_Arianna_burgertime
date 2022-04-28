@@ -33,16 +33,16 @@
     <ClCompile Include="Ingredient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy\Enemy.cpp">
+    <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy\MrEgg.cpp">
+    <ClCompile Include="MrEgg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy\MrHotDog.cpp">
+    <ClCompile Include="MrHotDog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy\MrPickle.cpp">
+    <ClCompile Include="MrPickle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AttackCommand.cpp">
@@ -68,16 +68,16 @@
     <ClInclude Include="Ingredient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy\Enemy.h">
+    <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy\MrEgg.h">
+    <ClInclude Include="MrEgg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy\MrHotDog.h">
+    <ClInclude Include="MrHotDog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy\MrPickle.h">
+    <ClInclude Include="MrPickle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AttackCommand.h">

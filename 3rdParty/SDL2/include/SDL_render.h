@@ -147,6 +147,12 @@ typedef struct SDL_Renderer SDL_Renderer;
 struct SDL_Texture;
 typedef struct SDL_Texture SDL_Texture;
 
+/**
+ * Sound
+ */
+struct SDL_Audio;
+typedef struct SDL_Audio SDL_Audio;
+
 /* Function prototypes */
 
 /**
