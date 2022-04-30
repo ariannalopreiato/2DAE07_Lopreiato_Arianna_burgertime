@@ -2,6 +2,7 @@
 #include <vector>
 #include "Event.h"
 #include "Singleton.h"
+#include <mutex>
 
 namespace dae
 {
@@ -17,5 +18,8 @@ namespace dae
 	private:
 		std::vector<Event> m_Events;
 		std::vector<IEventListener*> m_Listeners;
+		std::mutex m_Mutex;
+		int m_NrThreads;
+		std::vector<std::jthread> m_Threads;
 	};
 }

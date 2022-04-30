@@ -8,6 +8,7 @@ namespace dae
 	class SoundSystem
 	{
 	public:
+		SoundSystem() = default;
 		SoundSystem(const SoundSystem& other) = delete;
 		SoundSystem(SoundSystem&& other) = delete;
 		SoundSystem& operator=(const SoundSystem& other) = delete;

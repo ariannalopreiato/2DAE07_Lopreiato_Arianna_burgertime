@@ -1,6 +1,5 @@
 #pragma once
 #include "SoundSystem.h"
-#include <SDL_mixer.h> //todo pimpl away
 #include "IEventListener.h"
 #include "Event.h"
 
@@ -9,6 +8,7 @@ namespace dae
 	class SDL_SoundSystem : public SoundSystem, IEventListener
 	{
 	public:
+		SDL_SoundSystem();
 		void loadMusic(const std::string& path) override;
 		void playMusic(const soundId id, const int looping) override;
 		void stopMusic() override;
@@ -20,9 +20,7 @@ namespace dae
 		~SDL_SoundSystem();
 
 	private:
-		std::unordered_map<soundId, Mix_Music*> m_MusicMap;
-		std::unordered_map<soundId, Mix_Chunk*> m_ChunkMap;
-		soundId m_MusicCounter{ 0 };
-		soundId m_ChunkCounter{ 0 };
+		class PimplImpl;
+		std::unique_ptr<PimplImpl> m_pImpl;
 	};
 }
