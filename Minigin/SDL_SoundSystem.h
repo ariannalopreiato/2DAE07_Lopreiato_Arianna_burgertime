@@ -1,10 +1,12 @@
 #pragma once
 #include "SoundSystem.h"
-#include <SDL_mixer.h>
+#include <SDL_mixer.h> //todo pimpl away
+#include "IEventListener.h"
+#include "Event.h"
 
 namespace dae
 {
-	class SDL_SoundSystem : public SoundSystem
+	class SDL_SoundSystem : public SoundSystem, IEventListener
 	{
 	public:
 		void loadMusic(const std::string& path) override;
@@ -14,6 +16,7 @@ namespace dae
 		void playSound(const soundId id) override;
 		void stopSound(const soundId id) override;
 		void stopAllSounds() override;
+		bool HandleEvent(const Event& currentEvent) override;
 		~SDL_SoundSystem();
 
 	private:

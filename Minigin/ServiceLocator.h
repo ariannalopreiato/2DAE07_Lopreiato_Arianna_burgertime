@@ -1,5 +1,6 @@
 #pragma once
 #include "SoundSystem.h"
+#include "Event.h"
 
 namespace dae
 {

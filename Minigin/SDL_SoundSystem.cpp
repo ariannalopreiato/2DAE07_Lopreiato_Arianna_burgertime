@@ -60,6 +60,23 @@ void dae::SDL_SoundSystem::stopAllSounds()
 	Mix_HaltChannel(-1);
 }
 
+bool dae::SDL_SoundSystem::HandleEvent(const Event& currentEvent)
+{
+	bool hasPlayed{ false };
+	if (currentEvent.GetName() == "PlaySound")
+	{
+		playSound(currentEvent.GetEventData<soundId>());
+		hasPlayed = true;
+	}
+	if (currentEvent.GetName() == "PlayMusic")
+	{
+		playMusic(currentEvent.GetEventData<soundId>(), 0);
+		hasPlayed = true;
+	}
+
+	return hasPlayed;
+}
+
 dae::SDL_SoundSystem::~SDL_SoundSystem()
 {
 	for (const std::pair<soundId, Mix_Music*> songs : m_MusicMap)
