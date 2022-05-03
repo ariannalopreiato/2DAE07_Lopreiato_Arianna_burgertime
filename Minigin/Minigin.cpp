@@ -60,13 +60,16 @@ void dae::Minigin::Initialize()
  */
 void dae::Minigin::LoadGame() const
 {
-	auto& scene = SceneManager::GetInstance().CreateScene("Demo"); //create scene
-	auto go = std::make_shared<GameObject>(); //create game object
+	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo"); //create scene
+	auto go = std::make_shared<dae::GameObject>(); //create game object
 
 	//create components
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
-	auto text = std::make_shared<TextObject>(go, "Player one", font);
+	auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 20);
+	auto text = std::make_shared<dae::TextObject>(go, "Press A, B, X or Y to play sound", font);
+	//auto picture = dae::ResourceManager::GetInstance().LoadTexture("PeterPepperWalk.png");
+	//auto texture = std::make_shared<dae::TextureComponent>(go, picture);
 	go->AddComponent(text);
+	//go->AddComponent(texture);
 	scene.Add(go);
 }
 

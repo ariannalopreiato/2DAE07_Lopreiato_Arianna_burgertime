@@ -11,7 +11,7 @@ private:
 	soundId m_ChunkCounter{ 0 };
 
 public:
-	void loadMusic(const std::string& path)
+	soundId loadMusic(const std::string& path)
 	{
 		auto song = Mix_LoadMUS(path.c_str());
 		if (song == nullptr)
@@ -19,7 +19,9 @@ public:
 			std::string errorMsg = "SoundStream: Failed to load " + path + ",\nSDL_mixer Error: " + Mix_GetError();
 			std::cerr << errorMsg;
 		}
-		m_MusicMap.insert(std::make_pair(m_MusicCounter++, song));
+		m_MusicMap.insert(std::make_pair(m_MusicCounter, song));
+		++m_MusicCounter;
+		return m_MusicCounter - 1;
 	}
 
 	void playMusic(const soundId id, const int looping)
@@ -38,7 +40,7 @@ public:
 		Mix_HaltMusic();
 	}
 
-	void loadSound(const std::string& path)
+	soundId loadSound(const std::string& path)
 	{
 		auto song = Mix_LoadWAV(path.c_str());
 		if (song == nullptr)
@@ -46,7 +48,9 @@ public:
 			std::string errorMsg = "SoundStream: Failed to load " + path + ",\nSDL_mixer Error: " + Mix_GetError();
 			std::cerr << errorMsg;
 		}
-		m_ChunkMap.insert(std::make_pair(m_ChunkCounter++, song));
+		m_ChunkMap.insert(std::make_pair(m_ChunkCounter, song));
+		++m_ChunkCounter;
+		return m_ChunkCounter - 1;
 	}
 
 	void playSound(const soundId id)
@@ -105,9 +109,9 @@ dae::SDL_SoundSystem::SDL_SoundSystem()
 	:m_pImpl{ std::make_unique<PimplImpl>() }
 {}
 
-void dae::SDL_SoundSystem::loadMusic(const std::string& path)
+dae::soundId dae::SDL_SoundSystem::loadMusic(const std::string& path)
 {
-	m_pImpl->loadMusic(path);
+	return m_pImpl->loadMusic(path);
 }
 
 void dae::SDL_SoundSystem::playMusic(const soundId id, const int looping)
@@ -120,9 +124,9 @@ void dae::SDL_SoundSystem::stopMusic()
 	m_pImpl->stopMusic();
 }
 
-void dae::SDL_SoundSystem::loadSound(const std::string& path)
+dae::soundId dae::SDL_SoundSystem::loadSound(const std::string& path)
 {
-	m_pImpl->loadSound(path);
+	return m_pImpl->loadSound(path);
 }
 
 void dae::SDL_SoundSystem::playSound(const soundId id)

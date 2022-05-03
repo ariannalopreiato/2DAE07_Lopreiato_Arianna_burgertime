@@ -1,9 +1,9 @@
 #pragma once
 #include "Singleton.h"
 #include <vector>
-#include "Command.h"
 #include <XInput.h>
 #include <array>
+#include "Command.h"
 #include "ControllerButton.h"
 
 namespace dae

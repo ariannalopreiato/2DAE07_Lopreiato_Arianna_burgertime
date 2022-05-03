@@ -196,11 +196,16 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutputPath) 
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AttackCommand.cpp" />
+    <ClCompile Include="AttackComponent.cpp" />
     <ClCompile Include="BurgerTime.cpp" />
+    <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="CommandManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="Ingredient.cpp" />
+    <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
+    <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="MrEgg.cpp" />
     <ClCompile Include="MrHotDog.cpp" />
     <ClCompile Include="MrPickle.cpp" />
@@ -210,10 +215,16 @@ xcopy $(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\*.dll $(OutputPath) 
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackCommand.h" />
+    <ClInclude Include="AttackComponent.h" />
+    <ClInclude Include="BurgerTime.h" />
+    <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="CommandManager.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="Ingredient.h" />
+    <ClInclude Include="InputComponent.h" />
     <ClInclude Include="MoveCommand.h" />
+    <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="MrEgg.h" />
     <ClInclude Include="MrHotDog.h" />
     <ClInclude Include="MrPickle.h" />

@@ -12,20 +12,20 @@ enum class IngredientType
 class Ingredient
 {
 public:
-	Ingredient(IngredientType type, float x, float y);
-	Ingredient(IngredientType type, Point2f position);
+	Ingredient(IngredientType type, float x, float y, float width, float height);
+	Ingredient(IngredientType type, Rectf shape);
 	const IngredientType& GetIngredientType() const;
 	bool IsFalling() const;
-	void IngredientFall(float x, float y);
-	void IngredientFall(Point2f newPosition);
+	void IngredientFall(float x, float y, const std::vector<Enemy>& enemies);
+	void IngredientFall(const Point2f& newPosition, const std::vector<Enemy>& enemies);
 	bool IsOverlappedByEnemy(const Enemy& enemy);
-
+	const Point2f GetTopLeftPos();
+	void AssignPoints(int enemyNr);
 private:
 	IngredientType m_Type;
-	Point2f m_Position;
+	Rectf m_IngredientShape;
 	int m_Width{ 80 };
 	bool m_IsFalling{ false };
-	//std::vector<Enemy> m_OverlappingEnemies;
 };
 
 

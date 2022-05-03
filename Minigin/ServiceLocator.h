@@ -6,10 +6,10 @@ namespace dae
 {
 	class NullSoundSystem final : public SoundSystem
 	{
-		void loadMusic(const std::string&) override {};
+		soundId loadMusic(const std::string&) override {};
 		void playMusic(const soundId, const int) override {};
 		void stopMusic() override {};
-		void loadSound(const std::string&) override {};
+		soundId loadSound(const std::string&) override {};
 		void playSound(const soundId) override {};
 		void stopSound(const soundId) override {};
 		void stopAllSounds() override {};

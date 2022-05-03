@@ -9,10 +9,10 @@ namespace dae
 	{
 	public:
 		SDL_SoundSystem();
-		void loadMusic(const std::string& path) override;
+		soundId loadMusic(const std::string& path) override;
 		void playMusic(const soundId id, const int looping) override;
 		void stopMusic() override;
-		void loadSound(const std::string& path) override;
+		soundId loadSound(const std::string& path) override;
 		void playSound(const soundId id) override;
 		void stopSound(const soundId id) override;
 		void stopAllSounds() override;

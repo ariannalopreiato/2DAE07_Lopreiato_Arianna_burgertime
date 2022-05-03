@@ -8,7 +8,7 @@ class AttackCommand : public dae::Command
 {
 public:
 	//pass the object to move and in which direction to move it
-	AttackCommand(const std::shared_ptr<Player>& playerObject);
+	AttackCommand();
 	void Execute() override;
 
 private:

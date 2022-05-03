@@ -3,7 +3,6 @@
 void Plate::AddIngredient(const Ingredient& ingredient)
 {
 	m_IngredientsOnPlate.push_back(ingredient);
-	//todo increase points?
 }
 
 void Plate::Reset()
