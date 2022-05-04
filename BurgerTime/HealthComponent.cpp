@@ -10,7 +10,6 @@ void HealthComponent::Update(float)
 {
 	if (m_IsDead) 
 	{
-		//todo: kill character, restart game, reload level
 		m_CurrentLives = m_StartingLives;
 		m_IsDead = false;
 	};

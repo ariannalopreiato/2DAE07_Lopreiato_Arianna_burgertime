@@ -2,13 +2,14 @@
 #include "MiniginPCH.h"
 #include <memory>
 #include "Command.h"
-#include "Vector2f.h"
+#include "PlayerComponent.h"
 
-class Player;
 class MoveCommand : public dae::Command
 {
 public:
-	//pass the object to move and in which direction to move it
-	MoveCommand();
+	MoveCommand(std::shared_ptr<PlayerComponent> player);
 	void Execute() override;
+
+private:
+	std::shared_ptr<PlayerComponent> m_Player;
 };

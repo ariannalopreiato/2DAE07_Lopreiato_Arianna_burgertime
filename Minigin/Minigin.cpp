@@ -1,6 +1,7 @@
 #include "MiniginPCH.h"
 #include "Minigin.h"
 #include <thread>
+#include <SDL_mixer.h>
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "Renderer.h"
@@ -51,6 +52,10 @@ void dae::Minigin::Initialize()
 	{
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
+
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+		std::cout << "Error: " << Mix_GetError() << std::endl;
 
 	Renderer::GetInstance().Init(m_Window);
 }

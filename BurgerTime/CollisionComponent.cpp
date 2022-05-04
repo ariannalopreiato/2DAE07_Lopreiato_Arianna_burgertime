@@ -6,11 +6,6 @@ CollisionComponent::CollisionComponent(std::shared_ptr<dae::GameObject> gameObje
 	, m_Shape(shape)
 {}
 
-void CollisionComponent::Update(float)
-{
-
-}
-
 bool CollisionComponent::IsOverlapping(const Rectf& other) const
 {
 	return dae::utils::IsOverlapping(other, m_Shape);

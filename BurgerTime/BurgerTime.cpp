@@ -1,21 +1,26 @@
+#include <windows.h>
 #include <iostream>
+#include <chrono>
+#include <thread>
 #include "BurgerTime.h"
 #include "Minigin.h"
 #include "MoveCommand.h"
-#include "CommandManager.h"
 #include "ControllerButton.h"
 #include "SoundSystem.h"
 #include "ServiceLocator.h"
 #include "SDL_SoundSystem.h"
-#include <SDL_mixer.h>  
 #include "SceneManager.h"
 #include "GameObject.h"
 #include "TextObject.h"
 #include "Scene.h"
-#include <chrono>
-#include <thread>
 #include "InputManager.h"
 #include "Renderer.h"
+#include "PlayerComponent.h"
+#include "HealthComponent.h"
+#include "PointComponent.h"
+#include "CollisionComponent.h"
+#include "InputComponent.h"
+#include "AttackCommand.h"
 
 int main(int, char* []) {
 
@@ -27,12 +32,22 @@ int main(int, char* []) {
     dae::Minigin engine;
     engine.Initialize();
 
-    //commandManagerOne.SetMoveCommandsController(dae::ControllerButton::ButtonY, dae::ControllerButton::ButtonA, dae::ControllerButton::ButtonX, dae::ControllerButton::ButtonB);
+    auto pPlayerOne = std::make_shared<dae::GameObject>();
+    auto pPlayerComponentOne = std::make_shared<PlayerComponent>(pPlayerOne, 5);
+    auto pHealthComponentOne = std::make_shared<HealthComponent>(pPlayerOne, 3);
+    auto pPointComponentOne = std::make_shared<PointComponent>(pPlayerOne, 0);
+    auto pCollisionComponentOne = std::make_shared<CollisionComponent>(pPlayerOne, Rectf{ 0,0,20,20 });
+    auto pInputComponentOne = std::make_shared<InputComponent>(pPlayerOne, 0);
+    auto attack = std::make_unique<AttackCommand>(pPlayerComponentOne);
+    pInputComponentOne->AddCommand(std::move(attack), dae::ControllerButton::ButtonA);
+    auto moveRight = std::make_unique<MoveCommand>(pPlayerComponentOne);
+    pInputComponentOne->AddCommand(std::move(moveRight), dae::ControllerButton::ButtonB);
+    pPlayerOne->AddComponent(pPlayerComponentOne);
+    pPlayerOne->AddComponent(pHealthComponentOne);
+    pPlayerOne->AddComponent(pPointComponentOne);
+    pPlayerOne->AddComponent(pCollisionComponentOne);
+    pPlayerOne->AddComponent(pInputComponentOne);
 
-
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-        std::cout << "Error: " << Mix_GetError() << std::endl;
 
     dae::SoundSystem* soundSystem = new dae::SDL_SoundSystem();
     dae::ServiceLocator::RegisterSoundSystem(soundSystem);

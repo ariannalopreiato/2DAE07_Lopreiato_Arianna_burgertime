@@ -2,15 +2,14 @@
 #include "MiniginPCH.h"
 #include <memory>
 #include "Command.h"
+#include "PlayerComponent.h"
 
-class Player;
 class AttackCommand : public dae::Command
 {
 public:
-	//pass the object to move and in which direction to move it
-	AttackCommand();
+	AttackCommand(std::shared_ptr<PlayerComponent> player);
 	void Execute() override;
 
 private:
-	std::weak_ptr<Player> m_Player;
+	std::shared_ptr<PlayerComponent> m_Player;
 };
