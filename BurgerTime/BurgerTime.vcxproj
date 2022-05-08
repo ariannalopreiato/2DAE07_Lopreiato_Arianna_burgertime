@@ -201,35 +201,34 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
   <ItemGroup>
     <ClCompile Include="AttackCommand.cpp" />
     <ClCompile Include="BurgerTime.cpp" />
-    <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="Ingredient.cpp" />
-    <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
-    <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="MrEgg.cpp" />
     <ClCompile Include="MrHotDog.cpp" />
     <ClCompile Include="MrPickle.cpp" />
     <ClCompile Include="Plate.cpp" />
+    <ClCompile Include="PlayerAttackComponent.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
+    <ClCompile Include="PlayerMovementComponent.cpp" />
     <ClCompile Include="PointComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackCommand.h" />
     <ClInclude Include="BurgerTime.h" />
-    <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="Ingredient.h" />
-    <ClInclude Include="InputComponent.h" />
     <ClInclude Include="MoveCommand.h" />
-    <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="MrEgg.h" />
     <ClInclude Include="MrHotDog.h" />
     <ClInclude Include="MrPickle.h" />
     <ClInclude Include="Plate.h" />
+    <ClInclude Include="PlayerAttackComponent.h" />
     <ClInclude Include="PlayerComponent.h" />
+    <ClInclude Include="PlayerMovementComponent.h" />
+    <ClInclude Include="PlayerState.h" />
     <ClInclude Include="PointComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

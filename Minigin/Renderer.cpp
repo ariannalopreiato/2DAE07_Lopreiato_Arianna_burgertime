@@ -57,12 +57,30 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
 
-void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height) const
+void dae::Renderer::RenderTexture(Texture2D& texture, const Rectf& source, const Rectf& dest, SDL_RendererFlip flip)
 {
 	SDL_Rect dst{};
-	dst.x = static_cast<int>(x);
-	dst.y = static_cast<int>(y);
-	dst.w = static_cast<int>(width);
-	dst.h = static_cast<int>(height);
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
+	texture.m_Width = float(dst.w);
+	texture.m_Height = float(dst.h);
+	dst.x = static_cast<int>(dest.left);
+	dst.y = static_cast<int>(dest.bottom);
+	dst.w = static_cast<int>(dest.width);
+	dst.h = static_cast<int>(dest.height);
+
+	SDL_Rect src{};
+	src.x = static_cast<int>(source.left);
+	src.y = static_cast<int>(source.bottom);
+	src.w = static_cast<int>(source.width);
+	src.h = static_cast<int>(source.height);
+
+
+
+
+	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst, 0, nullptr, flip);
+	//SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst);
 }
+//dest -> where
+//source -> which part of sprite sheet
+//sdl_rendercopyex -> flipping image
+//render texture pass the source and dest rect

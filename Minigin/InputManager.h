@@ -10,11 +10,12 @@ namespace dae
 {
 	struct FullCommand
 	{
-		FullCommand(std::unique_ptr<Command> command, ControllerButton button)
-			:m_Command(std::move(command)), m_Button(button) {}
+		FullCommand(std::unique_ptr<Command> command, ControllerButton button, bool executeOnPress)
+			:m_Command(std::move(command)), m_Button(button), m_ExecutePress(executeOnPress) {}
 
 		std::unique_ptr<Command> m_Command;
 		ControllerButton m_Button;
+		bool m_ExecutePress;
 	};
 
 	class InputManager final : public Singleton<InputManager>
@@ -26,7 +27,7 @@ namespace dae
 		bool IsReleased(ControllerButton button, int playerIdx = 0) const;
 		//bool IsPressed(SDL_KeyCode key) const;
 		//bool IsReleased(SDL_KeyCode key) const;
-		void AddCommandController(std::unique_ptr<Command> command, ControllerButton button, int playerIdx = 0);
+		void AddCommandController(std::unique_ptr<Command> command, ControllerButton button, bool executeOnPress, int playerIdx = 0);
 		//void SetCommandKeyboard(Command*& command, SDL_KeyCode key);
 
 	private:

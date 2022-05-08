@@ -44,10 +44,18 @@ bool dae::InputManager::ProcessInput()
 
 	for (int j = 0; j < m_NrOfPlayers; ++j)
 	{
-		for (int k = 0; k < m_ControllerCommands[j].size(); ++k)
+		for (size_t k = 0; k < m_ControllerCommands[j].size(); ++k)
 		{
-			if (IsPressed(m_ControllerCommands[j][k]->m_Button, j))
-				m_ControllerCommands[j][k]->m_Command->Execute();
+			if (m_ControllerCommands[j][k]->m_ExecutePress)
+			{
+				if (IsPressed(m_ControllerCommands[j][k]->m_Button, j))
+					m_ControllerCommands[j][k]->m_Command->Execute();
+			}
+			else
+			{
+				if (IsReleased(m_ControllerCommands[j][k]->m_Button, j))
+					m_ControllerCommands[j][k]->m_Command->Execute();
+			}
 		}
 	}
 	return isRunning;
@@ -56,7 +64,7 @@ bool dae::InputManager::ProcessInput()
 bool dae::InputManager::IsPressed(ControllerButton button, int playerIdx) const
 {
 	//if current state is pressed and previous state is released
-	return ((m_CurrentStates[playerIdx].Gamepad.wButtons & (unsigned)button) != 0 && (m_PreviousStates[playerIdx].Gamepad.wButtons & (unsigned)button) == 0);
+	return ((m_CurrentStates[playerIdx].Gamepad.wButtons & (unsigned)button) != 0);
 }
 
 bool dae::InputManager::IsReleased(ControllerButton button, int playerIdx) const
@@ -75,10 +83,9 @@ bool dae::InputManager::IsReleased(ControllerButton button, int playerIdx) const
 //	return ((m_CurrentState.Gamepad.wButtons & (unsigned)key) == 0 && (m_PreviousState.Gamepad.wButtons & (unsigned)key) != 0);
 //}
 
-void dae::InputManager::AddCommandController(std::unique_ptr<Command> command, ControllerButton button, int playerIdx)
+void dae::InputManager::AddCommandController(std::unique_ptr<Command> command, ControllerButton button, bool executeOnPress, int playerIdx)
 {
 	//push_back copies by default, emplace_back creates object at the back -> unique ptr cannot be copied
 	//but compiler is smart enough to use the move overload of push_back
-	m_ControllerCommands[playerIdx].push_back(std::make_unique<FullCommand>(std::move(command), button));
+	m_ControllerCommands[playerIdx].push_back(std::make_unique<FullCommand>(std::move(command), button, executeOnPress));
 }
-

@@ -4,9 +4,9 @@
 
 void dae::EventQueue::Update()
 {
-	for (int i = 0; i < m_Events.size(); ++i)
+	for (size_t i = 0; i < m_Events.size(); ++i)
 	{
-		for (int j = 0; j < m_Listeners.size(); ++j)
+		for (size_t j = 0; j < m_Listeners.size(); ++j)
 		{
 			if (m_Listeners[j]->HandleEvent(m_Events[i]))
 				m_Events[i].m_IsExecuted = true;

@@ -18,11 +18,11 @@ dae::GameObject::GameObject()
 
 dae::GameObject::GameObject(const GameObject& other) noexcept //copy
 {
-	for (int i = 0; i < other.m_Components.size(); ++i)
+	for (size_t i = 0; i < other.m_Components.size(); ++i)
 	{
 		m_Components.push_back(other.m_Components[i]->Clone(std::make_shared<GameObject>(*this)));
 	}
-	for (int i = 0; i < other.m_Children.size(); ++i)
+	for (size_t i = 0; i < other.m_Children.size(); ++i)
 	{
 		m_Children.push_back(std::make_shared<GameObject>(*other.m_Children[i]));
 	}
@@ -32,12 +32,12 @@ dae::GameObject::GameObject(const GameObject& other) noexcept //copy
 dae::GameObject::GameObject(GameObject&& other) noexcept //move
 {
 	m_Components = std::move(other.m_Components);
-	for (int i = 0; i < other.m_Components.size(); ++i)
+	for (size_t i = 0; i < other.m_Components.size(); ++i)
 	{
 		m_Components[i]->SetOwner(std::make_shared<GameObject>(*this));
 	}
 	m_Children = std::move(other.m_Children);
-	for (int i = 0; i < other.m_Children.size(); ++i)
+	for (size_t i = 0; i < other.m_Children.size(); ++i)
 	{
 		m_Children[i]->SetParent(std::make_shared<GameObject>(*this));
 	}
@@ -46,11 +46,11 @@ dae::GameObject::GameObject(GameObject&& other) noexcept //move
 
 dae::GameObject& dae::GameObject::operator=(const GameObject& other) noexcept //copy
 {
-	for (int i = 0; i < other.m_Components.size(); ++i)
+	for (size_t i = 0; i < other.m_Components.size(); ++i)
 	{
 		m_Components.push_back(other.m_Components[i]->Clone(std::make_shared<GameObject>(*this)));
 	}
-	for (int i = 0; i < other.m_Children.size(); ++i)
+	for (size_t i = 0; i < other.m_Children.size(); ++i)
 	{
 		m_Children.push_back(std::make_shared<GameObject>(*other.m_Children[i]));
 	}
@@ -61,12 +61,12 @@ dae::GameObject& dae::GameObject::operator=(const GameObject& other) noexcept //
 dae::GameObject& dae::GameObject::operator=(GameObject&& other) noexcept //move
 {
 	m_Components = std::move(other.m_Components);
-	for (int i = 0; i < other.m_Components.size(); ++i)
+	for (size_t i = 0; i < other.m_Components.size(); ++i)
 	{
 		m_Components[i]->SetOwner(std::make_shared<GameObject>(*this));
 	}
 	m_Children = std::move(other.m_Children);
-	for (int i = 0; i < other.m_Children.size(); ++i)
+	for (size_t i = 0; i < other.m_Children.size(); ++i)
 	{
 		m_Children[i]->SetParent(std::make_shared<GameObject>(*this));
 	}

@@ -1,12 +1,10 @@
 #include "Ingredient.h"
+#include "GameObject.h"
+#include "CollisionComponent.h"
 
-Ingredient::Ingredient(IngredientType type, float x, float y, float width, float height)
-    :Ingredient(type, Rectf{x, y, width, height})
-{}
-
-Ingredient::Ingredient(IngredientType type, Rectf shape)
-    : m_Type(type)
-    , m_IngredientShape(shape)
+Ingredient::Ingredient(const std::shared_ptr<dae::GameObject>& gameObject, IngredientType type)
+    : Component(gameObject)
+    , m_Type(type)
 {}
 
 const IngredientType& Ingredient::GetIngredientType() const
@@ -28,38 +26,30 @@ void Ingredient::IngredientFall(const Point2f& newPosition, const std::vector<En
 {
     m_IsFalling = true;
     int enemyOverlap{ 0 };
-
-    for (int i = 0; i < enemies.size(); ++i)
+    auto collision = m_GameObject.lock()->GetComponent<dae::CollisionComponent>();
+    for (size_t i = 0; i < enemies.size(); ++i)
     {
-        if (IsOverlappedByEnemy(enemies[i]))
+        if (collision->IsOverlapping(Rectf{})) //todo pass enemy
             ++enemyOverlap;
     }
 
-    AssignPoints(enemyOverlap);
-
-    while (newPosition.y != m_IngredientShape.bottom)
+    auto shape = collision->m_Shape;
+    while (newPosition.y != shape.bottom)
     {
-        --m_IngredientShape.bottom;
+        --shape.bottom;
+        collision->m_Shape = shape;
     }
     m_IsFalling = false;
-}
 
-bool Ingredient::IsOverlappedByEnemy(const Enemy&)
-{
-    //if (/*dae::utils::IsOverlapping()*/false)
-    //{
-    //    m_OverlappingEnemies.push_back(enemy);
-    //    return true;
-    //}
-    //return false;
-    return false;
-}
-
-const Point2f Ingredient::GetTopLeftPos()
-{
-    return Point2f{ m_IngredientShape.left, m_IngredientShape.bottom + m_IngredientShape.height };
+    AssignPoints(enemyOverlap);
 }
 
 void Ingredient::AssignPoints(int)
 {
+
+}
+
+std::shared_ptr<dae::Component> Ingredient::Clone(const std::shared_ptr<dae::GameObject>& gameObject)
+{
+    return std::make_shared<Ingredient>(gameObject, m_Type);
 }
