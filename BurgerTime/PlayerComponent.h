@@ -4,6 +4,7 @@
 #include "Vector2f.h"
 #include "Command.h"
 #include "ControllerButton.h"
+#include "KeyboardButton.h"
 #include "PlayerState.h"
 #include "CollisionComponent.h"
 #include "TextureComponent.h"
@@ -18,6 +19,7 @@ public:
 	PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObject, int playerIdx);
 	void Update(float elapsedSec);
 	void AddCommand(std::unique_ptr<dae::Command> command, dae::ControllerButton button, bool executeOnPress, int playerIdx);
+	void AddCommand(std::unique_ptr<dae::Command> command, dae::KeyboardButton key, bool executeOnPress, int playerIdx);
 	void Move(PlayerDirection direction);
 	void Attack();
 	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;

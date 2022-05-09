@@ -21,13 +21,15 @@ bool dae::InputManager::ProcessInput()
 {
 	for (int i = 0; i < m_NrOfPlayers; ++i)
 	{
-		ZeroMemory(&m_PreviousStates[i], sizeof(XINPUT_STATE));
-		m_PreviousStates[i] = m_CurrentStates[i];
-		XInputGetState(i, &m_CurrentStates[i]);
-		auto buttonChanges = m_CurrentStates[i].Gamepad.wButtons ^ m_PreviousStates[i].Gamepad.wButtons;
-		m_ButtonsPressedThisFrame[i] = buttonChanges & m_CurrentStates[i].Gamepad.wButtons;
-		m_ButtonsReleasedThisFrame[i] = buttonChanges & (~m_CurrentStates[i].Gamepad.wButtons);
+		ZeroMemory(&m_PreviousStatesController[i], sizeof(XINPUT_STATE));
+		m_PreviousStatesController[i] = m_CurrentStatesController[i];
+		XInputGetState(i, &m_CurrentStatesController[i]);
+		auto buttonChanges = m_CurrentStatesController[i].Gamepad.wButtons ^ m_PreviousStatesController[i].Gamepad.wButtons;
+		m_ButtonsPressedThisFrame[i] = buttonChanges & m_CurrentStatesController[i].Gamepad.wButtons;
+		m_ButtonsReleasedThisFrame[i] = buttonChanges & (~m_CurrentStatesController[i].Gamepad.wButtons);
 	}
+
+	m_PreviousStatesKey = m_CurrentStatesKey;
 
 	SDL_Event e;
 	bool isRunning{ true };
@@ -35,26 +37,47 @@ bool dae::InputManager::ProcessInput()
 		if (e.type == SDL_QUIT) {
 			isRunning = false;
 		}
-		//if (e.type == SDL_KEYDOWN) {
-		//	
-		//}
-		//if (e.type == SDL_MOUSEBUTTONDOWN) {
+		if (e.type == SDL_KEYDOWN) 
+		{
+			m_CurrentStatesKey[e.key.keysym.sym] = true;
+			break;
+		}
+		if (e.type == SDL_KEYUP)
+		{
+			m_CurrentStatesKey[e.key.keysym.sym] = false;
+			break;
+		}
+		//if (e.type == SDL_MOUSEBUTTONDOWN) 
+		//{
 		//}
 	}
 
-	for (int j = 0; j < m_NrOfPlayers; ++j)
+	for (int player = 0; player < m_NrOfPlayers; ++player)
 	{
-		for (size_t k = 0; k < m_ControllerCommands[j].size(); ++k)
+		for (size_t controller = 0; controller < m_ControllerCommands[player].size(); ++controller)
 		{
-			if (m_ControllerCommands[j][k]->m_ExecutePress)
+			if (m_ControllerCommands[player][controller]->m_ExecutePress)
 			{
-				if (IsPressed(m_ControllerCommands[j][k]->m_Button, j))
-					m_ControllerCommands[j][k]->m_Command->Execute();
+				if (IsPressed(m_ControllerCommands[player][controller]->m_Button, player))
+					m_ControllerCommands[player][controller]->m_Command->Execute();
 			}
 			else
 			{
-				if (IsReleased(m_ControllerCommands[j][k]->m_Button, j))
-					m_ControllerCommands[j][k]->m_Command->Execute();
+				if (IsReleased(m_ControllerCommands[player][controller]->m_Button, player))
+					m_ControllerCommands[player][controller]->m_Command->Execute();
+			}
+		}
+		for (size_t key = 0; key < m_KeyboardCommands[player].size(); ++key)
+		{
+			if (m_KeyboardCommands[player][key]->m_ExecutePress)
+			{
+				if(IsPressed(m_KeyboardCommands[player][key]->m_Key, player))
+					m_KeyboardCommands[player][key]->m_Command->Execute();
+			}
+			else
+			{
+				if (IsReleased(m_KeyboardCommands[player][key]->m_Key, player))
+					m_KeyboardCommands[player][key]->m_Command->Execute();
 			}
 		}
 	}
@@ -64,28 +87,34 @@ bool dae::InputManager::ProcessInput()
 bool dae::InputManager::IsPressed(ControllerButton button, int playerIdx) const
 {
 	//if current state is pressed and previous state is released
-	return ((m_CurrentStates[playerIdx].Gamepad.wButtons & (unsigned)button) != 0);
+	return ((m_CurrentStatesController[playerIdx].Gamepad.wButtons & (unsigned)button) != 0);
 }
 
 bool dae::InputManager::IsReleased(ControllerButton button, int playerIdx) const
 {
 	//if current state is released and previous state is pressed
-	return ((m_CurrentStates[playerIdx].Gamepad.wButtons & (unsigned)button) == 0 && (m_PreviousStates[playerIdx].Gamepad.wButtons & (unsigned)button) != 0);
+	return ((m_CurrentStatesController[playerIdx].Gamepad.wButtons & (unsigned)button) == 0 && (m_PreviousStatesController[playerIdx].Gamepad.wButtons & (unsigned)button) != 0);
 }
 
-//bool dae::InputManager::IsPressed(SDL_KeyCode key) const
-//{
-//	return ((m_CurrentState.Gamepad.wButtons & (unsigned)key) != 0 && (m_PreviousState.Gamepad.wButtons & (unsigned)key) == 0);
-//}
-//
-//bool dae::InputManager::IsReleased(SDL_KeyCode key) const
-//{
-//	return ((m_CurrentState.Gamepad.wButtons & (unsigned)key) == 0 && (m_PreviousState.Gamepad.wButtons & (unsigned)key) != 0);
-//}
+bool dae::InputManager::IsPressed(KeyboardButton key, int) const
+{
+	return (m_CurrentStatesKey[int(key)]);
+}
+
+bool dae::InputManager::IsReleased(KeyboardButton key, int) const
+{
+	//return (SDL_GetKeyboardState() == SDL_RELEASED);
+	return (!m_CurrentStatesKey[int(key)] && m_PreviousStatesKey[int(key)]);
+}
 
 void dae::InputManager::AddCommandController(std::unique_ptr<Command> command, ControllerButton button, bool executeOnPress, int playerIdx)
 {
 	//push_back copies by default, emplace_back creates object at the back -> unique ptr cannot be copied
 	//but compiler is smart enough to use the move overload of push_back
-	m_ControllerCommands[playerIdx].push_back(std::make_unique<FullCommand>(std::move(command), button, executeOnPress));
+	m_ControllerCommands[playerIdx].push_back(std::make_unique<FullCommandController>(std::move(command), button, executeOnPress));
+}
+
+void dae::InputManager::AddCommandKeyboard(std::unique_ptr<Command> command, KeyboardButton key, bool executeOnPress, int playerIdx)
+{
+	m_KeyboardCommands[playerIdx].push_back(std::make_unique<FullCommandKeyboard>(std::move(command), key, executeOnPress));
 }

@@ -6,6 +6,7 @@
 #include "Minigin.h"
 #include "MoveCommand.h"
 #include "ControllerButton.h"
+#include "KeyboardButton.h"
 #include "SoundSystem.h"
 #include "ServiceLocator.h"
 #include "SDL_SoundSystem.h"
@@ -52,10 +53,10 @@ int main(int, char* []) {
     auto moveDown = std::make_unique<MoveCommand>(pPlayerComponentOne, PlayerDirection::down);
     auto moveLeft = std::make_unique<MoveCommand>(pPlayerComponentOne, PlayerDirection::left);
     pPlayerComponentOne->AddCommand(std::move(attack), dae::ControllerButton::ButtonA, false, 0);
-    pPlayerComponentOne->AddCommand(std::move(moveRight), dae::ControllerButton::ButtonRight, true, 0);
-    pPlayerComponentOne->AddCommand(std::move(moveDown), dae::ControllerButton::ButtonDown, true, 0);
-    pPlayerComponentOne->AddCommand(std::move(moveLeft), dae::ControllerButton::ButtonLeft, true, 0);
-    pPlayerComponentOne->AddCommand(std::move(moveUp), dae::ControllerButton::ButtonUp, true, 0);
+    pPlayerComponentOne->AddCommand(std::move(moveRight), dae::KeyboardButton::SDLK_d, true, 0);
+    pPlayerComponentOne->AddCommand(std::move(moveDown), dae::KeyboardButton::SDLK_s, true, 0);
+    pPlayerComponentOne->AddCommand(std::move(moveLeft), dae::KeyboardButton::SDLK_a, true, 0);
+    pPlayerComponentOne->AddCommand(std::move(moveUp), dae::KeyboardButton::SDLK_w, true, 0);
 
     auto picture = dae::ResourceManager::GetInstance().LoadTexture("../Data/Sprites/PeterPepper.png");
     auto pTextureComponentOne = std::make_shared<dae::TextureComponent>(pPlayerOne, picture);

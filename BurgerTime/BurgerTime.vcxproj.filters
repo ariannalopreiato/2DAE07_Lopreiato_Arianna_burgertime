@@ -28,9 +28,6 @@
     <Filter Include="Components\Player">
       <UniqueIdentifier>{e200132b-c875-4d18-9927-605162785c58}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components\Enemy">
-      <UniqueIdentifier>{ceef1932-41cd-4725-b3f6-5693dd3387ac}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BurgerTime.cpp">
@@ -51,15 +48,6 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="MrEgg.cpp">
-      <Filter>Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="MrHotDog.cpp">
-      <Filter>Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="MrPickle.cpp">
-      <Filter>Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="PointComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -74,6 +62,9 @@
     </ClCompile>
     <ClCompile Include="Ingredient.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,15 +86,6 @@
     <ClInclude Include="Enemy.h">
       <Filter>Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="MrEgg.h">
-      <Filter>Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="MrHotDog.h">
-      <Filter>Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="MrPickle.h">
-      <Filter>Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="PointComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -121,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="Ingredient.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>Enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

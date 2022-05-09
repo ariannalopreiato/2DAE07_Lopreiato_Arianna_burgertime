@@ -28,6 +28,12 @@ void PlayerComponent::AddCommand(std::unique_ptr<dae::Command> command, dae::Con
 	inputManager.AddCommandController(std::move(command), button, executeOnPress, playerIdx);
 }
 
+void PlayerComponent::AddCommand(std::unique_ptr<dae::Command> command, dae::KeyboardButton key, bool executeOnPress, int playerIdx)
+{
+	auto& inputManager = dae::InputManager::GetInstance();
+	inputManager.AddCommandKeyboard(std::move(command), key, executeOnPress, playerIdx);
+}
+
 void PlayerComponent::Move(PlayerDirection direction)
 {
 	m_PlayerState = PlayerState::walking;

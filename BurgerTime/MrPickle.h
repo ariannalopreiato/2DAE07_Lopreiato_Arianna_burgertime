@@ -1,9 +1,10 @@
 #pragma once
 #include "Enemy.h"
+#include "Component.h"
 
-class MrPickle : public Enemy
+class MrPickle : public Enemy, dae::Component
 {
 public:
-	MrPickle(Rectf enemy);
+	MrPickle(const std::shared_ptr<dae::GameObject>& gameObject);
 };
 

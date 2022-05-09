@@ -1,5 +1,6 @@
 #include "MrPickle.h"
 
-MrPickle::MrPickle(Rectf enemy)
-	:Enemy(EnemyType::MrPickle, enemy)
+MrPickle::MrPickle(const std::shared_ptr<dae::GameObject>& gameObject)
+	:Enemy(gameObject)
+	, Component(gameObject)
 {}

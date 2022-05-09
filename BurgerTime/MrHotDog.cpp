@@ -1,5 +1,6 @@
 #include "MrHotDog.h"
 
-MrHotDog::MrHotDog(Rectf enemy)
-	:Enemy(EnemyType::MrHotDog, enemy)
+MrHotDog::MrHotDog(const std::shared_ptr<dae::GameObject>& gameObject)
+	:Enemy(gameObject)
+	, Component(gameObject)
 {}

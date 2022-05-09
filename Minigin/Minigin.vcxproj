@@ -224,6 +224,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="IEventListener.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="KeyboardButton.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="MiniginPCH.h" />
     <ClInclude Include="Observer.h" />

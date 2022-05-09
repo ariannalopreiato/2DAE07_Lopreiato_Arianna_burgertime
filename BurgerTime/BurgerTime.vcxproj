@@ -202,12 +202,10 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClCompile Include="AttackCommand.cpp" />
     <ClCompile Include="BurgerTime.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="Ingredient.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
-    <ClCompile Include="MrEgg.cpp" />
-    <ClCompile Include="MrHotDog.cpp" />
-    <ClCompile Include="MrPickle.cpp" />
     <ClCompile Include="Plate.cpp" />
     <ClCompile Include="PlayerAttackComponent.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
@@ -218,12 +216,10 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClInclude Include="AttackCommand.h" />
     <ClInclude Include="BurgerTime.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="Ingredient.h" />
     <ClInclude Include="MoveCommand.h" />
-    <ClInclude Include="MrEgg.h" />
-    <ClInclude Include="MrHotDog.h" />
-    <ClInclude Include="MrPickle.h" />
     <ClInclude Include="Plate.h" />
     <ClInclude Include="PlayerAttackComponent.h" />
     <ClInclude Include="PlayerComponent.h" />
