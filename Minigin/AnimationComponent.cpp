@@ -16,6 +16,7 @@ void dae::AnimationComponent::Update(float elapsedSec)
 {
 	if (m_Texture.lock() == nullptr)
 		m_Texture = m_GameObject.lock()->GetComponent<dae::TextureComponent>();
+
 	if (m_CanAnimate)
 	{
 		m_AnimationTime += elapsedSec * m_Fps;

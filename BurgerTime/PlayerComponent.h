@@ -12,6 +12,7 @@
 #include "PlayerMovementComponent.h"
 #include "PlayerAttackComponent.h"
 #include "MoveCommand.h"
+#include "PointComponent.h"
 
 class PlayerComponent : public dae::Component
 {
@@ -21,18 +22,34 @@ public:
 	void AddCommand(std::unique_ptr<dae::Command> command, dae::ControllerButton button, bool executeOnPress, int playerIdx);
 	void AddCommand(std::unique_ptr<dae::Command> command, dae::KeyboardButton key, bool executeOnPress, int playerIdx);
 	void Move(PlayerDirection direction);
+	void SetIsNextToStair(bool isNextToStair);
 	void Attack();
 	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 
 private:
+	//Player info
 	int m_PlayerIdx{ 0 };
+	float m_PlayerSize{ 30.f };
 	Vector2f m_Velocity{};
+
+	//Handle animation
 	bool m_IsImageFlipped{ false };
+	bool m_IsNextToStairs{ false };
+	const int m_StartingColHorizontal{ 3 };
+	const int m_StartingColUp{ 6 };
+	const int m_StartingColDown{ 0 };
+	int m_CurrentCol{ 0 };
+
+	//Players state
 	PlayerState m_PlayerState{ PlayerState::idle };
+	PlayerDirection m_PlayerDirection{ PlayerDirection::down };
+
+	//Collisions
 	std::weak_ptr<dae::CollisionComponent> m_Collision;
 	std::weak_ptr<PlayerMovementComponent> m_Movement;
 	std::weak_ptr<PlayerAttackComponent> m_Attack;
 	std::weak_ptr<dae::TextureComponent> m_Texture;
 	std::weak_ptr<dae::AnimationComponent> m_Animation;
+	std::weak_ptr<PointComponent> m_Points;
 };
 

@@ -15,7 +15,7 @@ namespace dae
 		virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 		void SetNewStartingCol(int startCol);
 		void SetNewStartingRow(int startRow);
-		bool m_CanAnimate{ true };
+		bool m_CanAnimate{ false };
 
 	private:
 		float m_AnimationTime{ 0 };

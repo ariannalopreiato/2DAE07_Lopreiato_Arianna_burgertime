@@ -2,9 +2,8 @@
 #include "CollisionComponent.h"
 #include "utils.h"
 
-dae::CollisionComponent::CollisionComponent(std::shared_ptr<dae::GameObject> gameObject, Rectf shape)
+dae::CollisionComponent::CollisionComponent(std::shared_ptr<dae::GameObject> gameObject)
 	:Component(gameObject)
-	, m_Shape(shape)
 {}
 
 bool dae::CollisionComponent::IsOverlapping(const Rectf& other) const
@@ -14,5 +13,5 @@ bool dae::CollisionComponent::IsOverlapping(const Rectf& other) const
 
 std::shared_ptr<dae::Component> dae::CollisionComponent::Clone(const std::shared_ptr<dae::GameObject>& gameObject)
 {
-	return std::make_shared<CollisionComponent>(gameObject, m_Shape);
+	return std::make_shared<CollisionComponent>(gameObject);
 }

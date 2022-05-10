@@ -25,6 +25,3 @@ private:
 	IngredientType m_Type;
 	bool m_IsFalling{ false };
 };
-
-
-

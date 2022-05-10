@@ -45,7 +45,7 @@ int main(int, char* []) {
 
     auto pPointComponentOne = std::make_shared<PointComponent>(pPlayerOne, 0);
 
-    auto pCollisionComponentOne = std::make_shared<dae::CollisionComponent>(pPlayerOne, Rectf{ 0,0,200,200 });
+    auto pCollisionComponentOne = std::make_shared<dae::CollisionComponent>(pPlayerOne);
 
     auto attack = std::make_unique<AttackCommand>(pPlayerComponentOne);
     auto moveRight = std::make_unique<MoveCommand>(pPlayerComponentOne, PlayerDirection::right);
@@ -63,7 +63,7 @@ int main(int, char* []) {
 
     auto pAnimationComponentOne = std::make_shared<dae::AnimationComponent>(pPlayerOne, 3, 6, 9, 1);
 
-    auto pMovementComponentOne = std::make_shared<PlayerMovementComponent>(pPlayerOne, 40.0f);
+    auto pMovementComponentOne = std::make_shared<PlayerMovementComponent>(pPlayerOne, 50.0f);
 
     auto pAttackComponentOne = std::make_shared<PlayerAttackComponent>(pPlayerOne, 5);
 
