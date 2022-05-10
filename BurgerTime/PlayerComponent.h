@@ -5,7 +5,6 @@
 #include "Command.h"
 #include "ControllerButton.h"
 #include "KeyboardButton.h"
-#include "PlayerState.h"
 #include "CollisionComponent.h"
 #include "TextureComponent.h"
 #include "AnimationComponent.h"
@@ -13,6 +12,12 @@
 #include "PlayerAttackComponent.h"
 #include "MoveCommand.h"
 #include "PointComponent.h"
+#include "HealthComponent.h"
+
+enum class PlayerState
+{
+	idle, walking, attacking, climbing
+};
 
 class PlayerComponent : public dae::Component
 {
@@ -51,5 +56,6 @@ private:
 	std::weak_ptr<dae::TextureComponent> m_Texture;
 	std::weak_ptr<dae::AnimationComponent> m_Animation;
 	std::weak_ptr<PointComponent> m_Points;
+	std::weak_ptr<HealthComponent> m_Health;
 };
 

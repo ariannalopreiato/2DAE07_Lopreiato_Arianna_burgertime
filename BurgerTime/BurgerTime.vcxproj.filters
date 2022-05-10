@@ -22,9 +22,6 @@
     <Filter Include="Enemies">
       <UniqueIdentifier>{d0ac6559-fbc3-4925-a824-443d08cf584b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="State">
-      <UniqueIdentifier>{0d841417-3e08-4c17-8b7a-8ae4a4ed937d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Components\Player">
       <UniqueIdentifier>{e200132b-c875-4d18-9927-605162785c58}</UniqueIdentifier>
     </Filter>
@@ -45,9 +42,6 @@
     <ClCompile Include="HealthComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="PointComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -64,6 +58,9 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="EnemyManager.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyComponent.cpp">
       <Filter>Enemies</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,9 +80,6 @@
     <ClInclude Include="HealthComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="PointComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -98,13 +92,13 @@
     <ClInclude Include="PlayerAttackComponent.h">
       <Filter>Components\Player</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerState.h">
-      <Filter>State</Filter>
-    </ClInclude>
     <ClInclude Include="Ingredient.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="EnemyManager.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyComponent.h">
       <Filter>Enemies</Filter>
     </ClInclude>
   </ItemGroup>

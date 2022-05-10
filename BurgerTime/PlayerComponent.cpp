@@ -16,6 +16,9 @@ void PlayerComponent::Update(float)
 	if (m_Movement.lock() == nullptr)
 		m_Movement = m_GameObject.lock()->GetComponent<PlayerMovementComponent>();
 
+	if (m_Health.lock() == nullptr)
+		m_Health = m_GameObject.lock()->GetComponent<HealthComponent>();
+
 	if (m_Collision.lock() == nullptr)
 	{
 		m_Collision = m_GameObject.lock()->GetComponent<dae::CollisionComponent>();

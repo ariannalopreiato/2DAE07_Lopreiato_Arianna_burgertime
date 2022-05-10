@@ -38,6 +38,7 @@ int main(int, char* []) {
     engine.Initialize();
     auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
+    //player one initialization
     auto pPlayerOne = std::make_shared<dae::GameObject>();
     auto pPlayerComponentOne = std::make_shared<PlayerComponent>(pPlayerOne, 5);
 

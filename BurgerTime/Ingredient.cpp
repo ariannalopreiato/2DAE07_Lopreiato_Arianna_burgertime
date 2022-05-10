@@ -17,12 +17,12 @@ bool Ingredient::IsFalling() const
     return m_IsFalling;
 }
 
-void Ingredient::IngredientFall(float x, float y, const std::vector<Enemy>& enemies)
+void Ingredient::IngredientFall(float x, float y, const std::vector<EnemyComponent>& enemies)
 {
     IngredientFall(Point2f{ x, y }, enemies);
 }
 
-void Ingredient::IngredientFall(const Point2f& newPosition, const std::vector<Enemy>& enemies)
+void Ingredient::IngredientFall(const Point2f& newPosition, const std::vector<EnemyComponent>& enemies)
 {
     m_IsFalling = true;
     int enemyOverlap{ 0 };

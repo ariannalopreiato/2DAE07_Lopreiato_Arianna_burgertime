@@ -201,7 +201,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
   <ItemGroup>
     <ClCompile Include="AttackCommand.cpp" />
     <ClCompile Include="BurgerTime.cpp" />
-    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyComponent.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="Ingredient.cpp" />
@@ -215,7 +215,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
   <ItemGroup>
     <ClInclude Include="AttackCommand.h" />
     <ClInclude Include="BurgerTime.h" />
-    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyComponent.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="Ingredient.h" />
@@ -224,7 +224,6 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClInclude Include="PlayerAttackComponent.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PlayerMovementComponent.h" />
-    <ClInclude Include="PlayerState.h" />
     <ClInclude Include="PointComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
