@@ -6,7 +6,10 @@
 PlayerComponent::PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObject, int playerIdx)
 	:Component(gameObject)
 	, m_PlayerIdx(playerIdx)
-{}
+{
+	m_Transform = m_GameObject.lock()->GetComponent<dae::Transform>();
+	m_Transform.lock()->SetSize(m_PlayerSize, m_PlayerSize, 0.0f);
+}
 
 void PlayerComponent::Update(float)
 {
@@ -20,16 +23,11 @@ void PlayerComponent::Update(float)
 		m_Health = m_GameObject.lock()->GetComponent<HealthComponent>();
 
 	if (m_Collision.lock() == nullptr)
-	{
 		m_Collision = m_GameObject.lock()->GetComponent<dae::CollisionComponent>();
-		m_Collision.lock()->m_Shape.height = m_PlayerSize;
-		m_Collision.lock()->m_Shape.width = m_PlayerSize;
-	}
+
 	if (m_Animation.lock() == nullptr)
-	{
 		m_Animation = m_GameObject.lock()->GetComponent<dae::AnimationComponent>();
-		m_Texture.lock()->SetDestinationSize(m_PlayerSize, m_PlayerSize);
-	}
+
 
 	Rectf source = m_Animation.lock()->GetSource();
 	m_Texture.lock()->SetSource(source);
@@ -102,10 +100,7 @@ void PlayerComponent::Update(float)
 		break;
 	}
 
-	Rectf shape = m_Collision.lock()->m_Shape; //get current collision box
-	shape = m_Movement.lock()->Move(shape, m_Velocity); //move the player
-	m_Collision.lock()->m_Shape = shape; //set the new position of the collision box
-	m_Texture.lock()->SetPosition(shape.left, shape.bottom); //pass the new position to the texture to move it
+	m_Movement.lock()->SetVelocity(m_Velocity);
 	m_PlayerState = PlayerState::idle;
 }
 

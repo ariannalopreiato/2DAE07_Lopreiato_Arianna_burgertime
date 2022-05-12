@@ -34,7 +34,7 @@ public:
 private:
 	//Player info
 	int m_PlayerIdx{ 0 };
-	float m_PlayerSize{ 30.f };
+	const float m_PlayerSize{ 30.f };
 	Vector2f m_Velocity{};
 
 	//Handle animation
@@ -49,7 +49,7 @@ private:
 	PlayerState m_PlayerState{ PlayerState::idle };
 	PlayerDirection m_PlayerDirection{ PlayerDirection::down };
 
-	//Collisions
+	//Components
 	std::weak_ptr<dae::CollisionComponent> m_Collision;
 	std::weak_ptr<PlayerMovementComponent> m_Movement;
 	std::weak_ptr<PlayerAttackComponent> m_Attack;
@@ -57,5 +57,6 @@ private:
 	std::weak_ptr<dae::AnimationComponent> m_Animation;
 	std::weak_ptr<PointComponent> m_Points;
 	std::weak_ptr<HealthComponent> m_Health;
+	std::weak_ptr<dae::Transform> m_Transform;
 };
 

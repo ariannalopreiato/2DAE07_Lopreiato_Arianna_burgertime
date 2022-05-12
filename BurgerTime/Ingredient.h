@@ -3,8 +3,10 @@
 #include "structs.h"
 #include "utils.h"
 #include <vector>
-#include "EnemyComponent.h"
 #include "Component.h"
+#include "EnemyComponent.h"
+#include "CollisionComponent.h"
+#include "TextureComponent.h"
 
 enum class IngredientType 
 {
@@ -15,6 +17,7 @@ class Ingredient : public dae::Component
 {
 public:
 	Ingredient(const std::shared_ptr<dae::GameObject>& gameObject, IngredientType type);
+	void Update(float elapsedSec);
 	const IngredientType& GetIngredientType() const;
 	bool IsFalling() const;
 	void IngredientFall(float x, float y, const std::vector<EnemyComponent>& enemies);
@@ -24,4 +27,11 @@ public:
 private:
 	IngredientType m_Type;
 	bool m_IsFalling{ false };
+	const float m_IngredientWidth{ 50.f };
+	const float m_IngredientHeight{ 10.f };
+
+	//Components
+	std::weak_ptr<dae::CollisionComponent> m_Collision;
+	std::weak_ptr<dae::TextureComponent> m_Texture;
+	std::weak_ptr<dae::Transform> m_Transform;
 };

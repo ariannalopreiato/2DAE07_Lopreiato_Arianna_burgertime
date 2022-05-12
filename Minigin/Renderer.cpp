@@ -74,13 +74,5 @@ void dae::Renderer::RenderTexture(Texture2D& texture, const Rectf& source, const
 	src.w = static_cast<int>(source.width);
 	src.h = static_cast<int>(source.height);
 
-
-
-
 	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst, 0, nullptr, flip);
-	//SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst);
 }
-//dest -> where
-//source -> which part of sprite sheet
-//sdl_rendercopyex -> flipping image
-//render texture pass the source and dest rect

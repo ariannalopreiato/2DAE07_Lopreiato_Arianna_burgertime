@@ -1,21 +1,27 @@
 #include "PlayerMovementComponent.h"
+#include "GameObject.h"
 
 PlayerMovementComponent::PlayerMovementComponent(const std::shared_ptr<dae::GameObject>& gameObject, float speed)
 	:Component(gameObject)
 	, m_Speed(speed)
-{}
+{
+	m_Transform = m_GameObject.lock()->GetComponent<dae::Transform>();
+}
 
 void PlayerMovementComponent::Update(float elapsedSec)
 {
-	m_ElapsedSec = elapsedSec;
+	auto currentPos = m_Transform.lock()->GetPosition(); //get current position
+	Point2f startPos{ currentPos.x, currentPos.y };
+	startPos.x += elapsedSec * (m_Velocity.x * m_Speed);
+	startPos.y += elapsedSec * (m_Velocity.y * m_Speed);
+	m_Transform.lock()->SetPosition(startPos); //pass new position
 }
 
-const Rectf& PlayerMovementComponent::Move(Rectf& shape, const Vector2f& direction)
+void PlayerMovementComponent::SetVelocity(const Vector2f& velocity)
 {
-	shape.left += m_ElapsedSec * (direction.x * m_Speed);
-	shape.bottom += m_ElapsedSec * (direction.y * m_Speed);
-	return shape;
+	m_Velocity = velocity;
 }
+
 
 std::shared_ptr<dae::Component> PlayerMovementComponent::Clone(const std::shared_ptr<dae::GameObject>& gameObject)
 {

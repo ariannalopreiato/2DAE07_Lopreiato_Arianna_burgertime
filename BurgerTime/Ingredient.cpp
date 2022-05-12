@@ -5,7 +5,16 @@
 Ingredient::Ingredient(const std::shared_ptr<dae::GameObject>& gameObject, IngredientType type)
     : Component(gameObject)
     , m_Type(type)
-{}
+{
+    m_Transform = m_GameObject.lock()->GetComponent<dae::Transform>();
+    m_Transform.lock()->SetSize(m_IngredientWidth, m_IngredientHeight, 0.0f);
+    m_Transform.lock()->SetPosition(100.0f, 50.0f, 0.0f);
+}
+
+void Ingredient::Update(float)
+{
+
+}
 
 const IngredientType& Ingredient::GetIngredientType() const
 {
@@ -22,7 +31,7 @@ void Ingredient::IngredientFall(float x, float y, const std::vector<EnemyCompone
     IngredientFall(Point2f{ x, y }, enemies);
 }
 
-void Ingredient::IngredientFall(const Point2f& newPosition, const std::vector<EnemyComponent>& enemies)
+void Ingredient::IngredientFall(const Point2f&, const std::vector<EnemyComponent>& enemies)
 {
     m_IsFalling = true;
     int enemyOverlap{ 0 };
@@ -33,12 +42,12 @@ void Ingredient::IngredientFall(const Point2f& newPosition, const std::vector<En
             ++enemyOverlap;
     }
 
-    auto shape = collision->m_Shape;
-    while (newPosition.y != shape.bottom)
-    {
-        --shape.bottom;
-        collision->m_Shape = shape;
-    }
+    //auto shape = collision->m_Shape;
+    //while (newPosition.y != shape.bottom)
+    //{
+    //    --shape.bottom;
+    //    collision->m_Shape = shape;
+    //}
     m_IsFalling = false;
 
     AssignPoints(enemyOverlap);

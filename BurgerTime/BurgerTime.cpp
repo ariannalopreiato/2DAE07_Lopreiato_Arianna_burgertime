@@ -24,8 +24,11 @@
 #include "AnimationComponent.h"
 #include "PlayerMovementComponent.h"
 #include "PlayerAttackComponent.h"
+#include "Ingredient.h"
 #include "Texture2D.h"
 #include "AttackCommand.h"
+#include "LevelReader.h"
+#include "LevelCreator.h"
 
 int main(int, char* []) {
 
@@ -38,7 +41,7 @@ int main(int, char* []) {
     engine.Initialize();
     auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
-    //player one initialization
+    //////player one initialization
     auto pPlayerOne = std::make_shared<dae::GameObject>();
     auto pPlayerComponentOne = std::make_shared<PlayerComponent>(pPlayerOne, 5);
 
@@ -81,6 +84,14 @@ int main(int, char* []) {
     dae::SoundSystem* soundSystem = new dae::SDL_SoundSystem();
     dae::ServiceLocator::RegisterSoundSystem(soundSystem);
     dae::ServiceLocator::GetSoundSystem().loadSound("../Data/RandomCoinSound.wav");
+
+    auto levelReader = std::make_shared<LevelReader>();
+    levelReader->ReadLevel("../Data/Level1.txt");
+    auto levelObjects = LevelCreator::GetObjects();
+    for (size_t i = 0; i < levelObjects.size(); ++i)
+    {
+        scene.Add(levelObjects.at(i));
+    }
 
     scene.Add(pPlayerOne);
 

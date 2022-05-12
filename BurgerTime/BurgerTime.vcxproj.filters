@@ -19,11 +19,17 @@
     <Filter Include="Commands">
       <UniqueIdentifier>{a7ec10b0-e06c-4f38-876b-0913ba27df2c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Enemies">
-      <UniqueIdentifier>{d0ac6559-fbc3-4925-a824-443d08cf584b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Components\Player">
       <UniqueIdentifier>{e200132b-c875-4d18-9927-605162785c58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Enemies">
+      <UniqueIdentifier>{d0ac6559-fbc3-4925-a824-443d08cf584b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Level">
+      <UniqueIdentifier>{55a771a8-320d-43b9-91b1-a35bc568426c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Ingredients">
+      <UniqueIdentifier>{a488f164-cbd4-433b-af48-7bc76ae11075}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,14 +60,26 @@
     <ClCompile Include="PlayerAttackComponent.cpp">
       <Filter>Components\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Ingredient.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="EnemyManager.cpp">
-      <Filter>Enemies</Filter>
+      <Filter>Components\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="EnemyComponent.cpp">
-      <Filter>Enemies</Filter>
+      <Filter>Components\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelComponent.cpp">
+      <Filter>Components\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Ingredient.cpp">
+      <Filter>Components\Ingredients</Filter>
+    </ClCompile>
+    <ClCompile Include="IngredientManager.cpp">
+      <Filter>Components\Ingredients</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelReader.cpp">
+      <Filter>Components\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelCreator.cpp">
+      <Filter>Components\Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,14 +110,26 @@
     <ClInclude Include="PlayerAttackComponent.h">
       <Filter>Components\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Ingredient.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="EnemyManager.h">
-      <Filter>Enemies</Filter>
+      <Filter>Components\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="EnemyComponent.h">
-      <Filter>Enemies</Filter>
+      <Filter>Components\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelComponent.h">
+      <Filter>Components\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="IngredientManager.h">
+      <Filter>Components\Ingredients</Filter>
+    </ClInclude>
+    <ClInclude Include="Ingredient.h">
+      <Filter>Components\Ingredients</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelReader.h">
+      <Filter>Components\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelCreator.h">
+      <Filter>Components\Level</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

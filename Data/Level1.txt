@@ -1,0 +1,23 @@
+
+
+xxxoooooxxxoooooxxxoooooxxxoooooxxx
+ H       H   H   H       H       H
+ H       H   H   H       H       H
+ H       H   H   H       H       H
+xxxoooooxxx  H  xxxoooooxxxoooooxxx
+     H   H   H   H   H   H       H
+     H  xxxoooooxxx  H   H       H
+     H   H       H   H   H       H
+xxxoooooxxx      H   H  xxxoooooxxx
+ H   H   H       H   H   H   H   
+ H   H  xxxoooooxxxoooooxxx  H
+ H   H   H       H       H   H
+ H   H   H       H      xxxoooooxxx
+ H   H   H       H       H   H   H
+xxxoooooxxxoooooxxxoooooxxx  H   H
+ H       H       H       H   H   H
+ H       H       H       H   H   H
+xxxoooooxxxoooooxxxoooooxxxoooooxxx
+
+
+   -----   -----   -----   -----

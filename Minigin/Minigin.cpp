@@ -44,8 +44,8 @@ void dae::Minigin::Initialize()
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		640,
-		480,
+		m_Width,
+		m_Height,
 		SDL_WINDOW_OPENGL
 	);
 	if (m_Window == nullptr) 

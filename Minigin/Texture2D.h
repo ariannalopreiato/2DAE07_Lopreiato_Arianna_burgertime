@@ -15,7 +15,6 @@ namespace dae
 		~Texture2D();
 
 		SDL_Texture* GetSDLTexture() const;
-
 		Texture2D(const Texture2D&) = delete;
 		Texture2D(Texture2D&&) = default;
 		Texture2D& operator= (const Texture2D&) = delete;

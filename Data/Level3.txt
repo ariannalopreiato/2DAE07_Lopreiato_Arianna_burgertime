@@ -1,0 +1,27 @@
+
+
+xxxoooooxxxoooooxxxoooooxxxoooooxxx
+ H       H   H       H           H
+xxxoooooxxxoooooxxxoooooxxxoooooxxx
+ H       H       H       H       H
+xxxoooooxxxoooooxxx     xxxoooooxxx
+ H           H   H       H       H
+xxxoooooxxxoooooxxxoooooxxxoooooxxx
+         H   H   H   H
+        xxx  H  xxxoooooxxx
+         H   H   H       H
+        xxxoooooxxxoooooxxx
+   ----- H               H -----
+        xxx              H
+         H               H
+xxxoooooxxx             xxxoooooxxx
+ H   H   H               H       H
+xxxoooooxxx             xxxoooooxxx
+ H   H   H -----   ----- H   H   H
+xxxoooooxxx             xxxoooooxxx
+         H               H
+        xxxoooooxxxoooooxxx
+         H   H   H   H   H
+        xxxoooooxxxoooooxxx
+   -----                   -----
+    
