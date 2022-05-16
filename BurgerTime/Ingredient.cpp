@@ -26,19 +26,14 @@ bool Ingredient::IsFalling() const
     return m_IsFalling;
 }
 
-void Ingredient::IngredientFall(float x, float y, const std::vector<EnemyComponent>& enemies)
-{
-    IngredientFall(Point2f{ x, y }, enemies);
-}
-
-void Ingredient::IngredientFall(const Point2f&, const std::vector<EnemyComponent>& enemies)
+void Ingredient::IngredientFall(float , float , const std::vector<EnemyComponent>& enemies)
 {
     m_IsFalling = true;
     int enemyOverlap{ 0 };
     auto collision = m_GameObject.lock()->GetComponent<dae::CollisionComponent>();
     for (size_t i = 0; i < enemies.size(); ++i)
     {
-        if (collision->IsOverlapping(Rectf{})) //todo pass enemy
+        if (collision->IsOverlapping(SDL_Rect{})) //todo pass enemy
             ++enemyOverlap;
     }
 

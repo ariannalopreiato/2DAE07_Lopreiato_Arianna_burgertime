@@ -15,18 +15,18 @@ void dae::TextureComponent::Render() const
 	const auto& pos = m_Transform.lock()->GetPosition();
 	const auto& size = m_Transform.lock()->GetSize();
 	//passes the texture, which part of the sheet to use, where to draw it and how to flip it
-	dae::Renderer::GetInstance().RenderTexture(*m_Texture, m_SrcRect, Rectf{pos.x, pos.y, size.x, size.y }, m_Flip);
+	dae::Renderer::GetInstance().RenderTexture(*m_Texture, m_SrcRect, SDL_Rect{ int(pos.x), int(pos.y), int(size.x), int(size.y) }, m_Flip);
 }
 
 void dae::TextureComponent::Update(float)
 {
 	auto texture = GetSDLTexture();
 
-	if (m_SrcRect.width == 0.0f)
-		m_SrcRect.width = texture->m_Width;
+	if (m_SrcRect.w == 0)
+		m_SrcRect.w = int(texture->m_Width);
 
-	if(m_SrcRect.height == 0.0f)
-		m_SrcRect.height = texture->m_Height;
+	if(m_SrcRect.h == 0)
+		m_SrcRect.h = int(texture->m_Height);
 
 	//if (m_DstHeight == 0.0f)
 	//{
@@ -56,7 +56,7 @@ void dae::TextureComponent::Update(float)
 //	m_Transform.lock()->SetSize(width, height, depth);
 //}
 
-void dae::TextureComponent::SetSource(const Rectf& srcRect)
+void dae::TextureComponent::SetSource(const SDL_Rect& srcRect)
 {
 	m_SrcRect = srcRect; //in case the size changes
 }

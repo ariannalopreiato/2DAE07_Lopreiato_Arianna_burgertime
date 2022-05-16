@@ -11,13 +11,13 @@ PlayerMovementComponent::PlayerMovementComponent(const std::shared_ptr<dae::Game
 void PlayerMovementComponent::Update(float elapsedSec)
 {
 	auto currentPos = m_Transform.lock()->GetPosition(); //get current position
-	Point2f startPos{ currentPos.x, currentPos.y };
+	glm::vec2 startPos{ currentPos.x, currentPos.y };
 	startPos.x += elapsedSec * (m_Velocity.x * m_Speed);
 	startPos.y += elapsedSec * (m_Velocity.y * m_Speed);
-	m_Transform.lock()->SetPosition(startPos); //pass new position
+	m_Transform.lock()->SetPosition(startPos.x, startPos.y, 0.0f); //pass new position
 }
 
-void PlayerMovementComponent::SetVelocity(const Vector2f& velocity)
+void PlayerMovementComponent::SetVelocity(glm::vec2 velocity)
 {
 	m_Velocity = velocity;
 }

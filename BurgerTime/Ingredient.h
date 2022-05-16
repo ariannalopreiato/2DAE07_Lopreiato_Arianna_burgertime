@@ -1,7 +1,6 @@
 #pragma once
 #include "MiniginPCH.h"
 #include "structs.h"
-#include "utils.h"
 #include <vector>
 #include "Component.h"
 #include "EnemyComponent.h"
@@ -21,7 +20,6 @@ public:
 	const IngredientType& GetIngredientType() const;
 	bool IsFalling() const;
 	void IngredientFall(float x, float y, const std::vector<EnemyComponent>& enemies);
-	void IngredientFall(const Point2f& newPosition, const std::vector<EnemyComponent>& enemies);
 	void AssignPoints(int enemyNr);
 	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 private:

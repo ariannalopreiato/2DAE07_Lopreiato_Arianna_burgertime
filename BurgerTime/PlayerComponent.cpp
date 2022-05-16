@@ -9,6 +9,7 @@ PlayerComponent::PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObj
 {
 	m_Transform = m_GameObject.lock()->GetComponent<dae::Transform>();
 	m_Transform.lock()->SetSize(m_PlayerSize, m_PlayerSize, 0.0f);
+	m_Transform.lock()->SetPosition(15.0f, 12.0f, 0.0f);
 }
 
 void PlayerComponent::Update(float)
@@ -27,10 +28,12 @@ void PlayerComponent::Update(float)
 
 	if (m_Animation.lock() == nullptr)
 		m_Animation = m_GameObject.lock()->GetComponent<dae::AnimationComponent>();
+	
+	m_Collision.lock()->m_IsBoxVisible = true;
 
-
-	Rectf source = m_Animation.lock()->GetSource();
+	SDL_Rect source = m_Animation.lock()->GetSource();
 	m_Texture.lock()->SetSource(source);
+	CheckIsNextToStairs();
 
 	switch (m_PlayerState)
 	{
@@ -60,7 +63,7 @@ void PlayerComponent::Update(float)
 			break;
 		}
 		break;
-
+		
 	case PlayerState::idle:
 		m_Animation.lock()->m_CanAnimate = false;
 		if(m_IsImageFlipped)
@@ -118,11 +121,11 @@ void PlayerComponent::AddCommand(std::unique_ptr<dae::Command> command, dae::Key
 
 void PlayerComponent::Move(PlayerDirection direction)
 {
-	if(direction != PlayerDirection::up && direction != PlayerDirection::down)
+	if(direction != PlayerDirection::up && direction != PlayerDirection::down && m_PlayerState != PlayerState::climbing)
 		m_PlayerState = PlayerState::walking; 
 	else
 	{
-		if (m_IsNextToStairs)
+		if (m_IsNextToStairs && !IsOnPlatform())
 			m_PlayerState = PlayerState::climbing; //if it's next to a stair and it goes up/down it's climbing
 		else
 			m_PlayerState = PlayerState::idle; // if it's not next to a stair and it goes up/down it's idle
@@ -131,9 +134,47 @@ void PlayerComponent::Move(PlayerDirection direction)
 	m_PlayerDirection = direction;
 }
 
-void PlayerComponent::SetIsNextToStair(bool isNextToStair)
+void PlayerComponent::CheckIsNextToStairs()
 {
-	m_IsNextToStairs = isNextToStair;
+	auto objects = LevelCreator::GetObjects();
+	auto types = LevelCreator::GetTypes();
+	for (size_t i = 0; i < objects.size(); ++i)
+	{
+		if (types.at(i) == LevelObjectType::stair)
+		{
+			SDL_Rect collisionObject = objects.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+			if (m_Collision.lock()->IsOverlapping(collisionObject))
+			{
+				m_IsNextToStairs = true;
+				break;
+			}
+		}
+		else
+		{
+			m_IsNextToStairs = false;
+		}
+	}
+}
+
+bool PlayerComponent::IsOnPlatform()
+{
+	auto objects = LevelCreator::GetObjects();
+	auto types = LevelCreator::GetTypes();
+	for (size_t i = 0; i < objects.size(); ++i)
+	{
+		if (types.at(i) == LevelObjectType::floor || types.at(i) == LevelObjectType::stairTop)
+		{
+			SDL_Rect collisionObject = objects.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+			SDL_Rect playerCollision = m_Collision.lock()->GetCollisionBox();
+			std::cout << "platform   " << collisionObject.y - collisionObject.h << std::endl;
+			std::cout << "player   " << playerCollision.y << std::endl;
+			if (collisionObject.y - collisionObject.h == playerCollision.y)
+				return true;
+			else
+				return false;
+		}
+	}
+	return false;
 }
 
 void PlayerComponent::Attack()

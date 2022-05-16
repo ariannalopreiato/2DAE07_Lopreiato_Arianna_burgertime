@@ -1,7 +1,6 @@
 #pragma once
 #include "MiniginPCH.h"
 #include "Component.h"
-#include "Vector2f.h"
 #include "Command.h"
 #include "ControllerButton.h"
 #include "KeyboardButton.h"
@@ -13,6 +12,8 @@
 #include "MoveCommand.h"
 #include "PointComponent.h"
 #include "HealthComponent.h"
+#include "LevelCreator.h"
+#include "LevelObjectType.h"
 
 enum class PlayerState
 {
@@ -27,7 +28,8 @@ public:
 	void AddCommand(std::unique_ptr<dae::Command> command, dae::ControllerButton button, bool executeOnPress, int playerIdx);
 	void AddCommand(std::unique_ptr<dae::Command> command, dae::KeyboardButton key, bool executeOnPress, int playerIdx);
 	void Move(PlayerDirection direction);
-	void SetIsNextToStair(bool isNextToStair);
+	void CheckIsNextToStairs();
+	bool IsOnPlatform();
 	void Attack();
 	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 
@@ -35,7 +37,7 @@ private:
 	//Player info
 	int m_PlayerIdx{ 0 };
 	const float m_PlayerSize{ 30.f };
-	Vector2f m_Velocity{};
+	glm::vec2 m_Velocity{};
 
 	//Handle animation
 	bool m_IsImageFlipped{ false };

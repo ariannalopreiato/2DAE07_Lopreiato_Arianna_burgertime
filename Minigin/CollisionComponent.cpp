@@ -1,7 +1,7 @@
 #include "MiniginPCH.h"
 #include "CollisionComponent.h"
-#include "utils.h"
 #include "GameObject.h"
+#include "Renderer.h"
 
 dae::CollisionComponent::CollisionComponent(std::shared_ptr<dae::GameObject> gameObject)
 	:Component(gameObject)
@@ -12,19 +12,32 @@ dae::CollisionComponent::CollisionComponent(std::shared_ptr<dae::GameObject> gam
 void dae::CollisionComponent::Update(float)
 {
 	auto currentGameObjectPos = m_Transform.lock()->GetPosition();
-	m_Shape.left = currentGameObjectPos.x;
-	m_Shape.bottom = currentGameObjectPos.y;
+	m_Shape.x = int(currentGameObjectPos.x);
+	m_Shape.y = int(currentGameObjectPos.y);
 	auto currentGameObjectSize = m_Transform.lock()->GetSize();
-	m_Shape.width = currentGameObjectSize.x;
-	m_Shape.height = currentGameObjectSize.y;
+	m_Shape.w = int(currentGameObjectSize.x);
+	m_Shape.h = int(currentGameObjectSize.y);
 }
 
-bool dae::CollisionComponent::IsOverlapping(const Rectf& other) const
+void dae::CollisionComponent::Render() const
 {
-	return dae::utils::IsOverlapping(other, m_Shape);
+	if (m_IsBoxVisible)
+	{
+		auto renderer = dae::Renderer::GetInstance().GetSDLRenderer();
+		SDL_RenderDrawRect(renderer, &m_Shape);
+	}
 }
 
-const Rectf& dae::CollisionComponent::GetCollisionBox() const
+bool dae::CollisionComponent::IsOverlapping(const SDL_Rect& other)
+{
+	SDL_bool isOverlapping = SDL_HasIntersection(&m_Shape, &other);
+	if (isOverlapping == SDL_TRUE)
+		return true;
+	else
+		return false;
+}
+
+const SDL_Rect& dae::CollisionComponent::GetCollisionBox() const
 {
 	return m_Shape;
 }

@@ -5,11 +5,6 @@
 dae::Transform::Transform(const std::shared_ptr<GameObject>& gameObject)
 	:Component(gameObject) {}
 
-void dae::Transform::SetPosition(const Point2f& pos)
-{
-	SetPosition(pos.x, pos.y, 0.0f);
-}
-
 void dae::Transform::SetSize(float width, float height, float depth)
 {
 	m_Size.x = width;

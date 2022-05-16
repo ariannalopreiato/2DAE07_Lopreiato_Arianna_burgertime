@@ -12,12 +12,11 @@ std::shared_ptr<dae::GameObject> IngredientManager::SpawnIngredientAtPosition(co
     auto pCollision = std::make_shared<dae::CollisionComponent>(pIngredient);
     auto pTexture = dae::ResourceManager::GetInstance().LoadTexture("../Data/Sprites/cheese.png");
     auto pTextureComponent = std::make_shared<dae::TextureComponent>(pIngredient, pTexture);
-    pIngredient->GetComponent<dae::Transform>()->SetPosition(position);
+    pIngredient->GetComponent<dae::Transform>()->SetPosition(position.x, position.y, 0.0f);
 
     pIngredient->AddComponent(pCollision);
     pIngredient->AddComponent(pTextureComponent);
     pIngredient->AddComponent(pIngredientComponent);
-
 	return pIngredient;
 }
 

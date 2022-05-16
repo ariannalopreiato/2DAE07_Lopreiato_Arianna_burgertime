@@ -1,5 +1,4 @@
 #pragma once
-#include "structs.h"
 #include "Component.h"
 #include "TextureComponent.h"
 #include "CollisionComponent.h"
@@ -11,7 +10,7 @@ namespace dae
 	public:
 		AnimationComponent(const std::shared_ptr<dae::GameObject>& gameObject, int nrFrames, int fps, int col, int row);
 		void Update(float elapsedSec);
-		const Rectf& GetSource() const;
+		const SDL_Rect& GetSource() const;
 		virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 		void SetNewStartingCol(int startCol);
 		void SetNewStartingRow(int startRow);
@@ -24,9 +23,9 @@ namespace dae
 		const int m_Fps{ 0 };
 		int m_NrCol{ 0 };
 		int m_NrRow{ 0 };
-		Rectf m_Source{};
-		float m_ExtraSpaceCol{ 0.0f };
-		float m_ExtraSpaceRow{ 0.0f };
+		SDL_Rect m_Source{};
+		int m_ExtraSpaceCol{ 0 };
+		int m_ExtraSpaceRow{ 0 };
 		std::weak_ptr<TextureComponent> m_Texture;
 	};
 }

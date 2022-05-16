@@ -1,7 +1,5 @@
 #pragma once
-#include "structs.h"
-#include "Vector2f.h"
-#include "utils.h"
+#include "MiniginPCH.h"
 #include "Component.h"
 
 enum class EnemyType
@@ -18,8 +16,8 @@ public:
 	bool m_IsStunned{ false };
 	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 
-protected:
-	Vector2f m_Velocity{ 0.0f, 0.0f };
+private:
+	glm::vec2 m_Velocity;
 	EnemyType m_EnemyType{ EnemyType::mrHotDog };
 };
 
