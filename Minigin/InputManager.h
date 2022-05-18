@@ -5,7 +5,6 @@
 #include <array>
 #include "Command.h"
 #include "ControllerButton.h"
-#include "KeyboardButton.h"
 
 namespace dae
 {
@@ -21,11 +20,11 @@ namespace dae
 
 	struct FullCommandKeyboard
 	{
-		FullCommandKeyboard(std::unique_ptr<Command> command, KeyboardButton button, bool executeOnPress)
+		FullCommandKeyboard(std::unique_ptr<Command> command, SDL_Scancode button, bool executeOnPress)
 			:m_Command(std::move(command)), m_Key(button), m_ExecutePress(executeOnPress) {}
 
 		std::unique_ptr<Command> m_Command;
-		KeyboardButton m_Key;
+		SDL_Scancode m_Key;
 		bool m_ExecutePress;
 	};
 
@@ -36,10 +35,10 @@ namespace dae
 		bool ProcessInput();
 		bool IsPressed(ControllerButton button, int playerIdx = 0) const;
 		bool IsReleased(ControllerButton button, int playerIdx = 0) const;
-		bool IsPressed(KeyboardButton key, int playerIdx = 0) const;
-		bool IsReleased(KeyboardButton key, int playerIdx = 0) const;
+		bool IsPressed(SDL_Scancode key, int playerIdx = 0) const;
+		bool IsReleased(SDL_Scancode key, int playerIdx = 0) const;
 		void AddCommandController(std::unique_ptr<Command> command, ControllerButton button, bool executeOnPress, int playerIdx = 0);
-		void AddCommandKeyboard(std::unique_ptr<Command> command, KeyboardButton key, bool executeOnPress, int playerIdx = 0);
+		void AddCommandKeyboard(std::unique_ptr<Command> command, SDL_Scancode key, bool executeOnPress, int playerIdx = 0);
 
 	private:
 		friend Singleton<InputManager>;
