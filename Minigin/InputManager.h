@@ -46,12 +46,15 @@ namespace dae
 		InputManager();
 		inline static constexpr int m_NrOfPlayers{ 2 }; //constant expression at compile time that cannot be changed, inline -> initialize static variable in the header
 		inline static constexpr int m_NrOfKeys{ 122 };
+
 		std::array<int, m_NrOfPlayers> m_Players;
 		std::array<int, m_NrOfPlayers> m_ButtonsPressedThisFrame;
 		std::array<int, m_NrOfPlayers> m_ButtonsReleasedThisFrame;
+
 		std::array<XINPUT_STATE, m_NrOfPlayers> m_CurrentStatesController;
 		std::array<XINPUT_STATE, m_NrOfPlayers> m_PreviousStatesController;
 		std::array<std::vector<std::unique_ptr<FullCommandController>>, m_NrOfPlayers> m_ControllerCommands;
+
 		std::array<bool, m_NrOfKeys> m_CurrentStatesKey;
 		std::array<bool, m_NrOfKeys> m_PreviousStatesKey;
 		std::array<std::vector<std::unique_ptr<FullCommandKeyboard>>, m_NrOfPlayers> m_KeyboardCommands;

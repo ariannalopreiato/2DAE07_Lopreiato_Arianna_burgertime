@@ -12,7 +12,7 @@ namespace dae
 	private:
 		static const int MsPerFrame = 16; //16 for 60 fps, 33 for 30 fps
 		SDL_Window* m_Window{};
-		int m_Width{ 640 };
-		int m_Height{ 480 };
+		int m_Width{ 630 };
+		int m_Height{ 640 };
 	};
 }

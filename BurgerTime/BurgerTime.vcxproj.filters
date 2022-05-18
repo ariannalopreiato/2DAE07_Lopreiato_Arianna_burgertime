@@ -69,9 +69,6 @@
     <ClCompile Include="Ingredient.cpp">
       <Filter>Components\Ingredients</Filter>
     </ClCompile>
-    <ClCompile Include="IngredientManager.cpp">
-      <Filter>Components\Ingredients</Filter>
-    </ClCompile>
     <ClCompile Include="LevelReader.cpp">
       <Filter>Components\Level</Filter>
     </ClCompile>
@@ -112,9 +109,6 @@
     </ClInclude>
     <ClInclude Include="EnemyComponent.h">
       <Filter>Components\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="IngredientManager.h">
-      <Filter>Components\Ingredients</Filter>
     </ClInclude>
     <ClInclude Include="Ingredient.h">
       <Filter>Components\Ingredients</Filter>

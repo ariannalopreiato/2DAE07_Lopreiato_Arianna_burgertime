@@ -34,6 +34,25 @@ public:
 			//Mix_VolumeMusic(volume);
 		}
 	}
+		//ProcessQueue
+		//{ do
+		//{
+		//	if (!m_requests.empty())
+		//	{
+		//		std::unique_lock<std::mutex> lock{ m_mutex };
+		//		auto request = m_request.front();
+		//		m_request.pop();
+		//		lock.unlock();
+		//		auto audioclip = audioclips[request.first];
+		//		if (!audioclip->is_loaded())
+		//			audioclip->load();
+		//		audioclip->set_volume(request.second);
+		//		audioclip->play();
+		//	std::lock_guard<std::mutex> lock{ mutex };
+		//	if (m_requests.empty())
+		//		m_work.available.wait(lock);
+		//}while (!m_Requests.empty());
+		//}
 
 	void stopMusic()
 	{
@@ -107,6 +126,7 @@ public:
 
 dae::SDL_SoundSystem::SDL_SoundSystem()
 	:m_pImpl{ std::make_unique<PimplImpl>() }
+	//m_thread(&sdl_sound_system::process_queue)
 {}
 
 dae::soundId dae::SDL_SoundSystem::loadMusic(const std::string& path)

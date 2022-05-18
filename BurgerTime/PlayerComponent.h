@@ -25,6 +25,7 @@ class PlayerComponent : public dae::Component
 public:
 	PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObject, int playerIdx);
 	void Update(float elapsedSec);
+	void Render() const;
 	void AddCommand(std::unique_ptr<dae::Command> command, dae::ControllerButton button, bool executeOnPress, int playerIdx);
 	void AddCommand(std::unique_ptr<dae::Command> command, dae::KeyboardButton key, bool executeOnPress, int playerIdx);
 	void Move(PlayerDirection direction);
@@ -60,5 +61,6 @@ private:
 	std::weak_ptr<PointComponent> m_Points;
 	std::weak_ptr<HealthComponent> m_Health;
 	std::weak_ptr<dae::Transform> m_Transform;
+	SDL_Rect test{};
 };
 

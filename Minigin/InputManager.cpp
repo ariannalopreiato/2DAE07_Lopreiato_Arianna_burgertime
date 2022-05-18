@@ -47,9 +47,6 @@ bool dae::InputManager::ProcessInput()
 			m_CurrentStatesKey[e.key.keysym.sym] = false;
 			break;
 		}
-		//if (e.type == SDL_MOUSEBUTTONDOWN) 
-		//{
-		//}
 	}
 
 	for (int player = 0; player < m_NrOfPlayers; ++player)

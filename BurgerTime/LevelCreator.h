@@ -6,7 +6,7 @@
 #include "CollisionComponent.h"
 #include "TextureComponent.h"
 #include "Texture2D.h"
-#include "LevelObjectType.h"
+#include "Ingredient.h"
 
 //static -> every instance of this class will have the same values
 class LevelCreator
@@ -17,12 +17,20 @@ public:
 	static std::shared_ptr<dae::GameObject> SpawnFloor(int col, int row, int repetition = 5);
 	static std::shared_ptr<dae::GameObject> SpawnStairTop(int col, int row, int repetition = 3);
 	static std::shared_ptr<dae::GameObject> SpawnPlate(int col, int row, int repetition = 5);
-	static std::shared_ptr<dae::GameObject> SpawnIngredients();
+	static std::shared_ptr<dae::GameObject> SpawnBunTop(int col, int row, int repetition = 5);
+	static std::shared_ptr<dae::GameObject> SpawnBunBottom(int col, int row, int repetition = 5);
+	static std::shared_ptr<dae::GameObject> SpawnCheese(int col, int row, int repetition = 5);
+	static std::shared_ptr<dae::GameObject> SpawnLattuce(int col, int row, int repetition = 5);
+	static std::shared_ptr<dae::GameObject> SpawnTomato(int col, int row, int repetition = 5);
+	static std::shared_ptr<dae::GameObject> SpawnPatty(int col, int row, int repetition = 5);
+	//static std::shared_ptr<dae::GameObject> SpawnIngredient(const std::string& name, int col, int row, int repetition = 5);
 	static bool IsArrayInitialized() { return !m_Grid.empty(); }
-	static std::shared_ptr<dae::GameObject> CreateObject(const std::string& textureName, int col, int row, LevelObjectType type, int repetition);
+	static std::shared_ptr<dae::GameObject> CreateObject(const std::string& textureName, int col, int row, int repetition);
+	static std::shared_ptr<dae::GameObject> CreateIngredient(const std::string& textureName, int col, int row, int repetition);
 	static std::vector<std::shared_ptr<dae::GameObject>> GetObjects();
-	static std::vector<LevelObjectType> GetTypes();
-	//static bool IsStairUnder()
+	static std::vector<std::shared_ptr<dae::GameObject>> GetPlates();
+	static std::vector<std::shared_ptr<dae::GameObject>> GetStairs();
+	static std::vector<std::shared_ptr<dae::GameObject>> GetIngredients();
 
 private:
 	LevelCreator(); //no one can make an instance of it
@@ -33,6 +41,8 @@ private:
 	inline static float m_CellWidth{ 0 };
 	inline static float m_CellHeight{ 0 };
 	inline static std::vector<std::shared_ptr<dae::GameObject>> m_LevelObjects;
-	inline static std::vector<LevelObjectType> m_ObjectTypes;
+	inline static std::vector<std::shared_ptr<dae::GameObject>> m_Ingredients;
+	inline static std::vector<std::shared_ptr<dae::GameObject>> m_Stairs;
+	inline static std::vector<std::shared_ptr<dae::GameObject>> m_Plates;
 };
 

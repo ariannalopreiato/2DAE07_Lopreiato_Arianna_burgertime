@@ -15,31 +15,83 @@ void LevelCreator::SetArraySize(int cols, int rows)
 	m_Grid.resize(cols * rows);
 	m_MaxCol = cols;
 	m_MaxRow = rows;
-	m_CellHeight = float(480 / m_MaxRow);
-	m_CellWidth = float(640 / m_MaxCol);
+	m_CellHeight = float(640 / m_MaxRow);
+	m_CellWidth = float(630 / m_MaxCol);
 }
 
 std::shared_ptr<dae::GameObject> LevelCreator::SpawnStair(int col, int row, int repetition)
 {
-	return CreateObject("../Data/Sprites/stairs.png", col, row, LevelObjectType::stair, repetition);
+	auto stair = CreateObject("../Data/Sprites/stairs.png", col, row, repetition);
+	auto collision = stair->GetComponent<dae::CollisionComponent>();
+	collision->SetSize(m_CellWidth / 2, m_CellHeight * 2);
+	collision->SetPosition(col * m_CellWidth + m_CellWidth/4, row * m_CellHeight - m_CellHeight);
+	m_Stairs.emplace_back(stair);
+	return stair;  
 }
 
 std::shared_ptr<dae::GameObject> LevelCreator::SpawnFloor(int col, int row, int repetition)
 {
-	return CreateObject("../Data/Sprites/floor.png", col, row, LevelObjectType::floor, repetition);
+	auto floor = CreateObject("../Data/Sprites/floor.png", col, row, repetition);
+	return floor;
 }
 
 std::shared_ptr<dae::GameObject> LevelCreator::SpawnStairTop(int col, int row, int repetition)
 {
-	return CreateObject("../Data/Sprites/stairTop.png", col, row, LevelObjectType::stairTop, repetition);
+	auto stairTop = CreateObject("../Data/Sprites/stairTop.png", col, row, repetition);
+	return stairTop;
 }
 
 std::shared_ptr<dae::GameObject> LevelCreator::SpawnPlate(int col, int row, int repetition)
 {
-	return CreateObject("../Data/Sprites/plate.png", col, row, LevelObjectType::plate, repetition);
+	auto plate = CreateObject("../Data/Sprites/plate.png", col, row, repetition);
+	m_Plates.emplace_back(plate);
+	return plate;
 }
 
-std::shared_ptr<dae::GameObject> LevelCreator::CreateObject(const std::string& textureName, int col, int row, LevelObjectType type, int repetition)
+std::shared_ptr<dae::GameObject> LevelCreator::SpawnBunTop(int col, int row, int repetition)
+{
+	auto bunTop = CreateIngredient("../Data/Sprites/bunTop.png", col, row, repetition);
+	return bunTop;
+}
+
+std::shared_ptr<dae::GameObject> LevelCreator::SpawnBunBottom(int col, int row, int repetition)
+{
+	auto bunBottom = CreateIngredient("../Data/Sprites/bunBottom.png", col, row, repetition);
+	return bunBottom;
+}
+
+std::shared_ptr<dae::GameObject> LevelCreator::SpawnCheese(int col, int row, int repetition)
+{
+	auto cheese = CreateIngredient("../Data/Sprites/cheese.png", col, row, repetition);
+	return cheese;
+}
+
+std::shared_ptr<dae::GameObject> LevelCreator::SpawnLattuce(int col, int row, int repetition)
+{
+	auto lattuce = CreateIngredient("../Data/Sprites/lattuce.png", col, row, repetition);
+	return lattuce;
+}
+
+std::shared_ptr<dae::GameObject> LevelCreator::SpawnTomato(int col, int row, int repetition)
+{
+	auto tomato = CreateIngredient("../Data/Sprites/tomato.png", col, row, repetition);
+	return tomato;
+}
+
+std::shared_ptr<dae::GameObject> LevelCreator::SpawnPatty(int col, int row, int repetition)
+{
+	auto patty = CreateIngredient("../Data/Sprites/patty.png", col, row, repetition);
+	return patty;
+}
+
+//std::shared_ptr<dae::GameObject> LevelCreator::SpawnIngredient(const std::string& name, int col, int row, int repetition)
+//{
+//	auto ingredient = CreateIngredient("../Data/Sprites/"+name+".png", col, row, repetition);
+//	m_Ingredients.emplace_back(ingredient);
+//	return ingredient;
+//}
+
+std::shared_ptr<dae::GameObject> LevelCreator::CreateObject(const std::string& textureName, int col, int row, int repetition)
 {
 	auto object = std::make_shared<dae::GameObject>();
 
@@ -56,12 +108,25 @@ std::shared_ptr<dae::GameObject> LevelCreator::CreateObject(const std::string& t
 	auto texture = std::make_shared<dae::TextureComponent>(object, picture);
 
 	auto collision = std::make_shared<dae::CollisionComponent>(object);
+
 	collision->m_IsBoxVisible = true;
 	object->AddComponent(texture);
 	object->AddComponent(collision);
-	m_LevelObjects.push_back(object);
-	m_ObjectTypes.push_back(type);
+	m_LevelObjects.emplace_back(object);
 	return object;
+}
+
+std::shared_ptr<dae::GameObject> LevelCreator::CreateIngredient(const std::string& textureName, int col, int row, int repetition)
+{
+	auto ingredient = CreateObject(textureName, col, row, repetition);
+	
+	auto ingredietComponent = std::make_shared<Ingredient>(ingredient);
+
+	ingredient->AddComponent(ingredietComponent);
+
+	m_Ingredients.emplace_back(ingredient);
+
+	return ingredient;
 }
 
 std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetObjects()
@@ -69,7 +134,17 @@ std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetObjects()
 	return m_LevelObjects;
 }
 
-std::vector<LevelObjectType> LevelCreator::GetTypes()
+std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetPlates()
 {
-	return m_ObjectTypes;
+	return m_Plates;
+}
+
+std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetStairs()
+{
+	return m_Stairs;
+}
+
+std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetIngredients()
+{
+	return m_Ingredients;
 }

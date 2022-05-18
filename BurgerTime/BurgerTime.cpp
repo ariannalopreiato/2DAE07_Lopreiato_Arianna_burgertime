@@ -87,6 +87,7 @@ int main(int, char* []) {
 
     auto levelReader = std::make_shared<LevelReader>();
     levelReader->ReadLevel("../Data/Level1.txt");
+    //levelReader->ReadIngredients("../Data/ObjectsPos1.txt");
     auto levelObjects = LevelCreator::GetObjects();
     for (size_t i = 0; i < levelObjects.size(); ++i)
     {

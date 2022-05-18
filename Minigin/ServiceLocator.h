@@ -13,6 +13,7 @@ namespace dae
 		void playSound(const soundId) override {};
 		void stopSound(const soundId) override {};
 		void stopAllSounds() override {};
+		//add shutdown -> delete all service
 	};
 
 	class ServiceLocator final

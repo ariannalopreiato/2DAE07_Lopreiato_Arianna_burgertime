@@ -12,9 +12,9 @@ void Plate::Reset()
 
 bool Plate::IsComplete()
 {
-	if (m_IngredientsOnPlate[0].GetIngredientType() == IngredientType::bunBottom
-		&& m_IngredientsOnPlate[m_IngredientsOnPlate.size() - 1].GetIngredientType() == IngredientType::bunTop)
-		return true;
-	else
+	//if (m_IngredientsOnPlate[0].GetIngredientType() == IngredientType::bunBottom
+	//	&& m_IngredientsOnPlate[m_IngredientsOnPlate.size() - 1].GetIngredientType() == IngredientType::bunTop)
+	//	return true;
+	//else
 		return false;
 }
