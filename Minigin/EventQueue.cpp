@@ -17,7 +17,7 @@ void dae::EventQueue::Update()
 
 void dae::EventQueue::AddEvent(Event&& currentEvent)
 {
-	m_Events.push_back(std::move(currentEvent));
+	m_Events.emplace_back(std::move(currentEvent));
 }
 
 void dae::EventQueue::RemoveHandledEvents()
@@ -30,5 +30,5 @@ void dae::EventQueue::RemoveHandledEvents()
 
 void dae::EventQueue::AddListeners(IEventListener& listener)
 {
-	m_Listeners.push_back(&listener);
+	m_Listeners.emplace_back(&listener);
 }

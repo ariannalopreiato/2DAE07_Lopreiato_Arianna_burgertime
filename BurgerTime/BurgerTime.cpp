@@ -56,7 +56,7 @@ int main(int, char* []) {
     auto moveDown = std::make_unique<MoveCommand>(pPlayerComponentOne, PlayerDirection::down);
     auto moveLeft = std::make_unique<MoveCommand>(pPlayerComponentOne, PlayerDirection::left);
     pPlayerComponentOne->AddCommand(std::move(attack), dae::ControllerButton::ButtonA, false, 0);
-    pPlayerComponentOne->AddCommand(std::move(moveRight), SDL_SCANCODE_RIGHT, true, 0);
+    pPlayerComponentOne->AddCommand(std::move(moveRight), SDL_SCANCODE_D, true, 0);
     pPlayerComponentOne->AddCommand(std::move(moveDown),SDL_SCANCODE_S, true, 0);
     pPlayerComponentOne->AddCommand(std::move(moveLeft), SDL_SCANCODE_A, true, 0);
     pPlayerComponentOne->AddCommand(std::move(moveUp), SDL_SCANCODE_W, true, 0);
@@ -86,8 +86,12 @@ int main(int, char* []) {
 
     auto levelReader = std::make_shared<LevelReader>();
     levelReader->ReadLevel("../Data/Level1.txt");
-    //levelReader->ReadIngredients("../Data/ObjectsPos1.txt");
     auto levelObjects = LevelCreator::GetObjects();
+    auto ingredients = LevelCreator::GetIngredients();
+    for (size_t j = 0; j < ingredients.size(); ++j)
+    {
+        ingredients.at(j)->GetComponent<Ingredient>()->Initialize();
+    }
     for (size_t i = 0; i < levelObjects.size(); ++i)
     {
         scene.Add(levelObjects.at(i));

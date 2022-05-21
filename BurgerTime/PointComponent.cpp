@@ -28,7 +28,7 @@ void PointComponent::SavePointsToFile(const std::string&)
     //    {
     //        std::reverse(line.begin(), line.end());
     //        //input >> line;
-    //        text.push_back(line); //save line to vector
+    //        text.emplace_back(line); //save line to vector
     //    }
 
     //    std::reverse(text.begin(), text.end());

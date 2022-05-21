@@ -26,6 +26,18 @@ void dae::Transform::SetPosition(const float x, const float y, const float z)
 	m_Position.z = z;
 }
 
+void dae::Transform::SetPosition(glm::vec3 position3D)
+{
+	m_Position = position3D;
+}
+
+void dae::Transform::SetPosition(glm::vec2 position2D)
+{
+	m_Position.x = position2D.x;
+	m_Position.y = position2D.y;
+	m_Position.z = 0.0f;
+}
+
 std::shared_ptr<dae::Component> dae::Transform::Clone(const std::shared_ptr<GameObject>& gameObject)
 {
 	return std::make_shared<Transform>(gameObject);

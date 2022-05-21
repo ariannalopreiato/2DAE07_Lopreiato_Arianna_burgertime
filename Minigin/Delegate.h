@@ -20,7 +20,7 @@ namespace dae
 				{ return call.target_type() == callback.target_type(); });
 
 			if (it == m_Callbacks.cend())
-				m_Callbacks.push_back(callback); //add it to callbacks
+				m_Callbacks.emplace_back(callback); //add it to callbacks
 		}
 
 		//will notify the code that the event has been fired

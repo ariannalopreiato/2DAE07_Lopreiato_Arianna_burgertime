@@ -23,8 +23,9 @@ std::shared_ptr<dae::GameObject> LevelCreator::SpawnStair(int col, int row, int 
 {
 	auto stair = CreateObject("../Data/Sprites/stairs.png", col, row, repetition);
 	auto collision = stair->GetComponent<dae::CollisionComponent>();
-	collision->SetSize(m_CellWidth / 2, m_CellHeight * 2);
-	collision->SetPosition(col * m_CellWidth + m_CellWidth/4, row * m_CellHeight - m_CellHeight);
+	int extraSpace{ 5 };
+	collision->SetSize(m_CellWidth / 2, m_CellHeight * 2 + extraSpace);
+	collision->SetPosition(col * m_CellWidth + m_CellWidth/4, row * m_CellHeight - m_CellHeight - extraSpace);
 	m_Stairs.emplace_back(stair);
 	return stair;  
 }
@@ -32,6 +33,7 @@ std::shared_ptr<dae::GameObject> LevelCreator::SpawnStair(int col, int row, int 
 std::shared_ptr<dae::GameObject> LevelCreator::SpawnFloor(int col, int row, int repetition)
 {
 	auto floor = CreateObject("../Data/Sprites/floor.png", col, row, repetition);
+	m_Floors.emplace_back(floor);
 	return floor;
 }
 
@@ -147,4 +149,9 @@ std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetStairs()
 std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetIngredients()
 {
 	return m_Ingredients;
+}
+
+std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetFloors()
+{
+	return m_Floors;
 }

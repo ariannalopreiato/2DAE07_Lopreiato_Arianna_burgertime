@@ -108,12 +108,12 @@ bool dae::InputManager::IsReleased(ControllerButton button, int playerIdx) const
 
 void dae::InputManager::AddCommandController(std::unique_ptr<Command> command, ControllerButton button, bool executeOnPress, int playerIdx)
 {
-	//push_back copies by default, emplace_back creates object at the back -> unique ptr cannot be copied
-	//but compiler is smart enough to use the move overload of push_back
-	m_ControllerCommands[playerIdx].push_back(std::make_unique<FullCommandController>(std::move(command), button, executeOnPress));
+	//emplace_back copies by default, emplace_back creates object at the back -> unique ptr cannot be copied
+	//but compiler is smart enough to use the move overload of emplace_back
+	m_ControllerCommands[playerIdx].emplace_back(std::make_unique<FullCommandController>(std::move(command), button, executeOnPress));
 }
 
 void dae::InputManager::AddCommandKeyboard(std::unique_ptr<Command> command, SDL_Scancode key, bool executeOnPress, int playerIdx)
 {
-	m_KeyboardCommands[playerIdx].push_back(std::make_unique<FullCommandKeyboard>(std::move(command), key, executeOnPress));
+	m_KeyboardCommands[playerIdx].emplace_back(std::make_unique<FullCommandKeyboard>(std::move(command), key, executeOnPress));
 }

@@ -4,7 +4,7 @@
 
 void dae::Subject::AddObserver(std::shared_ptr<Observer> observer)
 {
-	m_Observers.push_back(observer);
+	m_Observers.emplace_back(observer);
 }
 
 void dae::Subject::RemoveObserver(std::shared_ptr<Observer> observer)

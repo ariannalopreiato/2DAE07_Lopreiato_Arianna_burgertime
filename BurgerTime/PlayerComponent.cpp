@@ -10,7 +10,7 @@ PlayerComponent::PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObj
 {
 	m_Transform = m_GameObject.lock()->GetComponent<dae::Transform>();
 	m_Transform.lock()->SetSize(m_PlayerSize, m_PlayerSize, 0.0f);
-	m_Transform.lock()->SetPosition(0.0f, 369.f, 0.0f);
+	m_Transform.lock()->SetPosition(50.0f, 350.f, 0.0f);
 }
 
 void PlayerComponent::Update(float)
@@ -35,6 +35,7 @@ void PlayerComponent::Update(float)
 	SDL_Rect source = m_Animation.lock()->GetSource();
 	m_Texture.lock()->SetSource(source);
 	CheckIsNextToStairs();
+	IsWalkingOnIngredient();
 
 	switch (m_PlayerState)
 	{
@@ -181,6 +182,22 @@ bool PlayerComponent::IsOnPlatform()
 		}
 	}
 	return false;
+}
+
+void PlayerComponent::IsWalkingOnIngredient()
+{
+	auto ingredients = LevelCreator::GetIngredients();
+	auto playerBox = m_Collision.lock()->GetCollisionBox();
+	for (int i = 0; i < ingredients.size(); ++i)
+	{
+		auto pieces = ingredients.at(i)->GetComponent<Ingredient>()->GetPieces();
+		for (size_t currentPiece = 0; currentPiece < pieces.size(); ++currentPiece)
+		{
+			auto box = pieces.at(currentPiece).shapeSize;
+			if (box.y == playerBox.y + playerBox.h && playerBox.x + playerBox.w / 2 > box.x && playerBox.x + playerBox.w / 2 < box.x + box.w)
+				ingredients.at(i)->GetComponent<Ingredient>()->SetHasWalkedOnPiece(currentPiece);
+		}
+	}
 }
 
 void PlayerComponent::Attack()

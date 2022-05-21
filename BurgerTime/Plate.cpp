@@ -2,7 +2,7 @@
 
 void Plate::AddIngredient(const Ingredient& ingredient)
 {
-	m_IngredientsOnPlate.push_back(ingredient);
+	m_IngredientsOnPlate.emplace_back(ingredient);
 }
 
 void Plate::Reset()

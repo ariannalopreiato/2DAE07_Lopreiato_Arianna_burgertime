@@ -10,7 +10,7 @@ dae::GameObject::GameObject()
 {
 	//transform component gets created in the constructor to ensure that the game object contains at least one of it
 	m_Transform = std::make_shared<Transform>(std::make_shared<GameObject>(*this)); 
-	m_Components.push_back(m_Transform);
+	m_Components.emplace_back(m_Transform);
 }
 
 //------------------------------------- Rule of five ------------------------------------------------
@@ -20,11 +20,11 @@ dae::GameObject::GameObject(const GameObject& other) noexcept //copy
 {
 	for (size_t i = 0; i < other.m_Components.size(); ++i)
 	{
-		m_Components.push_back(other.m_Components[i]->Clone(std::make_shared<GameObject>(*this)));
+		m_Components.emplace_back(other.m_Components[i]->Clone(std::make_shared<GameObject>(*this)));
 	}
 	for (size_t i = 0; i < other.m_Children.size(); ++i)
 	{
-		m_Children.push_back(std::make_shared<GameObject>(*other.m_Children[i]));
+		m_Children.emplace_back(std::make_shared<GameObject>(*other.m_Children[i]));
 	}
 	m_Parent = other.m_Parent;
 }
@@ -48,11 +48,11 @@ dae::GameObject& dae::GameObject::operator=(const GameObject& other) noexcept //
 {
 	for (size_t i = 0; i < other.m_Components.size(); ++i)
 	{
-		m_Components.push_back(other.m_Components[i]->Clone(std::make_shared<GameObject>(*this)));
+		m_Components.emplace_back(other.m_Components[i]->Clone(std::make_shared<GameObject>(*this)));
 	}
 	for (size_t i = 0; i < other.m_Children.size(); ++i)
 	{
-		m_Children.push_back(std::make_shared<GameObject>(*other.m_Children[i]));
+		m_Children.emplace_back(std::make_shared<GameObject>(*other.m_Children[i]));
 	}
 	m_Parent = other.m_Parent;
 	return *this;
@@ -104,7 +104,7 @@ void dae::GameObject::Render() const
 //------------------------------------- Components handling ------------------------------------------------
 void dae::GameObject::AddComponent(std::shared_ptr<Component> component)
 {
-	m_Components.push_back(component);
+	m_Components.emplace_back(component);
 }
 
 int dae::GameObject::GetComponentAmount()
@@ -170,7 +170,7 @@ void dae::GameObject::AddChild(const std::shared_ptr<GameObject>& child, const s
 		}
 	}
 	child->SetParent(parent);
-	m_Children.push_back(child); //added to the list
+	m_Children.emplace_back(child); //added to the list
 }
 
 const std::vector<std::shared_ptr<dae::GameObject>>& dae::GameObject::GetChildren() const

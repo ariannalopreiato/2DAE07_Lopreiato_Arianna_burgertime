@@ -20,7 +20,7 @@ void LevelReader::ReadLevel(const std::string& path)
 		if (line.size() > maxCols)
 			maxCols = int(line.size()); //find the max amount of cols
 		++maxRows; //find the max amount of rows
-		file.push_back(line);
+		file.emplace_back(line);
 	}
 
 	if (!LevelCreator::IsArrayInitialized())

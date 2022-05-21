@@ -25,16 +25,17 @@ public:
 	static std::shared_ptr<dae::GameObject> SpawnPatty(int col, int row, int repetition = 5);
 	//static std::shared_ptr<dae::GameObject> SpawnIngredient(const std::string& name, int col, int row, int repetition = 5);
 	static bool IsArrayInitialized() { return !m_Grid.empty(); }
-	static std::shared_ptr<dae::GameObject> CreateObject(const std::string& textureName, int col, int row, int repetition);
-	static std::shared_ptr<dae::GameObject> CreateIngredient(const std::string& textureName, int col, int row, int repetition);
 	static std::vector<std::shared_ptr<dae::GameObject>> GetObjects();
 	static std::vector<std::shared_ptr<dae::GameObject>> GetPlates();
 	static std::vector<std::shared_ptr<dae::GameObject>> GetStairs();
 	static std::vector<std::shared_ptr<dae::GameObject>> GetIngredients();
+	static std::vector<std::shared_ptr<dae::GameObject>> GetFloors();
 
 private:
 	LevelCreator(); //no one can make an instance of it
 	static size_t CalculateIndex(const size_t row, const size_t col);
+	static std::shared_ptr<dae::GameObject> CreateObject(const std::string& textureName, int col, int row, int repetition);
+	static std::shared_ptr<dae::GameObject> CreateIngredient(const std::string& textureName, int col, int row, int repetition);
 	inline static std::vector<int> m_Grid;
 	inline static int m_MaxCol{ 0 };
 	inline static int m_MaxRow{ 0 };
@@ -44,5 +45,6 @@ private:
 	inline static std::vector<std::shared_ptr<dae::GameObject>> m_Ingredients;
 	inline static std::vector<std::shared_ptr<dae::GameObject>> m_Stairs;
 	inline static std::vector<std::shared_ptr<dae::GameObject>> m_Plates;
+	inline static std::vector<std::shared_ptr<dae::GameObject>> m_Floors;
 };
 
