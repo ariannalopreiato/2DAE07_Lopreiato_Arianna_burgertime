@@ -19,7 +19,6 @@ public:
 	Ingredient(const std::shared_ptr<dae::GameObject>& gameObject);
 	void Initialize();
 	void Update(float elapsedSec);
-	void IngredientFall(/*const std::vector<EnemyComponent>& enemies*/);
 	void AssignPoints(int enemyNr);
 	const std::vector<Piece>& GetPieces() const;
 	void SetHasWalkedOnPiece(const size_t& index);

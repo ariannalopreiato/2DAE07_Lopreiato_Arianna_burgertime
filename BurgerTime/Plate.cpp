@@ -1,6 +1,10 @@
 #include "Plate.h"
 
-void Plate::AddIngredient(const Ingredient& ingredient)
+Plate::Plate(const std::shared_ptr<dae::GameObject>& gameObject)
+	:Component(gameObject)
+{}
+
+void Plate::AddIngredient(const std::shared_ptr<dae::GameObject>& ingredient)
 {
 	m_IngredientsOnPlate.emplace_back(ingredient);
 }
@@ -17,4 +21,9 @@ bool Plate::IsComplete()
 	//	return true;
 	//else
 		return false;
+}
+
+std::shared_ptr<dae::Component>Plate::Clone(const std::shared_ptr<dae::GameObject>& gameObject)
+{
+	return std::make_shared<Plate>(gameObject);
 }

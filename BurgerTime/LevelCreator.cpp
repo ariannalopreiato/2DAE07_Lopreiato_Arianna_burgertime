@@ -46,6 +46,8 @@ std::shared_ptr<dae::GameObject> LevelCreator::SpawnStairTop(int col, int row, i
 std::shared_ptr<dae::GameObject> LevelCreator::SpawnPlate(int col, int row, int repetition)
 {
 	auto plate = CreateObject("../Data/Sprites/plate.png", col, row, repetition);
+	auto plateComponent = std::make_shared<Plate>(plate);
+	plate->AddComponent(plateComponent);
 	m_Plates.emplace_back(plate);
 	return plate;
 }

@@ -36,9 +36,6 @@
     <ClCompile Include="BurgerTime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Plate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AttackCommand.cpp">
       <Filter>Commands</Filter>
     </ClCompile>
@@ -75,11 +72,11 @@
     <ClCompile Include="LevelCreator.cpp">
       <Filter>Components\Level</Filter>
     </ClCompile>
+    <ClCompile Include="Plate.cpp">
+      <Filter>Components\Ingredients</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Plate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BurgerTime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -121,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="LevelObjectType.h">
       <Filter>Components\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Plate.h">
+      <Filter>Components\Ingredients</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

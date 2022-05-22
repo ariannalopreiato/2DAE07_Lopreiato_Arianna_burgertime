@@ -7,6 +7,7 @@
 #include "TextureComponent.h"
 #include "Texture2D.h"
 #include "Ingredient.h"
+#include "Plate.h"
 
 //static -> every instance of this class will have the same values
 class LevelCreator

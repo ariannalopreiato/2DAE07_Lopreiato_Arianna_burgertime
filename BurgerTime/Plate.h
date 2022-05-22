@@ -1,17 +1,19 @@
 #pragma once
 #include <vector>
 #include "Ingredient.h"
+#include "Component.h"
+#include "PointComponent.h"
 
-class Plate
+class Plate : public dae::Component
 {
 public:
-	void AddIngredient(const Ingredient& ingredient);
+	Plate(const std::shared_ptr<dae::GameObject>& gameObject);
+	void AddIngredient(const std::shared_ptr<dae::GameObject>& ingredient);
 	void Reset();
 	bool IsComplete();
-
+	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 
 private:
-	std::vector<Ingredient> m_IngredientsOnPlate;
-	int m_Points{ 100 };
+	std::vector<std::shared_ptr<dae::GameObject>> m_IngredientsOnPlate;
 };
 
