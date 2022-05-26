@@ -5,5 +5,5 @@
 
 dae::IEventListener::IEventListener()
 {
-	EventQueue::GetInstance().AddListeners(*this);
+	EventQueue::GetInstance().AddListeners(this);
 }

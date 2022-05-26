@@ -10,16 +10,21 @@ namespace dae
 	class EventQueue final : public Singleton<EventQueue>
 	{
 	public:
-		void Update();
+		void Cleanup();
 		void AddEvent(Event&& currentEvent);
 		void RemoveHandledEvents();
-		void AddListeners(IEventListener& listener);
+		void AddListeners(IEventListener* listener);
 
 	private:
+		friend class Singleton<EventQueue>;
+		EventQueue();
+		void Update();
+
 		std::vector<Event> m_Events;
 		std::vector<IEventListener*> m_Listeners;
 		std::mutex m_Mutex;
-		int m_NrThreads;
-		std::vector<std::jthread> m_Threads;
+		std::condition_variable m_CV;
+		std::thread m_Thread;
+		bool m_IsRunning{ true };
 	};
 }

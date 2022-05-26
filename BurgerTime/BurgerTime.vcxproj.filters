@@ -25,11 +25,11 @@
     <Filter Include="Components\Enemies">
       <UniqueIdentifier>{d0ac6559-fbc3-4925-a824-443d08cf584b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components\Level">
-      <UniqueIdentifier>{55a771a8-320d-43b9-91b1-a35bc568426c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Components\Ingredients">
       <UniqueIdentifier>{a488f164-cbd4-433b-af48-7bc76ae11075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Level">
+      <UniqueIdentifier>{55a771a8-320d-43b9-91b1-a35bc568426c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -67,13 +67,16 @@
       <Filter>Components\Ingredients</Filter>
     </ClCompile>
     <ClCompile Include="LevelReader.cpp">
-      <Filter>Components\Level</Filter>
+      <Filter>Level</Filter>
     </ClCompile>
     <ClCompile Include="LevelCreator.cpp">
-      <Filter>Components\Level</Filter>
+      <Filter>Level</Filter>
     </ClCompile>
     <ClCompile Include="Plate.cpp">
       <Filter>Components\Ingredients</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelChecker.cpp">
+      <Filter>Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -111,16 +114,19 @@
       <Filter>Components\Ingredients</Filter>
     </ClInclude>
     <ClInclude Include="LevelReader.h">
-      <Filter>Components\Level</Filter>
+      <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="LevelCreator.h">
-      <Filter>Components\Level</Filter>
+      <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="LevelObjectType.h">
-      <Filter>Components\Level</Filter>
+      <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="Plate.h">
       <Filter>Components\Ingredients</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelChecker.h">
+      <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

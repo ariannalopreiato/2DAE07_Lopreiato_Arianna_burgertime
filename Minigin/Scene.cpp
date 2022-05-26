@@ -28,12 +28,3 @@ void Scene::Render() const
 		object->Render();
 	}
 }
-
-dae::Scene::~Scene()
-{
-	for (size_t i = 0; i < m_Objects.size(); ++i)
-	{
-		m_Objects.at(i) = nullptr;
-	}
-}
-

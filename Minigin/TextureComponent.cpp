@@ -27,34 +27,7 @@ void dae::TextureComponent::Update(float)
 
 	if(m_SrcRect.h == 0)
 		m_SrcRect.h = int(texture->m_Height);
-
-	//if (m_DstHeight == 0.0f)
-	//{
-	//	m_DstHeight = texture->m_Height;
-	//	m_Transform.lock()->SetSize(m_DstWidth, m_DstHeight, 0.0f);
-	//}
-
-	//if (m_DstWidth == 0.0f)
-	//{
-	//	m_DstWidth = texture->m_Width;
-	//	m_Transform.lock()->SetSize(m_DstWidth, m_DstHeight, 0.0f);
-	//}
 }
-
-//void dae::TextureComponent::SetPosition(float x, float y)
-//{
-//	SetPosition(Point2f{ x, y });
-//}
-//
-//void dae::TextureComponent::SetPosition(const Point2f& position)
-//{
-//	m_Transform.lock()->SetPosition(position.x, position.y, 0);
-//}
-//
-//void dae::TextureComponent::SetSize(float width, float height, float depth)
-//{
-//	m_Transform.lock()->SetSize(width, height, depth);
-//}
 
 void dae::TextureComponent::SetSource(const SDL_Rect& srcRect)
 {

@@ -9,7 +9,7 @@ PlayerComponent::PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObj
 	, m_PlayerIdx(playerIdx)
 {
 	m_Transform = m_GameObject.lock()->GetComponent<dae::Transform>();
-	m_Transform.lock()->SetSize(m_PlayerSize, m_PlayerSize, 0.0f);
+	m_Transform.lock()->SetSize(m_PlayerWidth, m_PlayerHeight, 0.0f);
 	m_Transform.lock()->SetPosition(50.0f, 350.f, 0.0f);
 }
 
@@ -61,14 +61,14 @@ void PlayerComponent::Update(float)
 			m_Velocity.y = -1.0f;
 			m_Animation.lock()->SetNewStartingCol(m_StartingColUp);
 			m_CurrentCol = m_StartingColUp;
-			m_IsImageFlipped = true;
+			m_Texture.lock()->m_IsImageFlipped = true;
 			break;
 		}
 		break;
 		
 	case PlayerState::idle:
 		m_Animation.lock()->m_CanAnimate = false;
-		if(m_IsImageFlipped)
+		if(m_Texture.lock()->m_IsImageFlipped)
 			m_Animation.lock()->SetNewStartingCol(m_CurrentCol - 1);
 		else
 			m_Animation.lock()->SetNewStartingCol(m_CurrentCol + 1);
@@ -82,11 +82,11 @@ void PlayerComponent::Update(float)
 		m_Animation.lock()->SetNewStartingCol(m_StartingColHorizontal);
 		m_CurrentCol = m_StartingColHorizontal;
 
-		if (m_IsImageFlipped)
+		if (m_Texture.lock()->m_IsImageFlipped)
 		{
 			//flip the image to the original position
 			m_Texture.lock()->SetFlip(SDL_FLIP_NONE);
-			m_IsImageFlipped = false;
+			m_Texture.lock()->m_IsImageFlipped = false;
 		}
 
 		switch (m_PlayerDirection)
@@ -99,7 +99,7 @@ void PlayerComponent::Update(float)
 			m_Velocity.x = 1.0f;
 			m_Velocity.y = 0.0f;
 			m_Texture.lock()->SetFlip(SDL_FLIP_HORIZONTAL); //flip the image
-			m_IsImageFlipped = true;
+			m_Texture.lock()->m_IsImageFlipped = true;
 			break;
 		}
 		break;
@@ -107,6 +107,7 @@ void PlayerComponent::Update(float)
 
 	m_Movement.lock()->SetVelocity(m_Velocity);
 	m_PlayerState = PlayerState::idle;
+	EnemyManager::SetPlayerPos(m_Collision.lock()->GetCollisionBox());
 }
 
 void PlayerComponent::Render() const
@@ -130,16 +131,15 @@ void PlayerComponent::AddCommand(std::unique_ptr<dae::Command> command,SDL_Scanc
 
 void PlayerComponent::Move(PlayerDirection direction)
 {
-	if(direction != PlayerDirection::up && direction != PlayerDirection::down && m_PlayerState != PlayerState::climbing && IsOnPlatform())
-		m_PlayerState = PlayerState::walking; 
+	if (direction != PlayerDirection::up && direction != PlayerDirection::down && m_PlayerState != PlayerState::climbing && IsOnPlatform())
+		m_PlayerState = PlayerState::walking;
 	else
 	{
-		if (m_IsNextToStairs )//&& !IsOnPlatform())
+		if (m_IsNextToStairs)
 			m_PlayerState = PlayerState::climbing; //if it's next to a stair and it goes up/down it's climbing
 		else
 			m_PlayerState = PlayerState::idle; // if it's not next to a stair and it goes up/down it's idle
 	}
-
 	m_PlayerDirection = direction;
 }
 
@@ -174,12 +174,13 @@ bool PlayerComponent::IsOnPlatform()
 	{
 		auto objects = LevelCreator::GetObjects();
 		auto playerBox = m_Collision.lock()->GetCollisionBox();
-		for (int i = 0; i < objects.size(); ++i)
+		for (size_t i = 0; i < objects.size(); ++i)
 		{
 			auto box = objects.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
-			if (playerBox.y + playerBox.h == box.y)   
+			if (playerBox.y + playerBox.h == box.y /*&& playerBox.x >= box.x && playerBox.x + playerBox.w <= box.x + box.w*/)
 				return true;
 		}
+		//m_Movement.lock()->MoveBack();
 	}
 	return false;
 }

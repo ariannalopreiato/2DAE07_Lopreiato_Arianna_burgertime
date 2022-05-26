@@ -111,18 +111,6 @@ int dae::GameObject::GetComponentAmount()
 {
 	return int(m_Components.size());
 }
-
-void dae::GameObject::RemoveComponent(const std::shared_ptr<Component>& component)
-{
-	//std::remove places elements to be removed at the end
-	//erase removes all the elements from the position of the first element equal to container untill the end of it
-	 m_Components.erase(std::remove(m_Components.begin(), m_Components.end(), component), m_Components.end());
-}
-
-void dae::GameObject::RemoveComponentAt(int index)
-{
-	m_Components.erase(m_Components.begin() + index - 1);
-}
 //--------------------------------------------------------------------------------------------------------
 
 
@@ -196,7 +184,7 @@ void dae::GameObject::RemoveChild(const std::shared_ptr<GameObject>& child)
 	m_Children.erase(std::remove(m_Children.begin(), m_Children.end(), child), m_Children.end());
 }
 
-void dae::GameObject::SetPosition(const float& x, const float& y)
+void dae::GameObject::SetPosition(float x, float y)
 {
 	m_Transform->SetPosition(x, y, 0.0f);
 }

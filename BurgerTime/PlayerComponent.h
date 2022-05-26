@@ -13,6 +13,7 @@
 #include "HealthComponent.h"
 #include "LevelCreator.h"
 #include "LevelObjectType.h"
+#include "EnemyManager.h"
 
 enum class PlayerState
 {
@@ -37,11 +38,11 @@ public:
 private:
 	//Player info
 	int m_PlayerIdx{ 0 };
-	const float m_PlayerSize{ 30.f };
+	const float m_PlayerWidth{ 30.f };
+	const float m_PlayerHeight{ 30.f };
 	glm::vec2 m_Velocity{};
 
 	//Handle animation
-	bool m_IsImageFlipped{ false };
 	bool m_IsNextToStairs{ false };
 	const int m_StartingColHorizontal{ 3 };
 	const int m_StartingColUp{ 6 };

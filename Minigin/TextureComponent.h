@@ -16,6 +16,7 @@ namespace dae
 		void SetSource(const SDL_Rect& srcRect);
 		void SetFlip(SDL_RendererFlip flip);
 		std::shared_ptr<Texture2D> GetSDLTexture() const;
+		bool m_IsImageFlipped{ false };
 		virtual std::shared_ptr<Component> Clone(const std::shared_ptr<GameObject>& gameObject) override;
 
 	private:

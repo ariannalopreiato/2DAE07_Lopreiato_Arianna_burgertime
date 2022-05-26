@@ -28,6 +28,7 @@
 #include "AttackCommand.h"
 #include "LevelReader.h"
 #include "LevelCreator.h"
+#include "EnemyManager.h"
 
 int main(int, char* []) {
 
@@ -97,6 +98,9 @@ int main(int, char* []) {
         scene.Add(levelObjects.at(i));
     }
 
+    auto hotDog = EnemyManager::SpawnMrHotDog(640.f, 407.f);
+
+    scene.Add(hotDog);
     scene.Add(pPlayerOne);
 
     engine.Run();

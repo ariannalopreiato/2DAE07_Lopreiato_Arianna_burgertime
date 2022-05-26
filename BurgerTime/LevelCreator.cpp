@@ -5,6 +5,21 @@
 LevelCreator::LevelCreator()
 {}
 
+void LevelCreator::SortElements()
+{
+	for (size_t i = 0; i < m_LevelObjects.size(); ++i)
+	{
+		if (m_LevelObjects[i]->GetComponent<Ingredient>() != nullptr)
+		{
+			m_LevelObjects.erase(m_LevelObjects.begin() + i);
+		}
+	}
+	for (size_t j = 0; j < m_Ingredients.size(); ++j)
+	{
+		m_LevelObjects.push_back(m_Ingredients[j]);
+	}
+}
+
 size_t LevelCreator::CalculateIndex(const size_t row, const size_t col)
 {
 	 return m_MaxCol * row + col;
@@ -33,13 +48,14 @@ std::shared_ptr<dae::GameObject> LevelCreator::SpawnStair(int col, int row, int 
 std::shared_ptr<dae::GameObject> LevelCreator::SpawnFloor(int col, int row, int repetition)
 {
 	auto floor = CreateObject("../Data/Sprites/floor.png", col, row, repetition);
-	m_Floors.emplace_back(floor);
+	m_Platforms.emplace_back(floor);
 	return floor;
 }
 
 std::shared_ptr<dae::GameObject> LevelCreator::SpawnStairTop(int col, int row, int repetition)
 {
 	auto stairTop = CreateObject("../Data/Sprites/stairTop.png", col, row, repetition);
+	m_Platforms.emplace_back(stairTop);
 	return stairTop;
 }
 
@@ -88,13 +104,6 @@ std::shared_ptr<dae::GameObject> LevelCreator::SpawnPatty(int col, int row, int 
 	return patty;
 }
 
-//std::shared_ptr<dae::GameObject> LevelCreator::SpawnIngredient(const std::string& name, int col, int row, int repetition)
-//{
-//	auto ingredient = CreateIngredient("../Data/Sprites/"+name+".png", col, row, repetition);
-//	m_Ingredients.emplace_back(ingredient);
-//	return ingredient;
-//}
-
 std::shared_ptr<dae::GameObject> LevelCreator::CreateObject(const std::string& textureName, int col, int row, int repetition)
 {
 	auto object = std::make_shared<dae::GameObject>();
@@ -135,6 +144,7 @@ std::shared_ptr<dae::GameObject> LevelCreator::CreateIngredient(const std::strin
 
 std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetObjects()
 {
+	SortElements();
 	return m_LevelObjects;
 }
 
@@ -153,7 +163,7 @@ std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetIngredients()
 	return m_Ingredients;
 }
 
-std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetFloors()
+std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetPlatforms()
 {
-	return m_Floors;
+	return m_Platforms;
 }

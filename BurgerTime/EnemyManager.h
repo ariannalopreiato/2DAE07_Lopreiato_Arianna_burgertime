@@ -9,16 +9,19 @@
 #include "AnimationComponent.h"
 #include "EnemyComponent.h"
 
-class EnemyManager : public dae::Component
+class EnemyManager
 {
 public:
-	EnemyManager(const std::shared_ptr<dae::GameObject>& gameObject);
-	void Update(float elapsedSec);
-	void Render() const;
-	std::shared_ptr<dae::GameObject> SpawnEnemy(EnemyType enemyType);
-	//const std::vector<std::weak_ptr<EnemyComponent>>& GetEnemies() const;
-	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
+	static void Update(float elapsedSec);
+	static std::shared_ptr<dae::GameObject> SpawnMrEgg(float posX, float posY);
+	static std::shared_ptr<dae::GameObject> SpawnMrHotDog(float posX, float posY);
+	static std::shared_ptr<dae::GameObject> SpawnMrPickle(float posX, float posY);
+	static const std::vector<std::weak_ptr<dae::GameObject>>& GetEnemies();
+	static void SetPlayerPos(const SDL_Rect& playerPos);
+	//static void RemoveEnemy(int index);
 
 private:
-	//std::vector<std::weak_ptr<EnemyComponent>> m_Enemies;
+	EnemyManager();
+	static std::shared_ptr<dae::GameObject> SpawnEnemy(float posX, float posY, int points, const std::shared_ptr<dae::Texture2D>& texture);
+	inline static std::vector<std::weak_ptr<dae::GameObject>> m_Enemies;
 };

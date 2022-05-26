@@ -30,13 +30,11 @@ namespace dae
 		}
 
 		int GetComponentAmount();
-		void RemoveComponent(const std::shared_ptr<Component>& component);
-		void RemoveComponentAt(int index);
 		template <typename Type>
-		void RemoveComponentByType(const std::shared_ptr<Type>& component)
+		void RemoveComponentByType()
 		{
-			if(typeid(component) != typeid(Transform)) //the transform component CANNOT be removed
-				m_Components.erase(std::remove(m_Components.begin(), m_Components.end(), component), m_Components.end());
+			if(typeid(Type) != typeid(Transform)) //the transform component CANNOT be removed
+				m_Components.erase(std::remove_if(m_Components.begin(), m_Components.end(), [](const std::shared_ptr<Component>& component) {return typeid(*(component.get())) == typeid(Type); }), m_Components.end());
 		}
 
 		std::shared_ptr<GameObject> GetParent() const;
@@ -46,7 +44,7 @@ namespace dae
 		void RemoveChildAt(int index);
 		void RemoveChild(const std::shared_ptr<GameObject>& child);
 
-		void SetPosition(const float& x, const float& y);
+		void SetPosition(float x, float y);
 
 	private:
 		std::vector<std::shared_ptr<GameObject>> m_Children{};

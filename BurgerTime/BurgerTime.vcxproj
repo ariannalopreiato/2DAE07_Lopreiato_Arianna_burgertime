@@ -205,6 +205,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="Ingredient.cpp" />
+    <ClCompile Include="LevelChecker.cpp" />
     <ClCompile Include="LevelCreator.cpp" />
     <ClCompile Include="LevelReader.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
@@ -221,6 +222,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="Ingredient.h" />
+    <ClInclude Include="LevelChecker.h" />
     <ClInclude Include="LevelCreator.h" />
     <ClInclude Include="LevelObjectType.h" />
     <ClInclude Include="LevelReader.h" />

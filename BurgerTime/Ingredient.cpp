@@ -27,7 +27,7 @@ Ingredient::Ingredient(const std::shared_ptr<dae::GameObject>& gameObject)
 void Ingredient::Initialize()
 {
     m_Collision = m_GameObject.lock()->GetComponent<dae::CollisionComponent>();
-    m_Floors = LevelCreator::GetFloors();
+    m_Floors = LevelCreator::GetPlatforms();
     m_LevelIngredients = LevelCreator::GetIngredients();
     m_Plates = LevelCreator::GetPlates();
 
@@ -60,12 +60,13 @@ void Ingredient::Update(float)
     {
         if (CheckHitLevelObject()) //if it touched the floor under it, it stops falling
             m_IsFalling = false;
+
         else
         {
-            CheckHitIngredient();
+            CheckHitIngredient(); //if it touches an ingredient it's going to make it fall
             auto currentPos = m_Transform.lock()->GetPosition();
             currentPos.y += m_Speed;
-            m_Transform.lock()->SetPosition(currentPos);
+            m_Transform.lock()->SetPosition(currentPos); //position ingredient after fall
         }
     }
 }
@@ -110,14 +111,17 @@ std::shared_ptr<dae::GameObject> Ingredient::FindNextFloor()
             break;
         }
     }
-    if (nextPlatform == nullptr) //if it's not falling on a floor it will fall on a plate
+    if (nextPlatform == nullptr) //if it's not falling on a platform it will fall on a plate
     {
         for (size_t i = 0; i < m_Plates.size(); ++i)
         {
             auto plateBox = m_Plates.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
-            if (plateBox.x == box.x && box.y < plateBox.y)
+            int ingredientAmount = m_Plates[m_PlateIdx]->GetComponent<Plate>()->IngredientsOnPlateAmount();
+            if (plateBox.x == box.x && box.y < plateBox.y - box.h * ingredientAmount)
             {
                 nextPlatform = m_Plates.at(i);
+                m_IsFallingOnPlate = true;
+                m_PlateIdx = int(i);  //save the platforms position
                 break;
             }
         }
@@ -132,19 +136,32 @@ bool Ingredient::CheckHitLevelObject()
 
     if (m_NextPlatform != nullptr)
     {
-        auto box = m_Collision.lock()->GetCollisionBox();
-        auto nextBox = m_NextPlatform->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+        SDL_Rect box = m_Collision.lock()->GetCollisionBox();
+        SDL_Rect nextBox = m_NextPlatform->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+        if (m_IsFallingOnPlate)
+        {
+            int ingredientAmount = m_Plates[m_PlateIdx]->GetComponent<Plate>()->IngredientsOnPlateAmount();
+            nextBox.y -= box.h * ingredientAmount;
+        }
         if (box.y >= nextBox.y)
         {
             m_Transform.lock()->SetPosition(float(box.x), float(nextBox.y), 0.0f);
             m_CurrentPlatform = m_NextPlatform;
             m_NextPlatform = FindNextFloor();
+            if (m_NextPlatform == nullptr) //ingredient is on the plate
+            {
+                m_Plates[m_PlateIdx]->GetComponent<Plate>()->AddIngredient(m_GameObject.lock());
+                m_IsFallingOnPlate = false;
+            }
             ResetPieces();
             return true;
         }
     }
-    else if (m_NextPlatform == nullptr)
+    else
+    {
+        ResetPieces();
         return true;
+    }
 
     return false;    
 }
@@ -153,13 +170,14 @@ void Ingredient::CheckHitIngredient()
 {
     auto box = m_Collision.lock()->GetCollisionBox();
     auto nextBox = m_NextPlatform->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+
     for(size_t i = 0; i < m_LevelIngredients.size(); ++i)
     {
         auto ingredientBox = m_LevelIngredients.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
         if (nextBox.x == ingredientBox.x && nextBox.y == ingredientBox.y) //if the ingredient is on the next platform
         {
-            if (box.x == ingredientBox.x && box.y + box.h >= ingredientBox.y)
-                m_LevelIngredients.at(i)->GetComponent<Ingredient>()->m_IsFalling = true;
+            if (box.x == ingredientBox.x && box.y + box.h >= ingredientBox.y) //if the current ingredient touches the next ingredient
+                    m_LevelIngredients.at(i)->GetComponent<Ingredient>()->m_IsFalling = true;
         }
     }
 }
@@ -168,5 +186,3 @@ std::shared_ptr<dae::Component> Ingredient::Clone(const std::shared_ptr<dae::Gam
 {
     return std::make_shared<Ingredient>(gameObject);
 }
-
-

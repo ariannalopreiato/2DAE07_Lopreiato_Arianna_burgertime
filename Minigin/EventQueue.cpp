@@ -2,33 +2,76 @@
 #include "EventQueue.h"
 #include "IEventListener.h"
 
-void dae::EventQueue::Update()
+#include <functional>
+
+namespace dae
 {
-	for (size_t i = 0; i < m_Events.size(); ++i)
+	EventQueue::EventQueue()
 	{
-		for (size_t j = 0; j < m_Listeners.size(); ++j)
+		m_Thread = std::thread(std::bind(&EventQueue::Update, this));
+	}
+
+	void EventQueue::Update()
+	{
+		while (m_IsRunning)
 		{
-			if (m_Listeners[j]->HandleEvent(m_Events[i]))
-				m_Events[i].m_IsExecuted = true;
+			std::unique_lock<std::mutex> lock{ m_Mutex };
+
+			m_CV.wait(lock, [this]()->bool
+				{
+					return !m_IsRunning || !m_Events.empty();
+				});
+
+			if (!m_IsRunning)
+			{
+				return;
+			}
+
+			for (size_t i = 0; i < m_Events.size(); ++i)
+			{
+				for (size_t j = 0; j < m_Listeners.size(); ++j)
+				{
+					if (m_Listeners[j]->HandleEvent(m_Events[i]))
+						m_Events[i].m_IsExecuted = true;
+				}
+			}
+
+			RemoveHandledEvents();
 		}
 	}
-	RemoveHandledEvents();
-}
 
-void dae::EventQueue::AddEvent(Event&& currentEvent)
-{
-	m_Events.emplace_back(std::move(currentEvent));
-}
+	void EventQueue::Cleanup()
+	{
+		m_IsRunning = false;
 
-void dae::EventQueue::RemoveHandledEvents()
-{
-	m_Events.erase(std::remove_if(m_Events.begin(), m_Events.end(), [](const Event& currentEvent)->bool
+		m_CV.notify_one();
+
+		m_Thread.join();
+	}
+
+	void EventQueue::AddEvent(Event&& currentEvent)
+	{
 		{
-			return currentEvent.m_IsExecuted;
-		}), m_Events.end());
-}
+			std::unique_lock<std::mutex> lock{ m_Mutex };
 
-void dae::EventQueue::AddListeners(IEventListener& listener)
-{
-	m_Listeners.emplace_back(&listener);
+			m_Events.emplace_back(std::move(currentEvent));
+		}
+
+		m_CV.notify_one();
+	}
+
+	void EventQueue::RemoveHandledEvents()
+	{
+		m_Events.erase(std::remove_if(m_Events.begin(), m_Events.end(), [](const Event& currentEvent)->bool
+			{
+				return currentEvent.m_IsExecuted;
+			}), m_Events.end());
+	}
+
+	void EventQueue::AddListeners(IEventListener* listener)
+	{
+		std::unique_lock<std::mutex> lock{ m_Mutex };
+
+		m_Listeners.emplace_back(listener);
+	}
 }

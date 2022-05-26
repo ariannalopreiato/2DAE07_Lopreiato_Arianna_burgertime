@@ -1,8 +1,7 @@
 #include "EnemyManager.h"
 #include "GameObject.h"
 
-EnemyManager::EnemyManager(const std::shared_ptr<dae::GameObject>& gameObject)
-	:Component(gameObject)
+EnemyManager::EnemyManager()
 {}
 
 void EnemyManager::Update(float)
@@ -10,50 +9,59 @@ void EnemyManager::Update(float)
 
 }
 
-void EnemyManager::Render() const
+std::shared_ptr<dae::GameObject> EnemyManager::SpawnMrEgg(float posX, float posY)
 {
+	int points{ 300 };
+	std::shared_ptr<dae::Texture2D> picture{};
+	picture = dae::ResourceManager::GetInstance().LoadTexture("../Data/Sprites/MrEgg.png");
+	return SpawnEnemy(posX, posY, points, picture);
 }
 
-std::shared_ptr<dae::GameObject> EnemyManager::SpawnEnemy(EnemyType enemyType)
+std::shared_ptr<dae::GameObject> EnemyManager::SpawnMrHotDog(float posX, float posY)
 {
-	int points{ 0 };    
-	std::shared_ptr<dae::Texture2D> picture{}; 
-	switch (enemyType)
-	{
-	case EnemyType::mrEgg:
-		points = 300;
-		picture = dae::ResourceManager::GetInstance().LoadTexture("../Data/Sprites/MrEgg.png");
-		break;
+	int points{ 100 };
+	std::shared_ptr<dae::Texture2D> picture{};
+	picture = dae::ResourceManager::GetInstance().LoadTexture("../Data/Sprites/MrHotDog.png");
+	return SpawnEnemy(posX, posY, points, picture);
+}
 
-	case EnemyType::mrHotDog:
-		points = 100;
-		picture = dae::ResourceManager::GetInstance().LoadTexture("../Data/Sprites/MrHotDog.png");
-		break;
+std::shared_ptr<dae::GameObject> EnemyManager::SpawnMrPickle(float posX, float posY)
+{
+	int points{ 200 };
+	std::shared_ptr<dae::Texture2D> picture{};
+	picture = dae::ResourceManager::GetInstance().LoadTexture("../Data/Sprites/MrPickle.png");
+	return SpawnEnemy(posX, posY, points, picture);
+}
 
-	case EnemyType::mrPickle:
-		points = 200;
-		picture = dae::ResourceManager::GetInstance().LoadTexture("../Data/Sprites/MrPickle.png");
-		break;
-	}
+std::shared_ptr<dae::GameObject> EnemyManager::SpawnEnemy(float posX, float posY, int points, const std::shared_ptr<dae::Texture2D>& texture)
+{
+	auto enemyObj = std::make_shared<dae::GameObject>();
+	enemyObj->GetComponent<dae::Transform>()->SetPosition(posX, posY, 0.0f);
 
-	auto enemyObj = std::shared_ptr<dae::GameObject>();
-	auto enemyComponent = std::make_shared<EnemyComponent>(enemyObj, enemyType); //create requested enemy
+	auto enemyComponent = std::make_shared<EnemyComponent>(enemyObj);
+	auto textureComponent = std::make_shared<dae::TextureComponent>(enemyObj, texture);
 	auto pointComponent = std::make_shared<PointComponent>(enemyObj, points);
-	auto textureComponent = std::make_shared<dae::TextureComponent>(enemyObj, picture);
 	auto collisionComponent = std::make_shared<dae::CollisionComponent>(enemyObj);
 	auto healthComponent = std::make_shared<HealthComponent>(enemyObj, 1);
-	auto animationComponent = std::make_shared<dae::AnimationComponent>(enemyObj, 8, 4, 8, 1);
-	enemyObj->AddComponent(enemyComponent);
-	enemyObj->AddComponent(pointComponent);
+	auto animationComponent = std::make_shared<dae::AnimationComponent>(enemyObj, 2, 6, 8, 1);
+
 	enemyObj->AddComponent(textureComponent);
+	enemyObj->AddComponent(pointComponent);
 	enemyObj->AddComponent(collisionComponent);
 	enemyObj->AddComponent(healthComponent);
 	enemyObj->AddComponent(animationComponent);
-	//m_GameObject.lock()->AddChild(enemyObj, std::make_shared<dae::GameObject>(this));    ???
+	enemyObj->AddComponent(enemyComponent);
+	m_Enemies.emplace_back(enemyObj);
 	return enemyObj;
 }
 
-std::shared_ptr<dae::Component> EnemyManager::Clone(const std::shared_ptr<dae::GameObject>& gameObject)
+const std::vector<std::weak_ptr<dae::GameObject>>& EnemyManager::GetEnemies()
 {
-	return std::make_shared<EnemyManager>(gameObject);
+	return m_Enemies;
+}
+
+void EnemyManager::SetPlayerPos(const SDL_Rect& playerPos)
+{
+	for (size_t i = 0; i < m_Enemies.size(); ++i)
+		m_Enemies.at(i).lock()->GetComponent<EnemyComponent>()->SetPlayerPos(playerPos);
 }

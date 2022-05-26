@@ -14,6 +14,7 @@
 #include "Scene.h"
 #include "FPS.h"
 #include "Component.h"
+#include "EventQueue.h"
 #include <chrono>
 
 using namespace std;
@@ -99,6 +100,7 @@ void dae::Minigin::Run()
 		auto& renderer = Renderer::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
+		auto& eventQueue = EventQueue::GetInstance();
 
 		// todo: this update loop could use some work.
 		bool doContinue = true;
@@ -112,6 +114,8 @@ void dae::Minigin::Run()
 			renderer.Render();
 			lastTime = currentTime;
 		}
+
+		eventQueue.Cleanup();
 	}
 
 	Cleanup();
