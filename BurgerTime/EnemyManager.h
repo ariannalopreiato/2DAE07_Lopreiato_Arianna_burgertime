@@ -7,7 +7,9 @@
 #include "HealthComponent.h"
 #include "CollisionComponent.h"
 #include "AnimationComponent.h"
-#include "EnemyComponent.h"
+#include "MrEggComponent.h"
+#include "MrHotDogComponent.h"
+#include "MrPickleComponent.h"
 
 class EnemyManager
 {
@@ -22,6 +24,6 @@ public:
 
 private:
 	EnemyManager();
-	static std::shared_ptr<dae::GameObject> SpawnEnemy(float posX, float posY, int points, const std::shared_ptr<dae::Texture2D>& texture);
+	static std::shared_ptr<dae::GameObject> SpawnEnemy(float posX, float posY);
 	inline static std::vector<std::weak_ptr<dae::GameObject>> m_Enemies;
 };

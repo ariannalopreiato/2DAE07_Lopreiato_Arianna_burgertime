@@ -203,23 +203,31 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClCompile Include="BurgerTime.cpp" />
     <ClCompile Include="EnemyComponent.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="FirstScene.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="Ingredient.cpp" />
     <ClCompile Include="LevelChecker.cpp" />
     <ClCompile Include="LevelCreator.cpp" />
     <ClCompile Include="LevelReader.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
+    <ClCompile Include="MrEggComponent.cpp" />
+    <ClCompile Include="MrHotDogComponent.cpp" />
+    <ClCompile Include="MrPickleComponent.cpp" />
+    <ClCompile Include="Pepper.cpp" />
     <ClCompile Include="Plate.cpp" />
     <ClCompile Include="PlayerAttackComponent.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PlayerMovementComponent.cpp" />
     <ClCompile Include="PointComponent.cpp" />
+    <ClCompile Include="SecondScene.cpp" />
+    <ClCompile Include="ThirdScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackCommand.h" />
     <ClInclude Include="BurgerTime.h" />
     <ClInclude Include="EnemyComponent.h" />
     <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="FirstScene.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="Ingredient.h" />
     <ClInclude Include="LevelChecker.h" />
@@ -227,11 +235,17 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClInclude Include="LevelObjectType.h" />
     <ClInclude Include="LevelReader.h" />
     <ClInclude Include="MoveCommand.h" />
+    <ClInclude Include="MrEggComponent.h" />
+    <ClInclude Include="MrHotDogComponent.h" />
+    <ClInclude Include="MrPickleComponent.h" />
+    <ClInclude Include="Pepper.h" />
     <ClInclude Include="Plate.h" />
     <ClInclude Include="PlayerAttackComponent.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PlayerMovementComponent.h" />
     <ClInclude Include="PointComponent.h" />
+    <ClInclude Include="SecondScene.h" />
+    <ClInclude Include="ThirdScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -14,22 +14,24 @@ dae::AnimationComponent::AnimationComponent(const std::shared_ptr<dae::GameObjec
 
 void dae::AnimationComponent::Update(float elapsedSec)
 {
-	if (m_Texture.lock() == nullptr)
-		m_Texture = m_GameObject.lock()->GetComponent<dae::TextureComponent>();
-
 	if (m_CanAnimate)
 	{
 		m_AnimationTime += elapsedSec * m_Fps;
 		m_AnimationFrame = int(m_AnimationTime) % m_Fps;
 	}
 
-	auto spriteSheet = m_Texture.lock()->GetSDLTexture();
-	m_Source.w = int(spriteSheet->m_Width / m_NrCol);
-	m_Source.h = int(spriteSheet->m_Height / m_NrRow);
-	if (m_NrCol > 1)
-		m_Source.x = int(float(m_AnimationFrame % m_NrFrames) * m_Source.w + m_ExtraSpaceCol);
-	if (m_NrRow > 1)
-		m_Source.y = int(float(m_AnimationFrame % m_NrFrames) * m_Source.h + m_ExtraSpaceRow);
+	if (m_Texture.lock() == nullptr)
+		m_Texture = m_GameObject.lock()->GetComponent<dae::TextureComponent>();
+	else
+	{
+		auto spriteSheet = m_Texture.lock()->GetSDLTexture();
+		m_Source.w = int(spriteSheet->m_Width / m_NrCol);
+		m_Source.h = int(spriteSheet->m_Height / m_NrRow);
+		if (m_NrCol > 1)
+			m_Source.x = int(float(m_AnimationFrame % m_NrFrames) * m_Source.w + m_ExtraSpaceCol);
+		if (m_NrRow > 1)
+			m_Source.y = int(float(m_AnimationFrame % m_NrFrames) * m_Source.h + m_ExtraSpaceRow);
+	}
 }
 
 const SDL_Rect& dae::AnimationComponent::GetSource() const

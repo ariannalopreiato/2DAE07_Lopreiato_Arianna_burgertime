@@ -29,8 +29,6 @@ void PlayerComponent::Update(float)
 
 	if (m_Animation.lock() == nullptr)
 		m_Animation = m_GameObject.lock()->GetComponent<dae::AnimationComponent>();
-	
-	//m_Collision.lock()->m_IsBoxVisible = true;
 
 	SDL_Rect source = m_Animation.lock()->GetSource();
 	m_Texture.lock()->SetSource(source);
@@ -189,7 +187,7 @@ void PlayerComponent::IsWalkingOnIngredient()
 {
 	auto ingredients = LevelCreator::GetIngredients();
 	auto playerBox = m_Collision.lock()->GetCollisionBox();
-	for (int i = 0; i < ingredients.size(); ++i)
+	for (size_t i = 0; i < ingredients.size(); ++i)
 	{
 		auto pieces = ingredients.at(i)->GetComponent<Ingredient>()->GetPieces();
 		for (size_t currentPiece = 0; currentPiece < pieces.size(); ++currentPiece)
@@ -207,10 +205,12 @@ void PlayerComponent::Attack()
 		m_Attack = m_GameObject.lock()->GetComponent<PlayerAttackComponent>();
 
 	m_PlayerState = PlayerState::attacking;
-
 	m_Attack.lock()->Attack();
+}
 
-	m_PlayerState = PlayerState::idle;
+glm::vec2 PlayerComponent::GetVelocity() const
+{
+	return m_Velocity;
 }
 
 std::shared_ptr<dae::Component> PlayerComponent::Clone(const std::shared_ptr<dae::GameObject>& gameObject)

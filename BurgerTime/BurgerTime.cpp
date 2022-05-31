@@ -56,7 +56,7 @@ int main(int, char* []) {
     auto moveUp = std::make_unique<MoveCommand>(pPlayerComponentOne, PlayerDirection::up);
     auto moveDown = std::make_unique<MoveCommand>(pPlayerComponentOne, PlayerDirection::down);
     auto moveLeft = std::make_unique<MoveCommand>(pPlayerComponentOne, PlayerDirection::left);
-    pPlayerComponentOne->AddCommand(std::move(attack), dae::ControllerButton::ButtonA, false, 0);
+    pPlayerComponentOne->AddCommand(std::move(attack), SDL_SCANCODE_SPACE, false, 0);
     pPlayerComponentOne->AddCommand(std::move(moveRight), SDL_SCANCODE_D, true, 0);
     pPlayerComponentOne->AddCommand(std::move(moveDown),SDL_SCANCODE_S, true, 0);
     pPlayerComponentOne->AddCommand(std::move(moveLeft), SDL_SCANCODE_A, true, 0);

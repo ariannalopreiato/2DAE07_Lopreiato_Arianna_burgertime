@@ -53,7 +53,7 @@ void Ingredient::Update(float)
         if (m_Pieces.at(i).hasWalkedOnIt)
             ++countTouchedPieces;
     }
-    if (countTouchedPieces == m_NumPieces)
+    if (countTouchedPieces == int(m_NumPieces))
         m_IsFalling = true;
 
     if (m_IsFalling)

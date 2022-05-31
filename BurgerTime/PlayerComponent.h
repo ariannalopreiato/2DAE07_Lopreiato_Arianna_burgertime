@@ -33,6 +33,7 @@ public:
 	bool IsOnPlatform();
 	void IsWalkingOnIngredient();
 	void Attack();
+	glm::vec2 GetVelocity() const;
 	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 
 private:

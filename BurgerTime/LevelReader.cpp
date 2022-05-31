@@ -17,7 +17,7 @@ void LevelReader::ReadLevel(const std::string& path)
 	std::string line{};
 	while (std::getline(levelFile, line))
 	{
-		if (line.size() > maxCols)
+		if (int(line.size()) > maxCols)
 			maxCols = int(line.size()); //find the max amount of cols
 		++maxRows; //find the max amount of rows
 		file.emplace_back(line);

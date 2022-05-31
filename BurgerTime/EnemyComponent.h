@@ -11,25 +11,33 @@ class EnemyComponent : public dae::Component
 public:
 	EnemyComponent(const std::shared_ptr<dae::GameObject>& gameObject);
 	virtual void Update(float elapsedSec);
-	virtual void Render() const;
+	virtual void ImplementedMovement() = 0;
+
 	void SetPlayerPos(const SDL_Rect& playerPos);
 	bool m_IsStunned{ false };
-	bool CheckIsNextToStairs();
-	void CheckIntersection();
+
+protected:
+	virtual void Move(float elapsedSec);
+	bool IsNextToStairs();
 	bool IsOnPlatform();
-	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
+	bool CanGoUp();
+	bool CanGoDown();
+	void CheckIntersection();
 
-private:
-	void Move(float elapsedSec);
-
-	bool m_HasWalkedStair{ false };
+	bool m_CanClimb{ true };
+	float m_MaxWaitTime{ 3.f };
+	float m_CurrentTime{0.0f};
 	const float m_Speed{ 18.f };
+	SDL_Rect m_CurrentPlatformShape{};
+
 	const float m_EnemyWidth{ 25.f };
 	const float m_EnemyHeight{ 30.f };
 	glm::vec2 m_Velocity{ 0.0f, 0.0f };
+
 	const int m_StartingColHorizontal{ 2 };
 	const int m_StartingColUp{ 4 };
 	const int m_StartingColDown{ 0 };
+
 	std::weak_ptr<dae::Transform> m_Transform;
 	std::weak_ptr<dae::TextureComponent> m_Texture;
 	std::weak_ptr<dae::AnimationComponent> m_Animation;

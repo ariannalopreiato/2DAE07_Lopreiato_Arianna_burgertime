@@ -12,10 +12,13 @@ dae::TextureComponent::TextureComponent(const std::shared_ptr<GameObject>& gameO
 
 void dae::TextureComponent::Render() const
 {
-	const auto& pos = m_Transform.lock()->GetPosition();
-	const auto& size = m_Transform.lock()->GetSize();
-	//passes the texture, which part of the sheet to use, where to draw it and how to flip it
-	dae::Renderer::GetInstance().RenderTexture(*m_Texture, m_SrcRect, SDL_Rect{ int(pos.x), int(pos.y), int(size.x), int(size.y) }, m_Flip);
+	if (m_IsImageShowing)
+	{
+		const auto& pos = m_Transform.lock()->GetPosition();
+		const auto& size = m_Transform.lock()->GetSize();
+		//passes the texture, which part of the sheet to use, where to draw it and how to flip it
+		dae::Renderer::GetInstance().RenderTexture(*m_Texture, m_SrcRect, SDL_Rect{ int(pos.x), int(pos.y), int(size.x), int(size.y) }, m_Flip);
+	}
 }
 
 void dae::TextureComponent::Update(float)

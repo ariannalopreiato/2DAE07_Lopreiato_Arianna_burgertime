@@ -1,6 +1,5 @@
 #pragma once
 #include "MiniginPCH.h"
-#include "structs.h"
 #include <vector>
 #include "Component.h"
 #include "EnemyComponent.h"
