@@ -47,8 +47,6 @@ int main(int, char* []) {
 
     auto pHealthComponentOne = std::make_shared<HealthComponent>(pPlayerOne, 3);
 
-    auto pPointComponentOne = std::make_shared<PointComponent>(pPlayerOne, 0);
-
     auto pCollisionComponentOne = std::make_shared<dae::CollisionComponent>(pPlayerOne);
 
     auto attack = std::make_unique<AttackCommand>(pPlayerComponentOne);
@@ -62,7 +60,7 @@ int main(int, char* []) {
     pPlayerComponentOne->AddCommand(std::move(moveLeft), SDL_SCANCODE_A, true, 0);
     pPlayerComponentOne->AddCommand(std::move(moveUp), SDL_SCANCODE_W, true, 0);
 
-    auto picture = dae::ResourceManager::GetInstance().LoadTexture("../Data/Sprites/PeterPepper.png");
+    auto picture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/PeterPepper.png");
     auto pTextureComponentOne = std::make_shared<dae::TextureComponent>(pPlayerOne, picture);
 
     auto pAnimationComponentOne = std::make_shared<dae::AnimationComponent>(pPlayerOne, 3, 6, 9, 1);
@@ -72,7 +70,6 @@ int main(int, char* []) {
     auto pAttackComponentOne = std::make_shared<PlayerAttackComponent>(pPlayerOne, 5);
 
     pPlayerOne->AddComponent(pHealthComponentOne);
-    pPlayerOne->AddComponent(pPointComponentOne);
     pPlayerOne->AddComponent(pCollisionComponentOne);
     pPlayerOne->AddComponent(pAnimationComponentOne);
     pPlayerOne->AddComponent(pTextureComponentOne);
@@ -80,6 +77,23 @@ int main(int, char* []) {
     pPlayerOne->AddComponent(pAttackComponentOne);
 
     pPlayerOne->AddComponent(pPlayerComponentOne);
+
+    //------------------------------------------------------UI
+    auto ui = std::make_shared<dae::GameObject>();
+    ui->GetComponent<dae::Transform>()->SetPosition(150.f, 10.f, 0.0f);
+    auto font = dae::ResourceManager::GetInstance().LoadFont("../Data/RetroGaming.ttf", 20);
+    auto textComponent = std::make_shared<dae::TextObject>(ui, "HI-SCORE", font);
+    textComponent->SetColor(SDL_Color{ 255, 0, 0, 255 });
+    ui->AddComponent(textComponent);
+
+    //------------------------------------------------------Score component
+    auto scoreGO = std::make_shared<dae::GameObject>();
+    auto scoreComponent = std::make_shared<PointComponent>(scoreGO, 0, glm::vec3{ 170.f, 30.f, 0.0f });
+    auto textPoint = std::make_shared<dae::TextObject>(scoreGO, "0", font);
+    textPoint->SetColor(SDL_Color{ 255, 255, 255, 255 });
+    scoreGO->AddComponent(textPoint);
+    scoreGO->AddComponent(scoreComponent);
+
 
     dae::SoundSystem* soundSystem = new dae::SDL_SoundSystem();
     dae::ServiceLocator::RegisterSoundSystem(soundSystem);
@@ -91,15 +105,18 @@ int main(int, char* []) {
     auto ingredients = LevelCreator::GetIngredients();
     for (size_t j = 0; j < ingredients.size(); ++j)
     {
-        ingredients.at(j)->GetComponent<Ingredient>()->Initialize();
+        ingredients[j]->GetComponent<Ingredient>()->Initialize();
+        ingredients[j]->GetComponent<Ingredient>()->AddObserver(scoreComponent);
     }
     for (size_t i = 0; i < levelObjects.size(); ++i)
     {
         scene.Add(levelObjects.at(i));
     }
 
-    auto hotDog = EnemyManager::SpawnMrHotDog(640.f, 407.f);
+    auto hotDog = EnemyManager::SpawnMrHotDog(640.f, 408.f);
 
+    scene.Add(ui);
+    scene.Add(scoreGO);
     scene.Add(hotDog);
     scene.Add(pPlayerOne);
 

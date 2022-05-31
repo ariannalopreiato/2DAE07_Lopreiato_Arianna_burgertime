@@ -18,23 +18,38 @@ namespace dae
 
 		void AddComponent(std::shared_ptr<Component> component);
 		
-		template <typename Type>
-		std::shared_ptr<Type> GetComponent() const
+		template <typename ComponentType>
+		std::shared_ptr<ComponentType> GetComponent() const
 		{
 			for (size_t i = 0; i < m_Components.size(); ++i)
 			{
-				if (typeid(*m_Components.at(i)) == typeid(Type)) //if it's the same type
-					return std::static_pointer_cast<Type>(m_Components.at(i));
+				if (typeid(*m_Components.at(i)) == typeid(ComponentType)) //if it's the same type
+					return std::static_pointer_cast<ComponentType>(m_Components.at(i));
+			}
+			return nullptr;
+		}
+
+		template <typename ComponentType>
+		std::shared_ptr<ComponentType> GetComponentInheritance() const
+		{
+			for (size_t i = 0; i < m_Components.size(); ++i)
+			{
+				//if the current component can convert to the given component type
+				if (std::shared_ptr<ComponentType> currentComponent{ std::dynamic_pointer_cast<ComponentType>(m_Components[i]) };
+					currentComponent != nullptr)
+				{
+					return currentComponent;
+				}
 			}
 			return nullptr;
 		}
 
 		int GetComponentAmount();
-		template <typename Type>
+		template <typename ComponentType>
 		void RemoveComponentByType()
 		{
-			if(typeid(Type) != typeid(Transform)) //the transform component CANNOT be removed
-				m_Components.erase(std::remove_if(m_Components.begin(), m_Components.end(), [](const std::shared_ptr<Component>& component) {return typeid(*(component.get())) == typeid(Type); }), m_Components.end());
+			if(typeid(ComponentType) != typeid(Transform)) //the transform component CANNOT be removed
+				m_Components.erase(std::remove_if(m_Components.begin(), m_Components.end(), [](const std::shared_ptr<Component>& component) {return typeid(*(component.get())) == typeid(ComponentType); }), m_Components.end());
 		}
 
 		std::shared_ptr<GameObject> GetParent() const;
@@ -45,6 +60,7 @@ namespace dae
 		void RemoveChild(const std::shared_ptr<GameObject>& child);
 
 		void SetPosition(float x, float y);
+		bool m_MarkForDestruction{ false };
 
 	private:
 		std::vector<std::shared_ptr<GameObject>> m_Children{};

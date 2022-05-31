@@ -12,7 +12,8 @@ public:
 	EnemyComponent(const std::shared_ptr<dae::GameObject>& gameObject);
 	virtual void Update(float elapsedSec);
 	virtual void ImplementedMovement() = 0;
-
+	void CheckIsBeingHitByIngredient();
+	virtual void Die();
 	void SetPlayerPos(const SDL_Rect& playerPos);
 	bool m_IsStunned{ false };
 
@@ -25,10 +26,14 @@ protected:
 	void CheckIntersection();
 
 	bool m_CanClimb{ true };
-	float m_MaxWaitTime{ 3.f };
-	float m_CurrentTime{0.0f};
 	const float m_Speed{ 18.f };
 	SDL_Rect m_CurrentPlatformShape{};
+	glm::vec3 m_StartPos;
+
+	float m_MaxWaitTime{ 3.f };
+	float m_CurrentTime{ 0.0f };
+	bool m_IsDead{ false };
+	bool m_IsFalling{ false };
 
 	const float m_EnemyWidth{ 25.f };
 	const float m_EnemyHeight{ 30.f };

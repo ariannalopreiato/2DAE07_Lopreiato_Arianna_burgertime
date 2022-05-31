@@ -7,7 +7,7 @@ namespace dae
 {
 	//https://www.cprogramming.com/tutorial/function-pointers.html
 	template <typename T>
-	class Delegate final 
+	class Delegate 
 	{
 	public:
 

@@ -5,6 +5,7 @@
 #include "EnemyComponent.h"
 #include "CollisionComponent.h"
 #include "TextureComponent.h"
+#include "Subject.h"
 
 struct Piece
 {
@@ -12,7 +13,7 @@ struct Piece
 	bool hasWalkedOnIt;
 };
 
-class Ingredient : public dae::Component
+class Ingredient : public dae::Component, public dae::Subject
 {
 public:
 	Ingredient(const std::shared_ptr<dae::GameObject>& gameObject);
@@ -21,6 +22,8 @@ public:
 	void AssignPoints(int enemyNr);
 	const std::vector<Piece>& GetPieces() const;
 	void SetHasWalkedOnPiece(const size_t& index);
+	bool IsIngredientFalling();
+	void AddEnemyOnIngredient(const std::shared_ptr<dae::GameObject>& enemy);
 	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 
 private:
@@ -35,6 +38,8 @@ private:
 	int m_Speed{ 2 };
 	int m_PlateIdx{ 0 };
 	bool m_IsFallingOnPlate{ false };
+	int m_ContinueFallingCount{ 0 };
+	std::vector<std::shared_ptr<dae::GameObject>> m_EnemiesOnIngredient;
 
 	//Components
 	std::weak_ptr<dae::CollisionComponent> m_Collision;

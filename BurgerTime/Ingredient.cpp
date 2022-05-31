@@ -41,8 +41,6 @@ void Ingredient::Initialize()
             break;
         }
     }
-
-    //m_NextPlatform = FindNextFloor();
 }
 
 void Ingredient::Update(float)
@@ -58,15 +56,44 @@ void Ingredient::Update(float)
 
     if (m_IsFalling)
     {
-        if (CheckHitLevelObject()) //if it touched the floor under it, it stops falling
-            m_IsFalling = false;
+        if (CheckHitLevelObject()) //if it touched the floor under it
+        {
+            if (!m_EnemiesOnIngredient.empty()) //if there are enemies on top of it
+            {
+                if (m_ContinueFallingCount == int(m_EnemiesOnIngredient.size()) && !m_EnemiesOnIngredient.empty()) //if it fell for the amount of enemies
+                {
+                    for (size_t enemies = 0; enemies < m_EnemiesOnIngredient.size(); ++enemies)
+                        m_EnemiesOnIngredient[enemies]->GetComponentInheritance<EnemyComponent>()->Die();
+                    m_ContinueFallingCount = 0;
+                    m_EnemiesOnIngredient.clear();
+                    m_IsFalling = false;
+                }
+                else
+                {
+                    FindNextFloor();
+                    ++m_ContinueFallingCount;
+                }
+            }
+            else
+            {
+                notify("50");
+                m_IsFalling = false; //if there are no enemies on top, it stops
+            }
+        }
 
         else
-        {
+        {              
             CheckHitIngredient(); //if it touches an ingredient it's going to make it fall
             auto currentPos = m_Transform.lock()->GetPosition();
             currentPos.y += m_Speed;
             m_Transform.lock()->SetPosition(currentPos); //position ingredient after fall
+        }
+
+        auto currentPos = m_Transform.lock()->GetPosition();
+        for (size_t i = 0; i < m_EnemiesOnIngredient.size(); ++i)
+        {
+            auto enemyPos = m_EnemiesOnIngredient[i]->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+            m_EnemiesOnIngredient[i]->GetComponent<dae::Transform>()->SetPosition(float(enemyPos.x), float(currentPos.y - enemyPos.h), 0.0f);
         }
     }
 }
@@ -95,6 +122,16 @@ void Ingredient::ResetPieces()
 void Ingredient::SetHasWalkedOnPiece(const size_t& index)
 {
     m_Pieces.at(index).hasWalkedOnIt = true;
+}
+
+bool Ingredient::IsIngredientFalling()
+{
+    return m_IsFalling;
+}
+
+void Ingredient::AddEnemyOnIngredient(const std::shared_ptr<dae::GameObject>& enemy)
+{
+    m_EnemiesOnIngredient.emplace_back(enemy);
 }
 
 std::shared_ptr<dae::GameObject> Ingredient::FindNextFloor()
@@ -152,7 +189,8 @@ bool Ingredient::CheckHitLevelObject()
             {
                 m_Plates[m_PlateIdx]->GetComponent<Plate>()->AddIngredient(m_GameObject.lock());
                 m_IsFallingOnPlate = false;
-            }
+                m_ContinueFallingCount = int(m_EnemiesOnIngredient.size());
+            }         
             ResetPieces();
             return true;
         }

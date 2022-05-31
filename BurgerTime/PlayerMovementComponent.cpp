@@ -24,30 +24,6 @@ void PlayerMovementComponent::SetVelocity(glm::vec2 velocity)
 
 void PlayerMovementComponent::MoveBack()
 {
-	if (m_Velocity.x > 0.0f)
-	{
-		auto currentPos = m_Transform.lock()->GetPosition();
-		glm::vec2 newPos{ currentPos.x - m_MoveBack, currentPos.y };
-		m_Transform.lock()->SetPosition(newPos.x, newPos.y, 0.0f);
-	}
-	if (m_Velocity.x < 0.0f)
-	{
-		auto currentPos = m_Transform.lock()->GetPosition();
-		glm::vec2 newPos{ currentPos.x + m_MoveBack, currentPos.y };
-		m_Transform.lock()->SetPosition(newPos.x, newPos.y, 0.0f);
-	}
-	if (m_Velocity.y > 0.0f)
-	{
-		auto currentPos = m_Transform.lock()->GetPosition();
-		glm::vec2 newPos{ currentPos.x, currentPos.y - m_MoveBack };
-		m_Transform.lock()->SetPosition(newPos.x, newPos.y, 0.0f);
-	}
-	if (m_Velocity.y < 0.0f)
-	{
-		auto currentPos = m_Transform.lock()->GetPosition();
-		glm::vec2 newPos{ currentPos.x + m_MoveBack, currentPos.y };
-		m_Transform.lock()->SetPosition(newPos.x, newPos.y, 0.0f);
-	}
 }
 
 std::shared_ptr<dae::Component> PlayerMovementComponent::Clone(const std::shared_ptr<dae::GameObject>& gameObject)

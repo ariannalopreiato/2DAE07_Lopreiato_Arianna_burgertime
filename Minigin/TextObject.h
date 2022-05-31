@@ -1,5 +1,4 @@
 #pragma once
-#include "GameObject.h"
 #include "Transform.h"
 #include "Component.h"
 
@@ -27,11 +26,11 @@ namespace dae
 		TextObject& operator=(TextObject&& other) = delete;
 
 	private:
-		bool m_NeedsUpdate;
-		std::string m_Text;
-		std::weak_ptr<Transform> m_Transform;
-		std::shared_ptr<Font> m_Font;
-		std::shared_ptr<Texture2D> m_TextTexture;
+		bool m_NeedsUpdate{};
+		std::string m_Text{};
+		std::weak_ptr<Transform> m_Transform{};
+		std::shared_ptr<Font> m_Font{};
+		std::shared_ptr<Texture2D> m_TextTexture{};
 		SDL_Color m_Color{ 255,255,255 };
 	};
 }

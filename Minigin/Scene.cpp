@@ -1,6 +1,7 @@
 #include "MiniginPCH.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include <ranges>
 
 using namespace dae;
 
@@ -19,6 +20,12 @@ void Scene::Update(float elapsedTime)
 	{
 		object->Update(elapsedTime);
 	}
+
+	//new feature in C++20 -> like erase(std::remove)
+	std::ranges::destroy(std::views::filter(m_Objects, [](const std::shared_ptr<GameObject>& go)
+		{
+			return go->m_MarkForDestruction;
+		}));
 }
 
 void Scene::Render() const

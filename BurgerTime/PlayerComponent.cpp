@@ -11,6 +11,7 @@ PlayerComponent::PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObj
 	m_Transform = m_GameObject.lock()->GetComponent<dae::Transform>();
 	m_Transform.lock()->SetSize(m_PlayerWidth, m_PlayerHeight, 0.0f);
 	m_Transform.lock()->SetPosition(50.0f, 350.f, 0.0f);
+	m_StartPos = m_Transform.lock()->GetPosition();
 }
 
 void PlayerComponent::Update(float)
@@ -30,10 +31,21 @@ void PlayerComponent::Update(float)
 	if (m_Animation.lock() == nullptr)
 		m_Animation = m_GameObject.lock()->GetComponent<dae::AnimationComponent>();
 
+	auto playerCollBox{ m_Collision.lock()->GetCollisionBox() };
+	m_LineLeft = Line{ playerCollBox.x, 
+		playerCollBox.y + playerCollBox.h, 
+		playerCollBox.x, 
+		playerCollBox.y + playerCollBox.h + m_LineLength };
+	m_LineRight = Line{ playerCollBox.x + playerCollBox.w, 
+		playerCollBox.y + playerCollBox.h, 
+		playerCollBox.x + playerCollBox.w, 
+		playerCollBox.y + playerCollBox.h + m_LineLength };
+
 	SDL_Rect source = m_Animation.lock()->GetSource();
 	m_Texture.lock()->SetSource(source);
 	CheckIsNextToStairs();
 	IsWalkingOnIngredient();
+	CheckIsHitByEnemy();
 
 	switch (m_PlayerState)
 	{
@@ -90,12 +102,24 @@ void PlayerComponent::Update(float)
 		switch (m_PlayerDirection)
 		{
 		case PlayerDirection::left:
-			m_Velocity.x = -1.0f;
-			m_Velocity.y = 0.0f;
+			if (CanGoLeft())
+			{
+				m_Velocity.x = -1.0f;
+				m_Velocity.y = 0.0f;
+				//SnapDown();
+			}
+			else
+				SnapBack();
 			break;
 		case PlayerDirection::right:
-			m_Velocity.x = 1.0f;
-			m_Velocity.y = 0.0f;
+			if (CanGoRight())
+			{
+				m_Velocity.x = 1.0f;
+				m_Velocity.y = 0.0f;
+				//SnapDown();
+			}
+			else
+				SnapBack();
 			m_Texture.lock()->SetFlip(SDL_FLIP_HORIZONTAL); //flip the image
 			m_Texture.lock()->m_IsImageFlipped = true;
 			break;
@@ -129,7 +153,8 @@ void PlayerComponent::AddCommand(std::unique_ptr<dae::Command> command,SDL_Scanc
 
 void PlayerComponent::Move(PlayerDirection direction)
 {
-	if (direction != PlayerDirection::up && direction != PlayerDirection::down && m_PlayerState != PlayerState::climbing && IsOnPlatform())
+	if (direction != PlayerDirection::up && direction != PlayerDirection::down && m_PlayerState != PlayerState::climbing
+		&&(CanGoLeft() || CanGoRight()))
 		m_PlayerState = PlayerState::walking;
 	else
 	{
@@ -166,23 +191,6 @@ void PlayerComponent::CheckIsNextToStairs()
 	}
 }
 
-bool PlayerComponent::IsOnPlatform()
-{
-	if (m_PlayerState != PlayerState::climbing)
-	{
-		auto objects = LevelCreator::GetObjects();
-		auto playerBox = m_Collision.lock()->GetCollisionBox();
-		for (size_t i = 0; i < objects.size(); ++i)
-		{
-			auto box = objects.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
-			if (playerBox.y + playerBox.h == box.y /*&& playerBox.x >= box.x && playerBox.x + playerBox.w <= box.x + box.w*/)
-				return true;
-		}
-		//m_Movement.lock()->MoveBack();
-	}
-	return false;
-}
-
 void PlayerComponent::IsWalkingOnIngredient()
 {
 	auto ingredients = LevelCreator::GetIngredients();
@@ -193,8 +201,24 @@ void PlayerComponent::IsWalkingOnIngredient()
 		for (size_t currentPiece = 0; currentPiece < pieces.size(); ++currentPiece)
 		{
 			auto box = pieces.at(currentPiece).shapeSize;
-			if (box.y == playerBox.y + playerBox.h && playerBox.x + playerBox.w / 2 > box.x && playerBox.x + playerBox.w / 2 < box.x + box.w)
-				ingredients.at(i)->GetComponent<Ingredient>()->SetHasWalkedOnPiece(currentPiece);
+			if (SDL_IntersectRectAndLine(&box, &m_LineLeft.x1, &m_LineLeft.y1, &m_LineLeft.x2, &m_LineLeft.y2)
+				|| SDL_IntersectRectAndLine(&box, &m_LineRight.x1, &m_LineRight.y1, &m_LineRight.x2, &m_LineRight.y2))
+				ingredients[i]->GetComponent<Ingredient>()->SetHasWalkedOnPiece(currentPiece);
+		}
+	}
+}
+
+void PlayerComponent::CheckIsHitByEnemy()
+{
+	auto enemies = EnemyManager::GetEnemies();
+	for (size_t i = 0; i < enemies.size(); ++i)
+	{
+		auto enemyColl = enemies[i].lock()->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+		if (m_Collision.lock()->IsOverlapping(enemyColl))
+		{
+			m_GameObject.lock()->GetComponent<HealthComponent>()->RemoveLife();
+			m_Transform.lock()->SetPosition(m_StartPos);
+			enemies[i].lock()->GetComponentInheritance<EnemyComponent>()->Die();
 		}
 	}
 }
@@ -206,6 +230,63 @@ void PlayerComponent::Attack()
 
 	m_PlayerState = PlayerState::attacking;
 	m_Attack.lock()->Attack();
+}
+
+bool PlayerComponent::CanGoLeft()
+{
+	if (m_PlayerState != PlayerState::climbing)
+	{
+		auto objects = LevelCreator::GetPlatforms();
+		auto playerBox = m_Collision.lock()->GetCollisionBox();
+		for (size_t i = 0; i < objects.size(); ++i)
+		{
+			auto box = objects.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+			box.h = 1;
+			if (SDL_IntersectRectAndLine(&box, &m_LineLeft.x1, &m_LineLeft.y1, &m_LineLeft.x2, &m_LineLeft.y2))
+			{
+				m_PlatformColliding = box;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool PlayerComponent::CanGoRight()
+{
+	if (m_PlayerState != PlayerState::climbing)
+	{
+		auto objects = LevelCreator::GetPlatforms();
+		auto playerBox = m_Collision.lock()->GetCollisionBox();
+		for (size_t i = 0; i < objects.size(); ++i)
+		{
+			auto box = objects.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+			box.h = 1;
+			if (SDL_IntersectRectAndLine(&box, &m_LineRight.x1, &m_LineRight.y1, &m_LineRight.x2, &m_LineRight.y2))
+			{
+				m_PlatformColliding = box;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+void PlayerComponent::SnapBack()
+{
+	int pushBack{ 1 };
+	auto currentPos = m_Transform.lock()->GetPosition();
+	if (!CanGoLeft())
+		m_Transform.lock()->SetPosition(float(currentPos.x + pushBack), float(currentPos.y), 0.0f);
+	else if (!CanGoRight())
+		m_Transform.lock()->SetPosition(float(currentPos.x - pushBack), float(currentPos.y), 0.0f);
+}
+
+void PlayerComponent::SnapDown()
+{
+	auto playerBox = m_Collision.lock()->GetCollisionBox();
+	int pushBack{ m_PlatformColliding.y - (playerBox.y + playerBox.h) };
+	m_Transform.lock()->SetPosition(float(playerBox.x), float(playerBox.y + pushBack), 0.0f);
 }
 
 glm::vec2 PlayerComponent::GetVelocity() const
