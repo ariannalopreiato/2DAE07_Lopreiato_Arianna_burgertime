@@ -4,46 +4,19 @@
 #include <thread>
 #include "BurgerTime.h"
 #include "Minigin.h"
-#include "MoveCommand.h"
-#include "ControllerButton.h"
-#include "SoundSystem.h"
-#include "ServiceLocator.h"
-#include "SDL_SoundSystem.h"
 #include "SceneManager.h"
-#include "GameObject.h"
-#include "TextObject.h"
-#include "Scene.h"
-#include "InputManager.h"
-#include "Renderer.h"
-#include "PlayerComponent.h"
-#include "HealthComponent.h"
-#include "PointComponent.h"
-#include "CollisionComponent.h"
-#include "TextureComponent.h"
-#include "AnimationComponent.h"
-#include "PlayerMovementComponent.h"
-#include "PlayerAttackComponent.h"
-#include "Ingredient.h"
-#include "Texture2D.h"
-#include "AttackCommand.h"
-#include "LevelReader.h"
-#include "LevelCreator.h"
-#include "EnemyManager.h"
+#include "FirstScene.h"
 
 int main(int, char* []) {
-
-    //BurgerTime engine;
-    //engine.Initialize();
-    //engine.LoadGame();
-    //engine.Run();
-    //engine.Cleanup();
     dae::Minigin engine;
     engine.Initialize();
     auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
+    //FirstScene* firstScene = new FirstScene("Level 1");
+    //firstScene->LoadSceneElements();
 
-    //////player one initialization
+        //////player one initialization
     auto pPlayerOne = std::make_shared<dae::GameObject>();
-    auto pPlayerComponentOne = std::make_shared<PlayerComponent>(pPlayerOne, 5);
+    auto pPlayerComponentOne = std::make_shared<PlayerComponent>(pPlayerOne, 0);
 
     auto pHealthComponentOne = std::make_shared<HealthComponent>(pPlayerOne, 3);
 
@@ -54,11 +27,11 @@ int main(int, char* []) {
     auto moveUp = std::make_unique<MoveCommand>(pPlayerComponentOne, PlayerDirection::up);
     auto moveDown = std::make_unique<MoveCommand>(pPlayerComponentOne, PlayerDirection::down);
     auto moveLeft = std::make_unique<MoveCommand>(pPlayerComponentOne, PlayerDirection::left);
-    pPlayerComponentOne->AddCommand(std::move(attack), SDL_SCANCODE_SPACE, false, 0);
-    pPlayerComponentOne->AddCommand(std::move(moveRight), SDL_SCANCODE_D, true, 0);
-    pPlayerComponentOne->AddCommand(std::move(moveDown),SDL_SCANCODE_S, true, 0);
-    pPlayerComponentOne->AddCommand(std::move(moveLeft), SDL_SCANCODE_A, true, 0);
-    pPlayerComponentOne->AddCommand(std::move(moveUp), SDL_SCANCODE_W, true, 0);
+    pPlayerComponentOne->AddCommand(std::move(attack), SDL_SCANCODE_E, false);
+    pPlayerComponentOne->AddCommand(std::move(moveRight), SDL_SCANCODE_D, true);
+    pPlayerComponentOne->AddCommand(std::move(moveDown), SDL_SCANCODE_S, true);
+    pPlayerComponentOne->AddCommand(std::move(moveLeft), SDL_SCANCODE_A, true);
+    pPlayerComponentOne->AddCommand(std::move(moveUp), SDL_SCANCODE_W, true);
 
     auto picture = dae::ResourceManager::GetInstance().LoadTexture("Sprites/PeterPepper.png");
     auto pTextureComponentOne = std::make_shared<dae::TextureComponent>(pPlayerOne, picture);
@@ -77,6 +50,43 @@ int main(int, char* []) {
     pPlayerOne->AddComponent(pAttackComponentOne);
 
     pPlayerOne->AddComponent(pPlayerComponentOne);
+
+    //////player two initialization
+    //auto pPlayerTwo = std::make_shared<dae::GameObject>();
+    //auto pPlayerComponentTwo = std::make_shared<PlayerComponent>(pPlayerTwo, 1);
+
+    //auto pHealthComponentTwo = std::make_shared<HealthComponent>(pPlayerTwo, 3);
+
+    //auto pCollisionComponentTwo = std::make_shared<dae::CollisionComponent>(pPlayerTwo);
+
+    //auto attack2 = std::make_unique<AttackCommand>(pPlayerComponentTwo);
+    //auto moveRight2 = std::make_unique<MoveCommand>(pPlayerComponentTwo, PlayerDirection::right);
+    //auto moveUp2 = std::make_unique<MoveCommand>(pPlayerComponentTwo, PlayerDirection::up);
+    //auto moveDown2 = std::make_unique<MoveCommand>(pPlayerComponentTwo, PlayerDirection::down);
+    //auto moveLeft2 = std::make_unique<MoveCommand>(pPlayerComponentTwo, PlayerDirection::left);
+    //pPlayerComponentTwo->AddCommand(std::move(attack2), dae::ControllerButton::ButtonA, false);
+    //pPlayerComponentTwo->AddCommand(std::move(moveRight), SDL_SCANCODE_D, true);
+    //pPlayerComponentTwo->AddCommand(std::move(moveDown), SDL_SCANCODE_S, true);
+    //pPlayerComponentTwo->AddCommand(std::move(moveLeft), SDL_SCANCODE_A, true);
+    //pPlayerComponentTwo->AddCommand(std::move(moveUp), SDL_SCANCODE_W, true);
+
+    //auto picture2 = dae::ResourceManager::GetInstance().LoadTexture("Sprites/MrsSalt.png");
+    //auto pTextureComponentTwo = std::make_shared<dae::TextureComponent>(pPlayerTwo, picture2);
+
+    //auto pAnimationComponentTwo = std::make_shared<dae::AnimationComponent>(pPlayerTwo, 3, 6, 9, 1);
+
+    //auto pMovementComponentTwo = std::make_shared<PlayerMovementComponent>(pPlayerTwo, 50.0f);
+
+    //auto pAttackComponentTwo = std::make_shared<PlayerAttackComponent>(pPlayerTwo, 5);
+
+    //pPlayerTwo->AddComponent(pHealthComponentTwo);
+    //pPlayerTwo->AddComponent(pCollisionComponentTwo);
+    //pPlayerTwo->AddComponent(pAnimationComponentTwo);
+    //pPlayerTwo->AddComponent(pTextureComponentTwo);
+    //pPlayerTwo->AddComponent(pMovementComponentTwo);
+    //pPlayerTwo->AddComponent(pAttackComponentTwo);
+
+    //pPlayerTwo->AddComponent(pPlayerComponentTwo);
 
     //------------------------------------------------------UI
     auto highScore = std::make_shared<dae::GameObject>();

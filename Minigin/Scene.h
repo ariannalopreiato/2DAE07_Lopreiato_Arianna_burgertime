@@ -8,14 +8,13 @@ namespace dae
 	{
 		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
+		Scene(const std::string& name);
 		void Add(const std::shared_ptr<GameObject>& object);
 
 		void Update(float elapsedTime);
 		void Render() const;
 
 	private: 
-		explicit Scene(const std::string& name);
-
 		std::string m_Name;
 		std::vector<std::shared_ptr<GameObject>> m_Objects;
 

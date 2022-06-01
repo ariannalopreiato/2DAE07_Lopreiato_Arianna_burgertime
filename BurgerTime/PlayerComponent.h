@@ -30,8 +30,8 @@ public:
 	PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObject, int playerIdx);
 	void Update(float elapsedSec);
 	void Render() const;
-	void AddCommand(std::unique_ptr<dae::Command> command, dae::ControllerButton button, bool executeOnPress, int playerIdx);
-	void AddCommand(std::unique_ptr<dae::Command> command, SDL_Scancode key, bool executeOnPress, int playerIdx);
+	void AddCommand(std::unique_ptr<dae::Command> command, dae::ControllerButton button, bool executeOnPress);
+	void AddCommand(std::unique_ptr<dae::Command> command, SDL_Scancode key, bool executeOnPress);
 	void CheckStates();
 	void Move(PlayerDirection direction);
 	void CheckIsNextToStairs();
@@ -39,6 +39,8 @@ public:
 	void Attack();
 	bool CanGoLeft();
 	bool CanGoRight();
+	bool CanGoUp();
+	bool CanGoDown();
 	void SnapBack();
 	void SnapDown();
 	void SnapToStair(const SDL_Rect& stairBox);
@@ -57,6 +59,7 @@ private:
 
 	//Handle animation
 	bool m_IsNextToStairs{ false };
+	bool m_CanGoUp{ false };
 	const int m_StartingColHorizontal{ 3 };
 	const int m_StartingColUp{ 6 };
 	const int m_StartingColDown{ 0 };
@@ -79,6 +82,6 @@ private:
 	Line m_LineLeft{};
 	Line m_LineRight{};
 	SDL_Rect m_PlatformColliding{};
-	int m_LineLength{ 5 };
+	int m_LineLength{ 2 };
 };
 
