@@ -214,6 +214,7 @@ void EnemyComponent::CheckIntersection()
 
 void EnemyComponent::Die()
 {
+	notify(std::to_string(m_Points));
 	m_IsDead = true;
 	m_Transform.lock()->SetPosition(m_StartPos);
 }

@@ -5,8 +5,9 @@
 #include "AnimationComponent.h"
 #include "TextureComponent.h"
 #include "LevelCreator.h"
+#include "Subject.h"
 
-class EnemyComponent : public dae::Component
+class EnemyComponent : public dae::Component, public dae::Subject
 {
 public:
 	EnemyComponent(const std::shared_ptr<dae::GameObject>& gameObject);
@@ -29,6 +30,7 @@ protected:
 	const float m_Speed{ 18.f };
 	SDL_Rect m_CurrentPlatformShape{};
 	glm::vec3 m_StartPos;
+	int m_Points{ 0 };
 
 	float m_MaxWaitTime{ 3.f };
 	float m_CurrentTime{ 0.0f };

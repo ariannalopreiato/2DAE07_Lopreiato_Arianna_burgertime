@@ -10,6 +10,7 @@ MrEggComponent::MrEggComponent(const std::shared_ptr<dae::GameObject>& gameObjec
 	auto animationComponent = std::make_shared<dae::AnimationComponent>(m_GameObject.lock(), 2, 6, 8, 1);
 	m_GameObject.lock()->AddComponent(animationComponent);
 	m_Texture = texture;
+	m_Points = 300;
 }
 
 std::shared_ptr<dae::Component> MrEggComponent::Clone(const std::shared_ptr<dae::GameObject>& gameObject)

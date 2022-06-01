@@ -62,6 +62,8 @@ void Ingredient::Update(float)
             {
                 if (m_ContinueFallingCount == int(m_EnemiesOnIngredient.size()) && !m_EnemiesOnIngredient.empty()) //if it fell for the amount of enemies
                 {
+                    int pointsForEnemies{ 500 };
+                    notify(std::to_string(pointsForEnemies * int(m_EnemiesOnIngredient.size())));
                     for (size_t enemies = 0; enemies < m_EnemiesOnIngredient.size(); ++enemies)
                         m_EnemiesOnIngredient[enemies]->GetComponentInheritance<EnemyComponent>()->Die();
                     m_ContinueFallingCount = 0;
@@ -96,11 +98,6 @@ void Ingredient::Update(float)
             m_EnemiesOnIngredient[i]->GetComponent<dae::Transform>()->SetPosition(float(enemyPos.x), float(currentPos.y - enemyPos.h), 0.0f);
         }
     }
-}
-
-void Ingredient::AssignPoints(int)
-{
-
 }
 
 const std::vector<Piece>& Ingredient::GetPieces() const
