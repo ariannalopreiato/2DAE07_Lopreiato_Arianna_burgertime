@@ -1,16 +1,12 @@
 #pragma once
 #include "MiniginPCH.h"
 #include "Component.h"
-#include "PointComponent.h"
 #include "Texture2D.h"
 #include "TextureComponent.h"
-#include "HealthComponent.h"
 #include "CollisionComponent.h"
-#include "AnimationComponent.h"
 #include "MrEggComponent.h"
 #include "MrHotDogComponent.h"
 #include "MrPickleComponent.h"
-#include "LevelCreator.h"
 
 class EnemyManager
 {
@@ -22,9 +18,6 @@ public:
 	static std::shared_ptr<dae::GameObject> SpawnMrPickle(float posX, float posY);
 	static const std::vector<std::weak_ptr<dae::GameObject>>& GetEnemies();
 	static void SetPlayerPos(const SDL_Rect& playerPos);
-	//static void CheckInOnIngredient();
-	//static void CheckIsBeingHitByIngredient();
-	//static void RemoveEnemy(int index);
 
 private:
 	EnemyManager();

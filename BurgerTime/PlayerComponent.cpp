@@ -43,10 +43,39 @@ void PlayerComponent::Update(float)
 
 	SDL_Rect source = m_Animation.lock()->GetSource();
 	m_Texture.lock()->SetSource(source);
+
 	CheckIsNextToStairs();
+
 	IsWalkingOnIngredient();
+
 	CheckIsHitByEnemy();
 
+	CheckStates();
+	
+	EnemyManager::SetPlayerPos(m_Collision.lock()->GetCollisionBox());
+}
+
+void PlayerComponent::Render() const
+{
+	auto renderer = dae::Renderer::GetInstance().GetSDLRenderer();
+	SDL_SetRenderDrawColor(renderer, Uint8{ 255 }, Uint8{ 0 }, Uint8{ 0 }, Uint8{ 255 });
+	SDL_RenderDrawRect(renderer, &test);
+}
+
+void PlayerComponent::AddCommand(std::unique_ptr<dae::Command> command, dae::ControllerButton button, bool executeOnPress, int playerIdx)
+{
+	auto& inputManager = dae::InputManager::GetInstance();
+	inputManager.AddCommandController(std::move(command), button, executeOnPress, playerIdx);
+}
+
+void PlayerComponent::AddCommand(std::unique_ptr<dae::Command> command,SDL_Scancode key, bool executeOnPress, int playerIdx)
+{
+	auto& inputManager = dae::InputManager::GetInstance();
+	inputManager.AddCommandKeyboard(std::move(command), key, executeOnPress, playerIdx);
+}
+
+void PlayerComponent::CheckStates()
+{
 	switch (m_PlayerState)
 	{
 	case PlayerState::attacking:
@@ -55,7 +84,7 @@ void PlayerComponent::Update(float)
 		m_Velocity.x = 0.0f;
 		m_Velocity.y = 0.0f;
 		break;
-		
+
 	case PlayerState::climbing:
 		m_Animation.lock()->m_CanAnimate = true;
 		switch (m_PlayerDirection)
@@ -75,10 +104,10 @@ void PlayerComponent::Update(float)
 			break;
 		}
 		break;
-		
+
 	case PlayerState::idle:
 		m_Animation.lock()->m_CanAnimate = false;
-		if(m_Texture.lock()->m_IsImageFlipped)
+		if (m_Texture.lock()->m_IsImageFlipped)
 			m_Animation.lock()->SetNewStartingCol(m_CurrentCol - 1);
 		else
 			m_Animation.lock()->SetNewStartingCol(m_CurrentCol + 1);
@@ -129,26 +158,6 @@ void PlayerComponent::Update(float)
 
 	m_Movement.lock()->SetVelocity(m_Velocity);
 	m_PlayerState = PlayerState::idle;
-	EnemyManager::SetPlayerPos(m_Collision.lock()->GetCollisionBox());
-}
-
-void PlayerComponent::Render() const
-{
-	auto renderer = dae::Renderer::GetInstance().GetSDLRenderer();
-	SDL_SetRenderDrawColor(renderer, Uint8{ 255 }, Uint8{ 0 }, Uint8{ 0 }, Uint8{ 255 });
-	SDL_RenderDrawRect(renderer, &test);
-}
-
-void PlayerComponent::AddCommand(std::unique_ptr<dae::Command> command, dae::ControllerButton button, bool executeOnPress, int playerIdx)
-{
-	auto& inputManager = dae::InputManager::GetInstance();
-	inputManager.AddCommandController(std::move(command), button, executeOnPress, playerIdx);
-}
-
-void PlayerComponent::AddCommand(std::unique_ptr<dae::Command> command,SDL_Scancode key, bool executeOnPress, int playerIdx)
-{
-	auto& inputManager = dae::InputManager::GetInstance();
-	inputManager.AddCommandKeyboard(std::move(command), key, executeOnPress, playerIdx);
 }
 
 void PlayerComponent::Move(PlayerDirection direction)
@@ -287,6 +296,12 @@ void PlayerComponent::SnapDown()
 	auto playerBox = m_Collision.lock()->GetCollisionBox();
 	int pushBack{ m_PlatformColliding.y - (playerBox.y + playerBox.h) };
 	m_Transform.lock()->SetPosition(float(playerBox.x), float(playerBox.y + pushBack), 0.0f);
+}
+
+void PlayerComponent::SnapToStair(const SDL_Rect& stairBox)
+{
+	auto playerBox = m_Collision.lock()->GetCollisionBox();
+	m_Transform.lock()->SetPosition(float(stairBox.x), float(playerBox.y), 0.0f);
 }
 
 glm::vec2 PlayerComponent::GetVelocity() const

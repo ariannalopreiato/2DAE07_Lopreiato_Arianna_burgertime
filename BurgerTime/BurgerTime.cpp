@@ -79,12 +79,26 @@ int main(int, char* []) {
     pPlayerOne->AddComponent(pPlayerComponentOne);
 
     //------------------------------------------------------UI
-    auto ui = std::make_shared<dae::GameObject>();
-    ui->GetComponent<dae::Transform>()->SetPosition(150.f, 10.f, 0.0f);
+    auto highScore = std::make_shared<dae::GameObject>();
+    highScore->GetComponent<dae::Transform>()->SetPosition(150.f, 5.f, 0.0f);
     auto font = dae::ResourceManager::GetInstance().LoadFont("../Data/RetroGaming.ttf", 20);
-    auto textComponent = std::make_shared<dae::TextObject>(ui, "HI-SCORE", font);
-    textComponent->SetColor(SDL_Color{ 255, 0, 0, 255 });
-    ui->AddComponent(textComponent);
+    auto hiScoreText = std::make_shared<dae::TextObject>(highScore, "HI-SCORE", font);
+    hiScoreText->SetColor(SDL_Color{ 255, 0, 0, 255 });
+
+    auto up = std::make_shared<dae::GameObject>();
+    up->GetComponent<dae::Transform>()->SetPosition(50.f, 5.f, 0.0f);
+    auto upText = std::make_shared<dae::TextObject>(up, "1UP", font);
+    upText->SetColor(SDL_Color{ 255, 0, 0, 255 });
+
+    auto pepperText = std::make_shared<dae::GameObject>();
+    pepperText->GetComponent<dae::Transform>()->SetPosition(570.f, 10.f, 0.0f);
+    pepperText->GetComponent<dae::Transform>()->SetSize(50.f, 15.f, 0.0f);
+    auto pepperTextPic = dae::ResourceManager::GetInstance().LoadTexture("Sprites/PepperText.png");
+    auto pepperTexture = std::make_shared<dae::TextureComponent>(pepperText, pepperTextPic);
+
+    pepperText->AddComponent(pepperTexture);
+    highScore->AddComponent(hiScoreText);
+    up->AddComponent(upText);
 
     //------------------------------------------------------Score component
     auto scoreGO = std::make_shared<dae::GameObject>();
@@ -93,6 +107,22 @@ int main(int, char* []) {
     textPoint->SetColor(SDL_Color{ 255, 255, 255, 255 });
     scoreGO->AddComponent(textPoint);
     scoreGO->AddComponent(scoreComponent);
+
+    //------------------------------------------------------Pepper component
+    auto pepperGO = std::make_shared<dae::GameObject>();
+    auto pepperComponent = std::make_shared<PointComponent>(pepperGO, 0, glm::vec3{ 600.f, 30.f, 0.0f });
+    auto pepperAmount = std::make_shared<dae::TextObject>(pepperGO, "5", font);
+    pepperAmount->SetColor(SDL_Color{ 255, 255, 255, 255 });
+    pepperGO->AddComponent(pepperAmount);
+    pepperGO->AddComponent(pepperComponent);
+
+    //------------------------------------------------------Lives component
+    //auto livesGO = std::make_shared<dae::GameObject>();
+    //auto pepperComponent = std::make_shared<PointComponent>(pepperGO, 0, glm::vec3{ 600.f, 30.f, 0.0f });
+    //auto pepperAmount = std::make_shared<dae::TextObject>(pepperGO, "5", font);
+    //pepperAmount->SetColor(SDL_Color{ 255, 255, 255, 255 });
+    //pepperGO->AddComponent(pepperAmount);
+    //pepperGO->AddComponent(pepperComponent);
 
 
     dae::SoundSystem* soundSystem = new dae::SDL_SoundSystem();
@@ -114,8 +144,12 @@ int main(int, char* []) {
     }
 
     auto hotDog = EnemyManager::SpawnMrHotDog(640.f, 408.f);
+    //hotDog->GetComponent<EnemyComponent>()->AddObserver(scoreComponent);
 
-    scene.Add(ui);
+    scene.Add(pepperText);
+    scene.Add(highScore);
+    scene.Add(up);
+    scene.Add(pepperGO);
     scene.Add(scoreGO);
     scene.Add(hotDog);
     scene.Add(pPlayerOne);

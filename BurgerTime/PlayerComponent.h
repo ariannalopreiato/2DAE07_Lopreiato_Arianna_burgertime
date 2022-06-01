@@ -32,6 +32,7 @@ public:
 	void Render() const;
 	void AddCommand(std::unique_ptr<dae::Command> command, dae::ControllerButton button, bool executeOnPress, int playerIdx);
 	void AddCommand(std::unique_ptr<dae::Command> command, SDL_Scancode key, bool executeOnPress, int playerIdx);
+	void CheckStates();
 	void Move(PlayerDirection direction);
 	void CheckIsNextToStairs();
 	void IsWalkingOnIngredient();
@@ -40,6 +41,7 @@ public:
 	bool CanGoRight();
 	void SnapBack();
 	void SnapDown();
+	void SnapToStair(const SDL_Rect& stairBox);
 	glm::vec2 GetVelocity() const;
 	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 
