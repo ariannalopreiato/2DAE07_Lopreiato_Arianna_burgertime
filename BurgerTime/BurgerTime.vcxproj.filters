@@ -78,9 +78,6 @@
     <ClCompile Include="Plate.cpp">
       <Filter>Components\Ingredients</Filter>
     </ClCompile>
-    <ClCompile Include="LevelChecker.cpp">
-      <Filter>Level</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerAttackComponent.cpp">
       <Filter>Components\Player\Attack</Filter>
     </ClCompile>
@@ -104,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="MrPickleComponent.cpp">
       <Filter>Components\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterBehaviour.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,9 +149,6 @@
     <ClInclude Include="Plate.h">
       <Filter>Components\Ingredients</Filter>
     </ClInclude>
-    <ClInclude Include="LevelChecker.h">
-      <Filter>Level</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerAttackComponent.h">
       <Filter>Components\Player\Attack</Filter>
     </ClInclude>
@@ -175,6 +172,12 @@
     </ClInclude>
     <ClInclude Include="MrEggComponent.h">
       <Filter>Components\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Structs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterBehaviour.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

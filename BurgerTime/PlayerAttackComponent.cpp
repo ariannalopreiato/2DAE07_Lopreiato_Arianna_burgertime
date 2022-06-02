@@ -12,8 +12,17 @@ PlayerAttackComponent::PlayerAttackComponent(const std::shared_ptr<dae::GameObje
 	m_Pepper = SpawnPepper();
 }
 
-void PlayerAttackComponent::Update(float)
+void PlayerAttackComponent::Update(float elapsedSec)
 {
+	if (m_IsPepperInitialized)
+	{
+		m_CurrentTime += elapsedSec;
+		if (m_CurrentTime >= m_SpawnTime)
+		{
+			m_IsPepperInitialized = false;
+			m_Pepper.lock()->m_MarkForDestruction;
+		}
+	}
 }
 
 void PlayerAttackComponent::Attack()
@@ -21,9 +30,8 @@ void PlayerAttackComponent::Attack()
 	if (m_CurrentShots > 0)
 	{
 		--m_CurrentShots;
-		m_IsActive = true;
-
-		//m_Pepper.lock()->GetComponent<Pepper>()->ActivatePepper();
+		SpawnPepper();
+		m_IsPepperInitialized = true;
 	}
 }
 
@@ -42,6 +50,7 @@ std::shared_ptr<dae::GameObject> PlayerAttackComponent::SpawnPepper()
 	gameObj->AddComponent(texture);
 	gameObj->AddComponent(collision);
 	//pepper->AddComponent(animation);
+	m_Pepper = gameObj;
 
 	return gameObj;
 }

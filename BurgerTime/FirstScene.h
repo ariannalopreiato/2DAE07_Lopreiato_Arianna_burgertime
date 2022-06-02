@@ -29,6 +29,6 @@ class FirstScene : public dae::Scene
 {
 public:
 	FirstScene(const std::string& name);
-	void LoadSceneElements();
+	virtual void LoadSceneElements() override;
 };
 

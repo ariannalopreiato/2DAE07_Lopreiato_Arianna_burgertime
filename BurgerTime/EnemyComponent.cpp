@@ -1,5 +1,6 @@
 #include "EnemyComponent.h"
 #include "GameObject.h"
+#include "LevelCreator.h"
 
 EnemyComponent::EnemyComponent(const std::shared_ptr<dae::GameObject>& gameObject)
 	:Component(gameObject)
@@ -9,32 +10,30 @@ EnemyComponent::EnemyComponent(const std::shared_ptr<dae::GameObject>& gameObjec
 	m_Transform.lock()->SetSize(m_EnemyWidth, m_EnemyHeight, 0.0f);
 	m_Velocity.x = -1.0f;
 	m_Velocity.y = 0.0f;
-
+	m_Behaviour = m_GameObject.lock()->GetComponent<CharacterBehaviour>();
 }
 
 void EnemyComponent::Update(float elapsedSec)
 {
+	if (m_Animation.lock() == nullptr)
+		m_Animation = m_GameObject.lock()->GetComponent<dae::AnimationComponent>();
+	if (m_Texture.lock() == nullptr)
+		m_Texture = m_GameObject.lock()->GetComponent<dae::TextureComponent>();
+	if (m_Collision.lock() == nullptr)
+		m_Collision = m_GameObject.lock()->GetComponent<dae::CollisionComponent>();
+	if (m_Behaviour.lock() == nullptr)
+		m_Behaviour = m_GameObject.lock()->GetComponent<CharacterBehaviour>();
+
 	if (!m_IsFalling && !m_IsDead)
 	{
-		//when reaching intersection it checks which direction takes them closer to the player
-		if (m_Animation.lock() == nullptr)
-			m_Animation = m_GameObject.lock()->GetComponent<dae::AnimationComponent>();
-		if (m_Texture.lock() == nullptr)
-			m_Texture = m_GameObject.lock()->GetComponent<dae::TextureComponent>();
-		if (m_Collision.lock() == nullptr)
-			m_Collision = m_GameObject.lock()->GetComponent<dae::CollisionComponent>();
+		m_Collision.lock()->m_IsBoxVisible = true;
+		m_Animation.lock()->m_CanAnimate = true;
+		m_Texture.lock()->m_IsImageShowing = true;
 
-		if (m_Animation.lock() != nullptr && m_Texture.lock() != nullptr)
-		{
-			m_Collision.lock()->m_IsBoxVisible = true;
-			m_Animation.lock()->m_CanAnimate = true;
-			m_Texture.lock()->m_IsImageShowing = true;
+		SDL_Rect source = m_Animation.lock()->GetSource();
+		m_Texture.lock()->SetSource(source);
 
-			SDL_Rect source = m_Animation.lock()->GetSource();
-			m_Texture.lock()->SetSource(source);
-
-			Move(elapsedSec);
-		}
+		Move(elapsedSec);
 	}
 	else if (m_IsDead)
 	{
@@ -49,7 +48,6 @@ void EnemyComponent::Update(float elapsedSec)
 			m_CurrentTime += elapsedSec;
 	}
 
-
 	CheckIsBeingHitByIngredient();
 }
 
@@ -60,7 +58,6 @@ void EnemyComponent::Move(float elapsedSec)
 		m_Texture.lock()->SetFlip(SDL_FLIP_NONE);
 		m_Texture.lock()->m_IsImageFlipped = false;
 	}
-
 	if (m_Velocity.x > 0.0f)
 	{
 		m_Animation.lock()->SetNewStartingCol(m_StartingColHorizontal);
@@ -69,10 +66,7 @@ void EnemyComponent::Move(float elapsedSec)
 	}
 	else if (m_Velocity.x < 0.0f)
 		m_Animation.lock()->SetNewStartingCol(m_StartingColHorizontal);
-	else if (m_Velocity.y > 0.0f)
-		m_Animation.lock()->SetNewStartingCol(m_StartingColDown);
-	else if (m_Velocity.y < 0.0f)
-		m_Animation.lock()->SetNewStartingCol(m_StartingColUp);
+
 
 	auto currentPos = m_Transform.lock()->GetPosition(); //get current position
 	glm::vec2 newPos{ currentPos.x, currentPos.y };
@@ -85,98 +79,47 @@ void EnemyComponent::Move(float elapsedSec)
 	ImplementedMovement();
 }
 
-bool EnemyComponent::IsNextToStairs()
-{
-	auto stairs = LevelCreator::GetStairs();
-	auto enemyBox = m_Collision.lock()->GetCollisionBox();
-	SDL_Rect enemyCenter{};
-	enemyCenter.w = enemyBox.w / 3;
-	enemyCenter.h = enemyBox.h;
-	enemyCenter.y = enemyBox.y;
-	enemyCenter.x = enemyBox.x + enemyCenter.w + enemyCenter.w / 2;
-
-	for (size_t i = 0; i < stairs.size(); ++i)
-	{
-		auto stairCollision = stairs.at(i)->GetComponent<dae::CollisionComponent>();
-		auto stairBox = stairCollision->GetCollisionBox();
-		if (stairCollision->IsOverlapping(enemyCenter))
-			//return true; 
-			return false;
-	}
-	return false;
-}
-
-bool EnemyComponent::IsOnPlatform()
-{
-	auto platforms = LevelCreator::GetPlatforms();
-	auto enemyBox = m_Collision.lock()->GetCollisionBox();
-	for (size_t i = 0; i < platforms.size(); ++i)
-	{
-		auto box = platforms.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
-		int margin{ 2 };
-		if ((enemyBox.y + enemyBox.h <= box.y - margin || enemyBox.y + enemyBox.h == box.y) && enemyBox.x >= box.x && enemyBox.x + enemyBox.w <= box.x + box. w)
-		{
-			m_CurrentPlatformShape = box;
-			return true;
-		}
-	}
-	return false;
-}
-
-bool EnemyComponent::CanGoUp()
-{
-	auto enemyBox = m_Collision.lock()->GetCollisionBox();
-	if (m_CanClimb)
-	{
-		auto stairs = LevelCreator::GetStairs();
-		for (size_t i = 0; i < stairs.size(); ++i)
-		{
-			auto stairBox = stairs.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
-			if (stairBox.y < enemyBox.y + (enemyBox.h / 2))
-			{
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-bool EnemyComponent::CanGoDown()
-{
-	auto enemyBox = m_Collision.lock()->GetCollisionBox();
-	if (m_CanClimb)
-	{
-		auto stairs = LevelCreator::GetStairs();
-		for (size_t i = 0; i < stairs.size(); ++i)
-		{
-			auto stairBox = stairs.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
-			if (stairBox.y > enemyBox.y + (enemyBox.h / 2))
-			{
-				return true;
-			}
-		}
-	}
-	return false;
-}
+////bool EnemyComponent::IsOnPlatform()
+////{
+////	auto platforms = LevelCreator::GetPlatforms();
+////	auto enemyBox = m_Collision.lock()->GetCollisionBox();
+////	for (size_t i = 0; i < platforms.size(); ++i)
+////	{
+////		auto box = platforms.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+////		int margin{ 2 };
+////		if ((enemyBox.y + enemyBox.h <= box.y - margin || enemyBox.y + enemyBox.h == box.y) && enemyBox.x >= box.x && enemyBox.x + enemyBox.w <= box.x + box. w)
+////		{
+////			m_CurrentPlatformShape = box;
+////			return true;
+////		}
+////	}
+////	return false;
+////}
 
 void EnemyComponent::CheckIntersection()
 {
 	auto enemyBox = m_Collision.lock()->GetCollisionBox();
-	if (IsNextToStairs() && IsOnPlatform())
+	bool canGoDown = m_Behaviour.lock()->CanGoDown();
+	bool canGoUp = m_Behaviour.lock()->CanGoUp();
+	//bool canGoLeft = m_Behaviour.lock()->CanGoLeft();
+	//bool canGoRight = m_Behaviour.lock()->CanGoRight();
+
+	//if i'm next to a stair and on a platform
+	if ((canGoDown || canGoUp))// && (canGoLeft || canGoRight))//&& m_CanClimb)// 
 	{
-		if (CanGoDown() && !CanGoUp())
+		if (canGoDown && !canGoUp)
 		{
 			m_Velocity.x = 0.0f;
 			m_Velocity.y = 1.0f;
-			m_CanClimb = false;
+			m_Animation.lock()->SetNewStartingCol(m_StartingColDown);
 		}
-		else if (!CanGoDown() && CanGoUp())
+		if (!canGoDown && canGoUp)
 		{
 			m_Velocity.x = 0.0f;
 			m_Velocity.y = -1.0f;
-			m_CanClimb = false;
+			m_Animation.lock()->SetNewStartingCol(m_StartingColUp);
 		}
-		else if(CanGoUp() && CanGoDown())
+		if (canGoDown && canGoUp)
 		{
 			m_Velocity.x = 0.0f;
 			if (m_PlayerPos.y > enemyBox.y)
@@ -192,24 +135,25 @@ void EnemyComponent::CheckIntersection()
 					m_Velocity.y = -1.0f;
 			}
 		}
+		m_CanClimb = false;
 	}
-	else if (IsOnPlatform() && !CanGoDown() && !CanGoUp())
-	{
-		enemyBox.y = m_CurrentPlatformShape.y + enemyBox.h;
-		m_Transform.lock()->SetPosition(float(enemyBox.x), float(enemyBox.y), 0.0f);
+	//else if (IsOnPlatform() && !CanGoDown() && !CanGoUp())
+	//{
+	//	enemyBox.y = m_CurrentPlatformShape.y + enemyBox.h;
+	//	m_Transform.lock()->SetPosition(float(enemyBox.x), float(enemyBox.y), 0.0f);
 
-		if (m_PlayerPos.x > enemyBox.x)
-		{
-			m_Velocity.x = 1.0f;
-			m_Velocity.y = 0.0f;
-		}
-		else
-		{
-			m_Velocity.x = -1.0f;
-			m_Velocity.y = 0.0f;
-		}
-		m_CanClimb = true;
-	}
+	//	if (m_PlayerPos.x > enemyBox.x)
+	//	{
+	//		m_Velocity.x = 1.0f;
+	//		m_Velocity.y = 0.0f;
+	//	}
+	//	else
+	//	{
+	//		m_Velocity.x = -1.0f;
+	//		m_Velocity.y = 0.0f;
+	//	}
+	//	m_CanClimb = true;
+	//}
 }
 
 void EnemyComponent::Die()
@@ -230,8 +174,8 @@ void EnemyComponent::CheckIsBeingHitByIngredient()
 	for (size_t i = 0; i < ingredients.size(); ++i)
 	{
 		auto enemyBox = m_Collision.lock()->GetCollisionBox();
-		auto ingredientBox = ingredients[i]->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
-		bool isFalling = ingredients[i]->GetComponent<Ingredient>()->IsIngredientFalling();
+		auto ingredientBox = ingredients[i]->GetCollisionBox();
+		bool isFalling = ingredients[i]->GetGameObject()->GetComponent<Ingredient>()->IsIngredientFalling();
 
 		if (m_Collision.lock()->IsOverlapping(ingredientBox) && isFalling)
 		{
@@ -241,7 +185,7 @@ void EnemyComponent::CheckIsBeingHitByIngredient()
 			{
 				if (!m_IsFalling && !m_IsDead)
 				{
-					ingredients[i]->GetComponent<Ingredient>()->AddEnemyOnIngredient(m_GameObject.lock());
+					ingredients[i]->GetGameObject()->GetComponent<Ingredient>()->AddEnemyOnIngredient(m_GameObject.lock());
 					m_IsFalling = true;
 				}
 			}

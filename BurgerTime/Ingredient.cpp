@@ -33,11 +33,11 @@ void Ingredient::Initialize()
 
     for (size_t i = 0; i < m_Floors.size(); ++i)
     {
-        auto floorBox = m_Floors.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+        auto floorBox = m_Floors.at(i)->GetCollisionBox();
         auto box = m_Collision.lock()->GetCollisionBox();
         if (floorBox.x == box.x && floorBox.y == box.y)
         {
-            m_CurrentPlatform = m_Floors.at(i);
+            m_CurrentPlatform = m_Floors.at(i)->GetGameObject();
             break;
         }
     }
@@ -137,11 +137,11 @@ std::shared_ptr<dae::GameObject> Ingredient::FindNextFloor()
     std::shared_ptr<dae::GameObject> nextPlatform{};
     for (size_t i = 0; i < m_Floors.size(); ++i)
     {
-        auto floorBox = m_Floors.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+        auto floorBox = m_Floors.at(i)->GetCollisionBox();
         //if the floor is on the same column, is not the current platform and is under the ingredient
-        if (floorBox.x == box.x && box.y < floorBox.y && m_Floors.at(i) != m_CurrentPlatform)
+        if (floorBox.x == box.x && box.y < floorBox.y && m_Floors.at(i)->GetGameObject() != m_CurrentPlatform)
         {
-            nextPlatform = m_Floors.at(i);
+            nextPlatform = m_Floors.at(i)->GetGameObject();
             break;
         }
     }
@@ -149,11 +149,11 @@ std::shared_ptr<dae::GameObject> Ingredient::FindNextFloor()
     {
         for (size_t i = 0; i < m_Plates.size(); ++i)
         {
-            auto plateBox = m_Plates.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
-            int ingredientAmount = m_Plates[m_PlateIdx]->GetComponent<Plate>()->IngredientsOnPlateAmount();
+            auto plateBox = m_Plates.at(i)->GetCollisionBox();
+            int ingredientAmount = m_Plates[m_PlateIdx]->GetGameObject()->GetComponent<Plate>()->IngredientsOnPlateAmount();
             if (plateBox.x == box.x && box.y < plateBox.y - box.h * ingredientAmount)
             {
-                nextPlatform = m_Plates.at(i);
+                nextPlatform = m_Plates.at(i)->GetGameObject();
                 m_IsFallingOnPlate = true;
                 m_PlateIdx = int(i);  //save the platforms position
                 break;
@@ -174,7 +174,7 @@ bool Ingredient::CheckHitLevelObject()
         SDL_Rect nextBox = m_NextPlatform->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
         if (m_IsFallingOnPlate)
         {
-            int ingredientAmount = m_Plates[m_PlateIdx]->GetComponent<Plate>()->IngredientsOnPlateAmount();
+            int ingredientAmount = m_Plates[m_PlateIdx]->GetGameObject()->GetComponent<Plate>()->IngredientsOnPlateAmount();
             nextBox.y -= box.h * ingredientAmount;
         }
         if (box.y >= nextBox.y)
@@ -184,7 +184,7 @@ bool Ingredient::CheckHitLevelObject()
             m_NextPlatform = FindNextFloor();
             if (m_NextPlatform == nullptr) //ingredient is on the plate
             {
-                m_Plates[m_PlateIdx]->GetComponent<Plate>()->AddIngredient(m_GameObject.lock());
+                m_Plates[m_PlateIdx]->GetGameObject()->GetComponent<Plate>()->AddIngredient(m_GameObject.lock());
                 m_IsFallingOnPlate = false;
                 m_ContinueFallingCount = int(m_EnemiesOnIngredient.size());
             }         
@@ -208,11 +208,11 @@ void Ingredient::CheckHitIngredient()
 
     for(size_t i = 0; i < m_LevelIngredients.size(); ++i)
     {
-        auto ingredientBox = m_LevelIngredients.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+        auto ingredientBox = m_LevelIngredients.at(i)->GetCollisionBox();
         if (nextBox.x == ingredientBox.x && nextBox.y == ingredientBox.y) //if the ingredient is on the next platform
         {
             if (box.x == ingredientBox.x && box.y + box.h >= ingredientBox.y) //if the current ingredient touches the next ingredient
-                    m_LevelIngredients.at(i)->GetComponent<Ingredient>()->m_IsFalling = true;
+                    m_LevelIngredients.at(i)->GetGameObject()->GetComponent<Ingredient>()->m_IsFalling = true;
         }
     }
 }

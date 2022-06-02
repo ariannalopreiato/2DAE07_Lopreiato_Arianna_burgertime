@@ -4,14 +4,17 @@
 #include "InputManager.h"
 #include "Renderer.h"
 
-PlayerComponent::PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObject, int playerIdx)
+PlayerComponent::PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObject, glm::vec3 position, int playerIdx, bool isEnemy)
 	:Component(gameObject)
 	, m_PlayerIdx(playerIdx)
+	, m_IsEnemy(isEnemy)
+	, m_StartPos(position)
 {
 	m_Transform = m_GameObject.lock()->GetComponent<dae::Transform>();
 	m_Transform.lock()->SetSize(m_PlayerWidth, m_PlayerHeight, 0.0f);
-	m_Transform.lock()->SetPosition(50.0f, 350.f, 0.0f);
+	m_Transform.lock()->SetPosition(position);
 	m_StartPos = m_Transform.lock()->GetPosition();
+	m_Behaviour = m_GameObject.lock()->GetComponent<CharacterBehaviour>();
 }
 
 void PlayerComponent::Update(float)
@@ -31,20 +34,13 @@ void PlayerComponent::Update(float)
 	if (m_Animation.lock() == nullptr)
 		m_Animation = m_GameObject.lock()->GetComponent<dae::AnimationComponent>();
 
+	if(m_Behaviour.lock() == nullptr)
+		m_Behaviour = m_GameObject.lock()->GetComponent<CharacterBehaviour>();
+
 	auto playerCollBox{ m_Collision.lock()->GetCollisionBox() };
-	m_LineLeft = Line{ playerCollBox.x, 
-		playerCollBox.y + playerCollBox.h, 
-		playerCollBox.x, 
-		playerCollBox.y + playerCollBox.h + m_LineLength };
-	m_LineRight = Line{ playerCollBox.x + playerCollBox.w, 
-		playerCollBox.y + playerCollBox.h, 
-		playerCollBox.x + playerCollBox.w, 
-		playerCollBox.y + playerCollBox.h + m_LineLength };
 
 	SDL_Rect source = m_Animation.lock()->GetSource();
 	m_Texture.lock()->SetSource(source);
-
-	CheckIsNextToStairs();
 
 	IsWalkingOnIngredient();
 
@@ -71,7 +67,7 @@ void PlayerComponent::AddCommand(std::unique_ptr<dae::Command> command, dae::Con
 void PlayerComponent::AddCommand(std::unique_ptr<dae::Command> command,SDL_Scancode key, bool executeOnPress)
 {
 	auto& inputManager = dae::InputManager::GetInstance();
-	inputManager.AddCommandKeyboard(std::move(command), key, executeOnPress, m_PlayerIdx);
+	inputManager.AddCommandKeyboard(std::move(command), key, executeOnPress);
 }
 
 void PlayerComponent::CheckStates()
@@ -90,7 +86,7 @@ void PlayerComponent::CheckStates()
 		switch (m_PlayerDirection)
 		{
 		case PlayerDirection::down:
-			if (CanGoDown())
+			if (m_Behaviour.lock()->CanGoDown())
 			{
 				m_Velocity.x = 0.0f;
 				m_Velocity.y = 1.0f;
@@ -99,12 +95,12 @@ void PlayerComponent::CheckStates()
 			}
 			else
 			{
-				if (CanGoLeft() || CanGoRight())
-					SnapDown();
+				if (m_Behaviour.lock()->CanGoLeft() || m_Behaviour.lock()->CanGoRight())
+					m_Behaviour.lock()->SnapDown();
 			}
 			break;
 		case PlayerDirection::up:
-			if (CanGoUp())
+			if (m_Behaviour.lock()->CanGoUp())
 			{
 				m_Velocity.x = 0.0f;
 				m_Velocity.y = -1.0f;
@@ -113,8 +109,8 @@ void PlayerComponent::CheckStates()
 			}
 			else
 			{
-				if (CanGoLeft() || CanGoRight())
-					SnapDown();
+				if (m_Behaviour.lock()->CanGoLeft() || m_Behaviour.lock()->CanGoRight())
+					m_Behaviour.lock()->SnapDown();
 			}
 			m_Texture.lock()->m_IsImageFlipped = true;
 			break;
@@ -147,24 +143,24 @@ void PlayerComponent::CheckStates()
 		switch (m_PlayerDirection)
 		{
 		case PlayerDirection::left:
-			if (CanGoLeft())
+			if (m_Behaviour.lock()->CanGoLeft())
 			{
 				m_Velocity.x = -1.0f;
 				m_Velocity.y = 0.0f;
 				//SnapDown();
 			}
 			else
-				SnapBack();
+				m_Behaviour.lock()->SnapBack();
 			break;
 		case PlayerDirection::right:
-			if (CanGoRight())
+			if (m_Behaviour.lock()->CanGoRight())
 			{
 				m_Velocity.x = 1.0f;
 				m_Velocity.y = 0.0f;
 				//SnapDown();
 			}
 			else
-				SnapBack();
+				m_Behaviour.lock()->SnapBack();
 			m_Texture.lock()->SetFlip(SDL_FLIP_HORIZONTAL); //flip the image
 			m_Texture.lock()->m_IsImageFlipped = true;
 			break;
@@ -179,11 +175,11 @@ void PlayerComponent::CheckStates()
 void PlayerComponent::Move(PlayerDirection direction)
 {
 	if (direction != PlayerDirection::up && direction != PlayerDirection::down && m_PlayerState != PlayerState::climbing
-		&&(CanGoLeft() || CanGoRight()))
+		&&(m_Behaviour.lock()->CanGoLeft() || m_Behaviour.lock()->CanGoRight()))
 		m_PlayerState = PlayerState::walking;
 	else
 	{
-		if (m_IsNextToStairs && (CanGoDown() || CanGoUp()))
+		if ((m_Behaviour.lock()->CanGoDown() || m_Behaviour.lock()->CanGoUp()))
 			m_PlayerState = PlayerState::climbing; //if it's next to a stair and it goes up/down it's climbing
 		else
 			m_PlayerState = PlayerState::idle; // if it's not next to a stair and it goes up/down it's idle
@@ -191,44 +187,22 @@ void PlayerComponent::Move(PlayerDirection direction)
 	m_PlayerDirection = direction;
 }
 
-void PlayerComponent::CheckIsNextToStairs()
-{
-	auto stairs = LevelCreator::GetStairs();
-	auto playerBox = m_Collision.lock()->GetCollisionBox();
-	SDL_Rect playerCenter{};
-	playerCenter.w = playerBox.w / 3;
-	playerCenter.h = playerBox.h;
-	playerCenter.y = playerBox.y;
-	playerCenter.x = playerBox.x + playerCenter.w;
-	test = playerCenter;
-
-	for (size_t i = 0; i < stairs.size(); ++i)
-	{
-		auto stairCollision = stairs.at(i)->GetComponent<dae::CollisionComponent>();
-		auto stairBox = stairCollision->GetCollisionBox();
-		if (stairCollision->IsOverlapping(playerCenter))
-		{
-			m_IsNextToStairs = true;
-			break;
-		}
-		else
-			m_IsNextToStairs = false;
-	}
-}
-
 void PlayerComponent::IsWalkingOnIngredient()
 {
+	auto characterBehaviour = m_GameObject.lock()->GetComponent<CharacterBehaviour>();
+	Line lineLeft = characterBehaviour->GetLineLeft();
+	Line lineRight = characterBehaviour->GetLineRight();
 	auto ingredients = LevelCreator::GetIngredients();
 	auto playerBox = m_Collision.lock()->GetCollisionBox();
 	for (size_t i = 0; i < ingredients.size(); ++i)
 	{
-		auto pieces = ingredients.at(i)->GetComponent<Ingredient>()->GetPieces();
+		auto pieces = ingredients.at(i)->GetGameObject()->GetComponent<Ingredient>()->GetPieces();
 		for (size_t currentPiece = 0; currentPiece < pieces.size(); ++currentPiece)
 		{
 			auto box = pieces.at(currentPiece).shapeSize;
-			if (SDL_IntersectRectAndLine(&box, &m_LineLeft.x1, &m_LineLeft.y1, &m_LineLeft.x2, &m_LineLeft.y2)
-				|| SDL_IntersectRectAndLine(&box, &m_LineRight.x1, &m_LineRight.y1, &m_LineRight.x2, &m_LineRight.y2))
-				ingredients[i]->GetComponent<Ingredient>()->SetHasWalkedOnPiece(currentPiece);
+			if (SDL_IntersectRectAndLine(&box, &lineLeft.x1, &lineLeft.y1, &lineLeft.x2, &lineLeft.y2)
+				|| SDL_IntersectRectAndLine(&box, &lineRight.x1, &lineRight.y1, &lineRight.x2, &lineRight.y2))
+				ingredients[i]->GetGameObject()->GetComponent<Ingredient>()->SetHasWalkedOnPiece(currentPiece);
 		}
 	}
 }
@@ -257,86 +231,6 @@ void PlayerComponent::Attack()
 	m_Attack.lock()->Attack();
 }
 
-bool PlayerComponent::CanGoLeft()
-{
-	auto objects = LevelCreator::GetPlatforms();
-	auto playerBox = m_Collision.lock()->GetCollisionBox();
-	for (size_t i = 0; i < objects.size(); ++i)
-	{
-		auto box = objects.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
-		box.h = 1;
-		if (SDL_IntersectRectAndLine(&box, &m_LineLeft.x1, &m_LineLeft.y1, &m_LineLeft.x2, &m_LineLeft.y2))
-		{
-			m_PlatformColliding = box;
-			return true;
-		}
-	}
-	return false;
-}
-
-bool PlayerComponent::CanGoRight()
-{
-	auto objects = LevelCreator::GetPlatforms();
-	auto playerBox = m_Collision.lock()->GetCollisionBox();
-	for (size_t i = 0; i < objects.size(); ++i)
-	{
-		auto box = objects.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
-		box.h = 1;
-		if (SDL_IntersectRectAndLine(&box, &m_LineRight.x1, &m_LineRight.y1, &m_LineRight.x2, &m_LineRight.y2))
-		{
-			m_PlatformColliding = box;
-			return true;
-		}
-	}
-	return false;
-}
-
-bool PlayerComponent::CanGoUp()
-{
-	auto stairs = LevelCreator::GetStairs();
-	auto playerBox = m_Collision.lock()->GetCollisionBox();
-	playerBox.h = 1;
-
-	for (size_t i = 0; i < stairs.size(); ++i)
-	{
-		auto stairBox = stairs.at(i)->GetComponent<dae::CollisionComponent>();
-		if (stairBox->IsOverlapping(playerBox))
-			return true;
-	}
-	return false;
-}
-
-bool PlayerComponent::CanGoDown()
-{
-	auto stairs = LevelCreator::GetStairs();
-	auto playerBox = m_Collision.lock()->GetCollisionBox();
-	playerBox.y = playerBox.y + playerBox.h;
-	playerBox.h = 2;
-	for (size_t i = 0; i < stairs.size(); ++i)
-	{
-		auto stairBox = stairs.at(i)->GetComponent<dae::CollisionComponent>();
-		if (stairBox->IsOverlapping(playerBox))
-			return true;
-	}
-	return false;
-}
-
-void PlayerComponent::SnapBack()
-{
-	int pushBack{ 1 };
-	auto currentPos = m_Transform.lock()->GetPosition();
-	if (!CanGoLeft())
-		m_Transform.lock()->SetPosition(float(currentPos.x + pushBack), float(currentPos.y), 0.0f);
-	else if (!CanGoRight())
-		m_Transform.lock()->SetPosition(float(currentPos.x - pushBack), float(currentPos.y), 0.0f);
-}
-
-void PlayerComponent::SnapDown()
-{
-	auto playerBox = m_Collision.lock()->GetCollisionBox();
-	m_Transform.lock()->SetPosition(float(playerBox.x), float(m_PlatformColliding.y - playerBox.h), 0.0f);
-}
-
 void PlayerComponent::SnapToStair(const SDL_Rect& stairBox)
 {
 	auto playerBox = m_Collision.lock()->GetCollisionBox();
@@ -350,5 +244,5 @@ glm::vec2 PlayerComponent::GetVelocity() const
 
 std::shared_ptr<dae::Component> PlayerComponent::Clone(const std::shared_ptr<dae::GameObject>& gameObject)
 {
-	return std::make_shared<PlayerComponent>(gameObject, m_PlayerIdx);
+	return std::make_shared<PlayerComponent>(gameObject, m_StartPos,m_PlayerIdx);
 }

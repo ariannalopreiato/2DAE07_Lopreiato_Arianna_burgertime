@@ -45,9 +45,9 @@ private:
 	std::weak_ptr<dae::TextureComponent> m_Texture;
 	std::weak_ptr<dae::Transform> m_Transform;
 
-	std::vector<std::shared_ptr<dae::GameObject>> m_Floors;
-	std::vector<std::shared_ptr<dae::GameObject>> m_LevelIngredients;
-	std::vector<std::shared_ptr<dae::GameObject>> m_Plates;
+	std::vector<std::shared_ptr<dae::CollisionComponent>> m_Floors;
+	std::vector<std::shared_ptr<dae::CollisionComponent>> m_LevelIngredients;
+	std::vector<std::shared_ptr<dae::CollisionComponent>> m_Plates;
 	std::shared_ptr<dae::GameObject> m_CurrentPlatform;
 	std::shared_ptr<dae::GameObject> m_NextPlatform;
 };

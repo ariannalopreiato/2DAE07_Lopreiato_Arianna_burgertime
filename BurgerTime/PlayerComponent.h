@@ -13,52 +13,43 @@
 #include "LevelCreator.h"
 #include "LevelObjectType.h"
 #include "EnemyManager.h"
+#include "Structs.h"
+#include "CharacterBehaviour.h"
 
 enum class PlayerState
 {
 	idle, walking, attacking, climbing
 };
 
-struct Line
-{
-	int x1, y1, x2, y2;
-};
-
 class PlayerComponent : public dae::Component
 {
 public:
-	PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObject, int playerIdx);
+	PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObject, glm::vec3 position, int playerIdx, bool isEnemy = false);
 	void Update(float elapsedSec);
 	void Render() const;
 	void AddCommand(std::unique_ptr<dae::Command> command, dae::ControllerButton button, bool executeOnPress);
 	void AddCommand(std::unique_ptr<dae::Command> command, SDL_Scancode key, bool executeOnPress);
-	void CheckStates();
+
 	void Move(PlayerDirection direction);
-	void CheckIsNextToStairs();
-	void IsWalkingOnIngredient();
 	void Attack();
-	bool CanGoLeft();
-	bool CanGoRight();
-	bool CanGoUp();
-	bool CanGoDown();
-	void SnapBack();
-	void SnapDown();
-	void SnapToStair(const SDL_Rect& stairBox);
 	glm::vec2 GetVelocity() const;
 	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 
 private:
+	void CheckStates();
 	void CheckIsHitByEnemy();
+	void IsWalkingOnIngredient();
+	void SnapToStair(const SDL_Rect& stairBox);
 
 	//Player info
 	int m_PlayerIdx{ 0 };
+	bool m_IsEnemy{ false };
 	const float m_PlayerWidth{ 30.f };
 	const float m_PlayerHeight{ 30.f };
 	glm::vec2 m_Velocity{};
 	glm::vec3 m_StartPos{};
 
 	//Handle animation
-	bool m_IsNextToStairs{ false };
 	bool m_CanGoUp{ false };
 	const int m_StartingColHorizontal{ 3 };
 	const int m_StartingColUp{ 6 };
@@ -77,10 +68,9 @@ private:
 	std::weak_ptr<dae::AnimationComponent> m_Animation;
 	std::weak_ptr<HealthComponent> m_Health;
 	std::weak_ptr<dae::Transform> m_Transform;
+	std::weak_ptr<CharacterBehaviour> m_Behaviour;
 
 	SDL_Rect test{};
-	Line m_LineLeft{};
-	Line m_LineRight{};
 	SDL_Rect m_PlatformColliding{};
 	int m_LineLength{ 2 };
 };

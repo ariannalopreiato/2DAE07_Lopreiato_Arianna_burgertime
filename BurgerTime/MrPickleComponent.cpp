@@ -1,4 +1,5 @@
 #include "MrPickleComponent.h"
+#include "GameObject.h"
 
 MrPickleComponent::MrPickleComponent(const std::shared_ptr<dae::GameObject>& gameObject)
 	:EnemyComponent(gameObject)

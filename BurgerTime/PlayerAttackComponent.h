@@ -22,7 +22,7 @@ private:
 	int m_PepperShots{ 0 };
 	int m_CurrentShots{ 0 };
 	float m_SpawnTime{ 3.f };
-	bool m_IsActive{ false };
+	float m_CurrentTime{ 0.0f };
 	bool m_IsPepperInitialized{ false };
 	std::weak_ptr<dae::GameObject> m_Pepper;
 };

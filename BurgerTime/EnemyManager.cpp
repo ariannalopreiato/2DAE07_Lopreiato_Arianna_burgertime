@@ -1,15 +1,22 @@
 #include "EnemyManager.h"
 #include "GameObject.h"
+#include "LevelCreator.h"
 
 EnemyManager::EnemyManager()
 {
-	m_Ingredients = LevelCreator::GetIngredients();
+	auto ingredients = LevelCreator::GetIngredients();
+	for (size_t i = 0; i < ingredients.size(); ++i)
+		m_Ingredients.emplace_back(ingredients[i]->GetGameObject());
 }
 
 void EnemyManager::Update(float)
 {
-	if(m_Ingredients.empty())
-		m_Ingredients = LevelCreator::GetIngredients();
+	if (m_Ingredients.empty())
+	{
+		auto ingredients = LevelCreator::GetIngredients();
+		for (size_t i = 0; i < ingredients.size(); ++i)
+			m_Ingredients.emplace_back(ingredients[i]->GetGameObject());
+	}
 }
 
 void EnemyManager::SetScoreComponent(const std::shared_ptr<dae::GameObject>& scoreComponent)
@@ -48,7 +55,10 @@ std::shared_ptr<dae::GameObject> EnemyManager::SpawnEnemy(float posX, float posY
 
 	auto collisionComponent = std::make_shared<dae::CollisionComponent>(enemyObj);
 
+	auto behaviourComponent = std::make_shared<CharacterBehaviour>(enemyObj);
+
 	enemyObj->AddComponent(collisionComponent);
+	enemyObj->AddComponent(behaviourComponent);
 	m_Enemies.emplace_back(enemyObj);
 	return enemyObj;
 }

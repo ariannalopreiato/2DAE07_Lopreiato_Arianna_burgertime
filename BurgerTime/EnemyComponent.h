@@ -4,8 +4,9 @@
 #include "Transform.h"
 #include "AnimationComponent.h"
 #include "TextureComponent.h"
-#include "LevelCreator.h"
+#include "CharacterBehaviour.h"
 #include "Subject.h"
+#include "Structs.h"
 
 class EnemyComponent : public dae::Component, public dae::Subject
 {
@@ -14,17 +15,14 @@ public:
 	virtual void Update(float elapsedSec);
 	virtual void ImplementedMovement() = 0;
 	void CheckIsBeingHitByIngredient();
+	void CheckIntersection();
 	virtual void Die();
 	void SetPlayerPos(const SDL_Rect& playerPos);
 	bool m_IsStunned{ false };
 
 protected:
+
 	virtual void Move(float elapsedSec);
-	bool IsNextToStairs();
-	bool IsOnPlatform();
-	bool CanGoUp();
-	bool CanGoDown();
-	void CheckIntersection();
 
 	bool m_CanClimb{ true };
 	const float m_Speed{ 18.f };
@@ -49,5 +47,6 @@ protected:
 	std::weak_ptr<dae::TextureComponent> m_Texture;
 	std::weak_ptr<dae::AnimationComponent> m_Animation;
 	std::weak_ptr<dae::CollisionComponent> m_Collision;
+	std::weak_ptr<CharacterBehaviour> m_Behaviour;
 	SDL_Rect m_PlayerPos{};
 };

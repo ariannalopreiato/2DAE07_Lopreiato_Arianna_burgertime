@@ -182,9 +182,6 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Subject.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
       <Filter>EngineResources</Filter>
     </ClCompile>
@@ -196,6 +193,9 @@
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>EngineResources</Filter>
+    </ClCompile>
+    <ClCompile Include="Subject.cpp">
+      <Filter>Observer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

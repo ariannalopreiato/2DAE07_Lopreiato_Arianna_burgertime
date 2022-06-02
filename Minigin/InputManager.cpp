@@ -64,21 +64,18 @@ bool dae::InputManager::ProcessInput()
 					m_ControllerCommands[player][controller]->m_Command->Execute();
 			}
 		}
-		for (size_t key = 0; key < m_KeyboardCommands[player].size(); ++key)
-		{
-			SDL_Scancode currentKey = m_KeyboardCommands[player][key]->m_Key;
-			if(SDL_GetKeyboardState(nullptr)[currentKey])
-			//if (m_KeyboardCommands[player][key]->m_ExecutePress)
-			{
-				//if(IsPressed(m_KeyboardCommands[player][key]->m_Key, player))
-					m_KeyboardCommands[player][key]->m_Command->Execute();
-			}
-			//else
-			//{
-			//	if (IsReleased(m_KeyboardCommands[player][key]->m_Key, player))
-			//		m_KeyboardCommands[player][key]->m_Command->Execute();
-			//}
-		}
+	}
+	for (size_t key = 0; key < m_KeyboardCommands.size(); ++key)
+	{
+		SDL_Scancode currentKey = m_KeyboardCommands[key]->m_Key;
+		if (SDL_GetKeyboardState(nullptr)[currentKey])
+			m_KeyboardCommands[key]->m_Command->Execute();
+
+		//else
+		//{
+		//	if (IsReleased(m_KeyboardCommands[player][key]->m_Key, player))
+		//		m_KeyboardCommands[player][key]->m_Command->Execute();
+		//}
 	}
 	return isRunning;
 }
@@ -113,7 +110,7 @@ void dae::InputManager::AddCommandController(std::unique_ptr<Command> command, C
 	m_ControllerCommands[playerIdx].emplace_back(std::make_unique<FullCommandController>(std::move(command), button, executeOnPress));
 }
 
-void dae::InputManager::AddCommandKeyboard(std::unique_ptr<Command> command, SDL_Scancode key, bool executeOnPress, int playerIdx)
+void dae::InputManager::AddCommandKeyboard(std::unique_ptr<Command> command, SDL_Scancode key, bool executeOnPress)
 {
-	m_KeyboardCommands[playerIdx].emplace_back(std::make_unique<FullCommandKeyboard>(std::move(command), key, executeOnPress));
+	m_KeyboardCommands.emplace_back(std::make_unique<FullCommandKeyboard>(std::move(command), key, executeOnPress));
 }

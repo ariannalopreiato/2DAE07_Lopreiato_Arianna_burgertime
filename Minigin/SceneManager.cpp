@@ -18,9 +18,35 @@ void dae::SceneManager::Render()
 	}
 }
 
-dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
+void dae::SceneManager::AddScene(const std::shared_ptr<Scene>& scene)
 {
-	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
 	m_Scenes.emplace_back(scene);
-	return *scene;
+}
+
+void dae::SceneManager::LoadScene(const std::string& name)
+{
+	if (m_CurrentScene.lock() != nullptr)
+		DeleteScene(m_CurrentScene.lock()->GetName());
+
+	for (const auto& scene : m_Scenes)
+	{
+		if (scene->GetName() == name)
+		{
+			scene->LoadSceneElements();
+			m_CurrentScene = scene;
+			break;
+		}
+	}
+}
+
+void dae::SceneManager::DeleteScene(const std::string& name)
+{
+	for (const auto& scene : m_Scenes)
+	{
+		if (scene->GetName() == name)
+		{
+			scene->CleanUpScene();
+			break;
+		}
+	}
 }

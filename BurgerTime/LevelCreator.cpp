@@ -148,22 +148,38 @@ std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetObjects()
 	return m_LevelObjects;
 }
 
-std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetPlates()
+std::vector<std::shared_ptr<dae::CollisionComponent>> LevelCreator::GetPlates()
 {
-	return m_Plates;
+	auto plates = std::vector<std::shared_ptr<dae::CollisionComponent>>();
+	for (size_t i = 0; i < m_Plates.size(); ++i)
+		plates.emplace_back(m_Plates[i]->GetComponent<dae::CollisionComponent>());
+
+	return plates;
 }
 
-std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetStairs()
+std::vector<std::shared_ptr<dae::CollisionComponent>> LevelCreator::GetStairs()
 {
-	return m_Stairs;
+	auto stairs = std::vector<std::shared_ptr<dae::CollisionComponent>>();
+	for (size_t i = 0; i < m_Stairs.size(); ++i)
+		stairs.emplace_back(m_Stairs[i]->GetComponent<dae::CollisionComponent>());
+
+	return stairs;
 }
 
-std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetIngredients()
+std::vector<std::shared_ptr<dae::CollisionComponent>> LevelCreator::GetIngredients()
 {
-	return m_Ingredients;
+	auto ingredients = std::vector<std::shared_ptr<dae::CollisionComponent>>();
+	for (size_t i = 0; i < m_Ingredients.size(); ++i)
+		ingredients.emplace_back(m_Ingredients[i]->GetComponent<dae::CollisionComponent>());
+
+	return ingredients;
 }
 
-std::vector<std::shared_ptr<dae::GameObject>> LevelCreator::GetPlatforms()
+std::vector<std::shared_ptr<dae::CollisionComponent>> LevelCreator::GetPlatforms()
 {
-	return m_Platforms;
+	auto platforms = std::vector<std::shared_ptr<dae::CollisionComponent>>();
+	for (size_t i = 0; i < m_Platforms.size(); ++i)
+		platforms.emplace_back(m_Platforms[i]->GetComponent<dae::CollisionComponent>());
+
+	return platforms;
 }

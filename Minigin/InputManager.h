@@ -38,7 +38,7 @@ namespace dae
 		bool IsPressed(SDL_Scancode key, int playerIdx = 0) const;
 		bool IsReleased(SDL_Scancode key, int playerIdx = 0) const;
 		void AddCommandController(std::unique_ptr<Command> command, ControllerButton button, bool executeOnPress, int playerIdx = 0);
-		void AddCommandKeyboard(std::unique_ptr<Command> command, SDL_Scancode key, bool executeOnPress, int playerIdx = 0);
+		void AddCommandKeyboard(std::unique_ptr<Command> command, SDL_Scancode key, bool executeOnPress);
 
 	private:
 		friend Singleton<InputManager>;
@@ -56,6 +56,6 @@ namespace dae
 
 		std::array<bool, m_NrOfKeys> m_CurrentStatesKey{};
 		std::array<bool, m_NrOfKeys> m_PreviousStatesKey{};
-		std::array<std::vector<std::unique_ptr<FullCommandKeyboard>>, m_NrOfPlayers> m_KeyboardCommands{};
+		std::vector<std::unique_ptr<FullCommandKeyboard>> m_KeyboardCommands{};
 	};
 }

@@ -1,4 +1,5 @@
 #include "MrHotDogComponent.h"
+#include "GameObject.h"
 
 MrHotDogComponent::MrHotDogComponent(const std::shared_ptr<dae::GameObject>& gameObject)
 	:EnemyComponent(gameObject)

@@ -5,29 +5,28 @@
 
 
 xxxbbbbbxxxbbbbbxxxbbbbbxxxbbbbbxxx
- H       H   H       H           H
- H       H   H       H           H
-xxxoooooxxxtttttxxxpppppxxxoooooxxx
- H       H       H       H       H
- H       H       H       H       H
-xxxpppppxxxoooooxxx     xxxtttttxxx
+ H       H   H                   H
+ H       H   H                   H
+xxxpppppxxxcccccxxx     xxxpppppxxx
  H           H   H       H       H
  H           H   H       H       H
-xxxBBBBBxxxBBBBBxxxcccccxxxBBBBBxxx
+xxxtttttxxxlllllxxxcccccxxxlllllxxx
          H   H   H   H
          H   H   H   H
         xxx  H  xxxlllllxxx
          H   H   H       H
          H   H   H       H
-        xxxoooooxxxBBBBBxxx
-   ----- H               H -----
+        xxxBBBBBxxxBBBBBxxx
+         H               H 
          H               H
-xxxbbbbbxxx             xxxbbbbbxxx
+xxxlllllxxx             xxxtttttxxx
  H   H   H               H       H
+ H   H   H -----   ----- H       H
  H   H   H               H       H
-xxxtttttxxx             xxxpppppxxx
- H   H   H -----   ----- H   H   H
- H   H   H               H   H   H
 xxxBBBBBxxx             xxxBBBBBxxx
+
+
+
+
 
    -----                   -----

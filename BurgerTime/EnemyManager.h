@@ -7,6 +7,7 @@
 #include "MrEggComponent.h"
 #include "MrHotDogComponent.h"
 #include "MrPickleComponent.h"
+#include "CharacterBehaviour.h"
 
 class EnemyManager
 {

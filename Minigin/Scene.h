@@ -6,11 +6,13 @@ namespace dae
 	class GameObject;
 	class Scene
 	{
-		friend Scene& SceneManager::CreateScene(const std::string& name);
+		//friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
 		Scene(const std::string& name);
 		void Add(const std::shared_ptr<GameObject>& object);
-
+		virtual void LoadSceneElements() = 0;
+		void CleanUpScene();
+		const std::string& GetName();
 		void Update(float elapsedTime);
 		void Render() const;
 

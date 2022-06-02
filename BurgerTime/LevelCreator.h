@@ -24,10 +24,10 @@ public:
 	static std::shared_ptr<dae::GameObject> SpawnPatty(int col, int row, int repetition = 5);
 	static bool IsArrayInitialized() { return !m_Grid.empty(); }
 	static std::vector<std::shared_ptr<dae::GameObject>> GetObjects();
-	static std::vector<std::shared_ptr<dae::GameObject>> GetPlates();
-	static std::vector<std::shared_ptr<dae::GameObject>> GetStairs();
-	static std::vector<std::shared_ptr<dae::GameObject>> GetIngredients();
-	static std::vector<std::shared_ptr<dae::GameObject>> GetPlatforms();
+	static std::vector<std::shared_ptr<dae::CollisionComponent>> GetPlates();
+	static std::vector<std::shared_ptr<dae::CollisionComponent>> GetStairs();
+	static std::vector<std::shared_ptr<dae::CollisionComponent>> GetIngredients();
+	static std::vector<std::shared_ptr<dae::CollisionComponent>> GetPlatforms();
 
 private:
 	LevelCreator(); //no one can make an instance of it

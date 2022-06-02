@@ -18,6 +18,19 @@ void Scene::Add(const std::shared_ptr<GameObject>& object)
 	m_Objects.emplace_back(object);
 }
 
+void dae::Scene::CleanUpScene()
+{
+	for (size_t i = 0; i < m_Objects.size(); ++i)
+	{
+		m_Objects[i]->m_MarkForDestruction = true;
+	}
+}
+
+const std::string& dae::Scene::GetName()
+{
+	return m_Name;
+}
+
 void Scene::Update(float elapsedTime)
 {
 	for(std::shared_ptr<GameObject>& object : m_Objects)
