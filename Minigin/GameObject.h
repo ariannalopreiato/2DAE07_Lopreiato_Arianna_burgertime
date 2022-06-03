@@ -55,7 +55,7 @@ namespace dae
 		std::shared_ptr<GameObject> GetParent() const;
 		std::shared_ptr<GameObject> GetChildAt(int index) const;
 		const std::vector<std::shared_ptr<GameObject>>& GetChildren() const;
-		void AddChild(const std::shared_ptr<GameObject>& child, const std::shared_ptr<GameObject>& parent);
+		void AddChild(const std::shared_ptr<GameObject>& child);
 		void RemoveChildAt(int index);
 		void RemoveChild(const std::shared_ptr<GameObject>& child);
 

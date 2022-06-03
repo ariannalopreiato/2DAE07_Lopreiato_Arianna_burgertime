@@ -8,8 +8,6 @@ EnemyComponent::EnemyComponent(const std::shared_ptr<dae::GameObject>& gameObjec
 	m_Transform = m_GameObject.lock()->GetComponent<dae::Transform>();
 	m_StartPos = m_Transform.lock()->GetPosition();
 	m_Transform.lock()->SetSize(m_EnemyWidth, m_EnemyHeight, 0.0f);
-	m_Velocity.x = -1.0f;
-	m_Velocity.y = 0.0f;
 	m_Behaviour = m_GameObject.lock()->GetComponent<CharacterBehaviour>();
 }
 
@@ -39,15 +37,28 @@ void EnemyComponent::Update(float elapsedSec)
 	{
 		m_Animation.lock()->m_CanAnimate = false;
 		m_Texture.lock()->m_IsImageShowing = false;
-		if (m_CurrentTime >= m_MaxWaitTime)
+		if (m_CurrentRespawnTime >= m_RespawnTime)
 		{
 			m_IsDead = false;
-			m_CurrentTime = 0.0f;
+			m_CurrentRespawnTime = 0.0f;
 		}
 		else
-			m_CurrentTime += elapsedSec;
+			m_CurrentRespawnTime += elapsedSec;
 	}
 
+	if (m_UseTimer)
+	{
+		m_CurrentTime += elapsedSec;
+		if (m_CurrentTime >= m_MaxWaitTime)
+		{
+			m_CurrentTime = true;
+			m_UseTimer = false;
+		}
+	}
+	else
+		CheckIntersection();
+		
+		
 	CheckIsBeingHitByIngredient();
 }
 
@@ -74,86 +85,132 @@ void EnemyComponent::Move(float elapsedSec)
 	newPos.y += elapsedSec * (m_Velocity.y * m_Speed);
 	m_Transform.lock()->SetPosition(newPos.x, newPos.y, 0.0f); //pass new position
 
-	CheckIntersection();
-
 	ImplementedMovement();
 }
 
-////bool EnemyComponent::IsOnPlatform()
-////{
-////	auto platforms = LevelCreator::GetPlatforms();
-////	auto enemyBox = m_Collision.lock()->GetCollisionBox();
-////	for (size_t i = 0; i < platforms.size(); ++i)
-////	{
-////		auto box = platforms.at(i)->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
-////		int margin{ 2 };
-////		if ((enemyBox.y + enemyBox.h <= box.y - margin || enemyBox.y + enemyBox.h == box.y) && enemyBox.x >= box.x && enemyBox.x + enemyBox.w <= box.x + box. w)
-////		{
-////			m_CurrentPlatformShape = box;
-////			return true;
-////		}
-////	}
-////	return false;
-////}
+void EnemyComponent::MoveHorizontal()
+{
+	auto enemyBox = m_Collision.lock()->GetCollisionBox();
+	bool canGoLeft = m_Behaviour.lock()->CanGoLeft();
+	bool canGoRight = m_Behaviour.lock()->CanGoRight();
+
+	SDL_Rect shapeCheck{ enemyBox };
+	m_Behaviour.lock()->SnapDown();
+
+	if (!m_IsMoving)
+	{
+		if (!canGoRight && canGoLeft)
+		{
+			shapeCheck.x = shapeCheck.x - shapeCheck.w;
+			if (m_Behaviour.lock()->IsCollidingWithPlatforms(shapeCheck))
+			{
+				m_Velocity.x = -1.0f;
+				m_Velocity.y = 0.0f;
+			}
+		}
+		if (canGoRight && !canGoLeft)
+		{
+			shapeCheck.x = shapeCheck.x + shapeCheck.w;
+			if (m_Behaviour.lock()->IsCollidingWithPlatforms(shapeCheck))
+			{
+				m_Velocity.x = 1.0f;
+				m_Velocity.y = 0.0f;
+			}
+		}
+		if (canGoRight && canGoLeft)
+		{
+			m_Velocity.y = 0.0f;
+			if (m_PlayerPos.x > enemyBox.x)
+				m_Velocity.x = 1.0f;
+			else if (m_PlayerPos.x < enemyBox.x)
+				m_Velocity.x = -1.0f;
+			else if (m_PlayerPos.x == enemyBox.x)
+			{
+				int randNum = rand() % 2;
+				if (randNum == 0)
+				{
+					shapeCheck.x = shapeCheck.x - shapeCheck.w;
+					if (m_Behaviour.lock()->IsCollidingWithPlatforms(shapeCheck))
+						m_Velocity.x = 1.0f;
+				}
+				else
+				{
+					shapeCheck.x = shapeCheck.x + shapeCheck.w;
+					if (m_Behaviour.lock()->IsCollidingWithPlatforms(shapeCheck))
+						m_Velocity.x = -1.0f;
+				}
+			}
+		}
+		m_IsMoving = true;
+	}
+	m_Animation.lock()->SetNewStartingCol(m_StartingColHorizontal);
+	m_UseTimer = true;
+	m_CanClimb = true;
+}
 
 void EnemyComponent::CheckIntersection()
 {
 	auto enemyBox = m_Collision.lock()->GetCollisionBox();
 	bool canGoDown = m_Behaviour.lock()->CanGoDown();
 	bool canGoUp = m_Behaviour.lock()->CanGoUp();
-	//bool canGoLeft = m_Behaviour.lock()->CanGoLeft();
-	//bool canGoRight = m_Behaviour.lock()->CanGoRight();
 
-	//if i'm next to a stair and on a platform
-	if ((canGoDown || canGoUp))// && (canGoLeft || canGoRight))//&& m_CanClimb)// 
+	if (m_Behaviour.lock()->CanGoLeft() || m_Behaviour.lock()->CanGoRight())
 	{
-		if (canGoDown && !canGoUp)
+		if ((canGoDown || canGoUp))
 		{
-			m_Velocity.x = 0.0f;
-			m_Velocity.y = 1.0f;
-			m_Animation.lock()->SetNewStartingCol(m_StartingColDown);
-		}
-		if (!canGoDown && canGoUp)
-		{
-			m_Velocity.x = 0.0f;
-			m_Velocity.y = -1.0f;
-			m_Animation.lock()->SetNewStartingCol(m_StartingColUp);
-		}
-		if (canGoDown && canGoUp)
-		{
-			m_Velocity.x = 0.0f;
-			if (m_PlayerPos.y > enemyBox.y)
-				m_Velocity.y = 1.0f;
-			else if (m_PlayerPos.y < enemyBox.y)
-				m_Velocity.y = -1.0f;
-			else
+			if (m_CanClimb)
 			{
-				int randNum = rand() % 2;
-				if (randNum == 0)
+				if (canGoDown && !canGoUp)
+				{
+					m_Velocity.x = 0.0f;
 					m_Velocity.y = 1.0f;
-				else
+				}
+				if (!canGoDown && canGoUp)
+				{
+					m_Velocity.x = 0.0f;
 					m_Velocity.y = -1.0f;
-			}
-		}
-		m_CanClimb = false;
-	}
-	//else if (IsOnPlatform() && !CanGoDown() && !CanGoUp())
-	//{
-	//	enemyBox.y = m_CurrentPlatformShape.y + enemyBox.h;
-	//	m_Transform.lock()->SetPosition(float(enemyBox.x), float(enemyBox.y), 0.0f);
+				}
+				if (canGoDown && canGoUp)
+				{
+					m_Velocity.x = 0.0f;
+					if (m_PlayerPos.y > enemyBox.y)
+						m_Velocity.y = 1.0f;
+					else if (m_PlayerPos.y < enemyBox.y)
+						m_Velocity.y = -1.0f;
+					else if (m_PlayerPos.y == enemyBox.y)
+					{
+						int randNum = rand() % 2;
+						if (randNum == 0)
+							m_Velocity.y = 1.0f;
+						else
+							m_Velocity.y = -1.0f;
+					}
+				}
+				if (m_Velocity.y > 0.0f)
+					m_Animation.lock()->SetNewStartingCol(m_StartingColDown);
+				else
+					m_Animation.lock()->SetNewStartingCol(m_StartingColUp);
 
-	//	if (m_PlayerPos.x > enemyBox.x)
-	//	{
-	//		m_Velocity.x = 1.0f;
-	//		m_Velocity.y = 0.0f;
-	//	}
-	//	else
-	//	{
-	//		m_Velocity.x = -1.0f;
-	//		m_Velocity.y = 0.0f;
-	//	}
-	//	m_CanClimb = true;
-	//}
+				m_UseTimer = true;
+				m_CanClimb = false;
+				m_IsMoving = false;
+			}
+			else
+				MoveHorizontal();
+		}
+		else
+			MoveHorizontal();
+	}
+}
+
+bool EnemyComponent::GetIsStunned()
+{
+	return m_IsStunned;
+}
+
+bool EnemyComponent::GetIsDead()
+{
+	return m_IsDead;
 }
 
 void EnemyComponent::Die()
@@ -161,6 +218,8 @@ void EnemyComponent::Die()
 	notify(std::to_string(m_Points));
 	m_IsDead = true;
 	m_Transform.lock()->SetPosition(m_StartPos);
+	m_UseTimer = true;
+	m_CanClimb = true;
 }
 
 void EnemyComponent::SetPlayerPos(const SDL_Rect& playerPos)

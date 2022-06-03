@@ -8,9 +8,7 @@ PlayerAttackComponent::PlayerAttackComponent(const std::shared_ptr<dae::GameObje
 	:Component(gameObject)
 	, m_PepperShots(pepperShots)
 	, m_CurrentShots(pepperShots)
-{
-	m_Pepper = SpawnPepper();
-}
+{}
 
 void PlayerAttackComponent::Update(float elapsedSec)
 {
@@ -20,7 +18,7 @@ void PlayerAttackComponent::Update(float elapsedSec)
 		if (m_CurrentTime >= m_SpawnTime)
 		{
 			m_IsPepperInitialized = false;
-			m_Pepper.lock()->m_MarkForDestruction;
+			m_Pepper.lock()->m_MarkForDestruction = true;
 		}
 	}
 }
@@ -35,7 +33,7 @@ void PlayerAttackComponent::Attack()
 	}
 }
 
-std::shared_ptr<dae::GameObject> PlayerAttackComponent::SpawnPepper()
+void PlayerAttackComponent::SpawnPepper()
 {
 	auto gameObj  = std::make_shared<dae::GameObject>();
 	auto picture = dae::ResourceManager::GetInstance().LoadTexture("../Data/Sprites/pepper.png");
@@ -51,8 +49,7 @@ std::shared_ptr<dae::GameObject> PlayerAttackComponent::SpawnPepper()
 	gameObj->AddComponent(collision);
 	//pepper->AddComponent(animation);
 	m_Pepper = gameObj;
-
-	return gameObj;
+	m_GameObject.lock()->AddChild(m_Pepper.lock());
 }
 
 int PlayerAttackComponent::GetPepperShots() const

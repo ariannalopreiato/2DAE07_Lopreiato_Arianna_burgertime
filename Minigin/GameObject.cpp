@@ -117,17 +117,18 @@ int dae::GameObject::GetComponentAmount()
 //------------------------------------- Scenegraph handling ----------------------------------------------
 void dae::GameObject::SetParent(const std::shared_ptr<GameObject>& parent)
 {
-	if (parent)
-	{
-		if (parent != this->GetParent())
-		{
-			if (!this->GetParent())
-			{
-				this->m_Parent = nullptr;
-			}
-			this->m_Parent = parent;
-		}
-	}
+	//if (parent)
+	//{
+	//	if (parent != this->GetParent())
+	//	{
+	//		if (!this->GetParent())
+	//		{
+	//			this->m_Parent = nullptr;
+	//		}
+	//		this->m_Parent = parent;
+	//	}
+	//}
+	m_Parent = parent;
 }
 
 std::shared_ptr<dae::GameObject> dae::GameObject::GetParent() const
@@ -140,7 +141,7 @@ std::shared_ptr<dae::GameObject> dae::GameObject::GetChildAt(int index) const
 	return m_Children.at(index);
 }
 
-void dae::GameObject::AddChild(const std::shared_ptr<GameObject>& child, const std::shared_ptr<GameObject>& parent)
+void dae::GameObject::AddChild(const std::shared_ptr<GameObject>& child)
 {
 	auto oldParent = child->GetParent(); //get the current parent
 	if (oldParent != nullptr)
@@ -157,7 +158,7 @@ void dae::GameObject::AddChild(const std::shared_ptr<GameObject>& child, const s
 			}
 		}
 	}
-	child->SetParent(parent);
+	child->SetParent(std::shared_ptr<dae::GameObject>(this));
 	m_Children.emplace_back(child); //added to the list
 }
 

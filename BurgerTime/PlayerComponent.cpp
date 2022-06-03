@@ -147,7 +147,6 @@ void PlayerComponent::CheckStates()
 			{
 				m_Velocity.x = -1.0f;
 				m_Velocity.y = 0.0f;
-				//SnapDown();
 			}
 			else
 				m_Behaviour.lock()->SnapBack();
@@ -157,7 +156,6 @@ void PlayerComponent::CheckStates()
 			{
 				m_Velocity.x = 1.0f;
 				m_Velocity.y = 0.0f;
-				//SnapDown();
 			}
 			else
 				m_Behaviour.lock()->SnapBack();
@@ -212,12 +210,12 @@ void PlayerComponent::CheckIsHitByEnemy()
 	auto enemies = EnemyManager::GetEnemies();
 	for (size_t i = 0; i < enemies.size(); ++i)
 	{
-		auto enemyColl = enemies[i].lock()->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
-		if (m_Collision.lock()->IsOverlapping(enemyColl))
+		auto enemyColl = enemies[i]->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+		if (m_Collision.lock()->IsOverlapping(enemyColl) && !enemies[i]->GetComponentInheritance<EnemyComponent>()->GetIsDead())
 		{
 			m_GameObject.lock()->GetComponent<HealthComponent>()->RemoveLife();
 			m_Transform.lock()->SetPosition(m_StartPos);
-			enemies[i].lock()->GetComponentInheritance<EnemyComponent>()->Die();
+			enemies[i]->GetComponentInheritance<EnemyComponent>()->Die();
 		}
 	}
 }

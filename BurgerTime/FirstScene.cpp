@@ -159,15 +159,17 @@ void FirstScene::LoadSceneElements()
         Add(levelObjects.at(i));
     }
 
-    auto hotDog = EnemyManager::SpawnMrHotDog(640.f, 408.f);
-    //hotDog->GetComponent<EnemyComponent>()->AddObserver(scoreComponent);
+   EnemyManager::SpawnAllLevelEnemies("../Data/EnemiesLevel1.txt");
+    auto levelEnemies = EnemyManager::GetEnemies();
+    for (size_t enemies = 0; enemies < levelEnemies.size(); ++enemies)
+    {
+        Add(levelEnemies[enemies]);
+    }
 
     Add(pepperText);
     Add(highScore);
     Add(up);
     Add(pepperGO);
     Add(scoreGO);
-    Add(hotDog);
     Add(pPlayerOne);
-    //scene.Add(pPlayerTwo);
 }

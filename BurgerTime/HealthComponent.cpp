@@ -50,6 +50,7 @@ void HealthComponent::RemoveLife()
 
 	m_TopMostPos.y -= m_Distance + m_Size;
 	m_LivesDisplay[m_LivesDisplay.size() - 1]->m_MarkForDestruction = true;
+	m_LivesDisplay.pop_back();
 }
 
 std::shared_ptr<dae::Component> HealthComponent::Clone(const std::shared_ptr<dae::GameObject>& gameObject)

@@ -159,7 +159,7 @@ void SecondScene::LoadSceneElements()
         Add(levelObjects.at(i));
     }
 
-    auto hotDog = EnemyManager::SpawnMrHotDog(640.f, 408.f);
+    //auto hotDog = EnemyManager::SpawnMrHotDog(640.f, 408.f);
     //hotDog->GetComponent<EnemyComponent>()->AddObserver(scoreComponent);
 
     Add(pepperText);
@@ -167,7 +167,7 @@ void SecondScene::LoadSceneElements()
     Add(up);
     Add(pepperGO);
     Add(scoreGO);
-    Add(hotDog);
+    //Add(hotDog);
     Add(pPlayerOne);
     //scene.Add(pPlayerTwo);
 }

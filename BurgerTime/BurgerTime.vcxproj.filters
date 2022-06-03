@@ -105,6 +105,9 @@
     <ClCompile Include="CharacterBehaviour.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BurgerTime.h">
@@ -178,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="CharacterBehaviour.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -125,3 +125,14 @@ std::shared_ptr<dae::Component> CharacterBehaviour::Clone(const std::shared_ptr<
 {
 	return std::make_shared<CharacterBehaviour>(gameObject);
 }
+
+bool CharacterBehaviour::IsCollidingWithPlatforms(const SDL_Rect& other)
+{
+	auto platforms = LevelCreator::GetPlatforms();
+	for (size_t i = 0; i < platforms.size(); ++i)
+	{
+		if (platforms[i]->IsOverlapping(other))
+			return true;
+	}
+	return false;
+}

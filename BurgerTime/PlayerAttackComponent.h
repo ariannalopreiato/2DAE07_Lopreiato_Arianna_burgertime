@@ -17,7 +17,7 @@ public:
 	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 
 private:
-	std::shared_ptr<dae::GameObject> SpawnPepper();
+	void SpawnPepper();
 
 	int m_PepperShots{ 0 };
 	int m_CurrentShots{ 0 };

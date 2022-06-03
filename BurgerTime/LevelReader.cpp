@@ -1,6 +1,5 @@
 #include "LevelReader.h"
 #include <fstream>
-#include <iostream>
 #include <cstdlib>
 #include <assert.h>
 

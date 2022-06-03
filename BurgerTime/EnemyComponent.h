@@ -16,13 +16,15 @@ public:
 	virtual void ImplementedMovement() = 0;
 	void CheckIsBeingHitByIngredient();
 	void CheckIntersection();
+	bool GetIsStunned();
+	bool GetIsDead();
 	virtual void Die();
 	void SetPlayerPos(const SDL_Rect& playerPos);
-	bool m_IsStunned{ false };
 
 protected:
 
 	virtual void Move(float elapsedSec);
+	void MoveHorizontal();
 
 	bool m_CanClimb{ true };
 	const float m_Speed{ 18.f };
@@ -30,9 +32,14 @@ protected:
 	glm::vec3 m_StartPos;
 	int m_Points{ 0 };
 
-	float m_MaxWaitTime{ 3.f };
+	bool m_UseTimer{ true };
+	bool m_IsMoving{ false };
+	float m_MaxWaitTime{ 2.f };
 	float m_CurrentTime{ 0.0f };
+	float m_RespawnTime{ 2.f };
+	float m_CurrentRespawnTime{ 0.0f };
 	bool m_IsDead{ false };
+	bool m_IsStunned{ false };
 	bool m_IsFalling{ false };
 
 	const float m_EnemyWidth{ 25.f };
