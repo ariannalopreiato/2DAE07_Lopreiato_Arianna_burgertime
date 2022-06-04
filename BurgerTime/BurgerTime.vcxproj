@@ -206,6 +206,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="FirstScene.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameStates.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="Ingredient.cpp" />
     <ClCompile Include="LevelCreator.cpp" />
@@ -225,12 +226,12 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackCommand.h" />
-    <ClInclude Include="BurgerTime.h" />
     <ClInclude Include="CharacterBehaviour.h" />
     <ClInclude Include="EnemyComponent.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="FirstScene.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameStates.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="Ingredient.h" />
     <ClInclude Include="LevelCreator.h" />

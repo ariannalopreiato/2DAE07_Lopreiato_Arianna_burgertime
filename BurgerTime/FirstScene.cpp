@@ -37,6 +37,5 @@ void FirstScene::LoadSceneElements()
     Add(scoreGO);
     GameManager::LoadUI(font);
     GameManager::LoadLevel("../Data/Level1.txt", scoreComponent);
-    GameManager::LoadEnemies("../Data/EnemiesLevel1.txt");
-    GameManager::LoadPlayers(glm::vec3{ 280.0f, 350.f, 0.0f }, glm::vec3{ 320.0f, 350.f, 0.0f });
+    GameManager::LoadPlayersAndEnemies(glm::vec3{ 280.0f, 350.f, 0.0f }, "../Data/EnemiesLevel1.txt", glm::vec3{ 320.0f, 350.f, 0.0f });
 }

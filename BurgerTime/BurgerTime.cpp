@@ -14,10 +14,12 @@ int main(int, char* []) {
     engine.Initialize();
     
     GameManager::SetGameMode(GameMode::multi);
+    //GameManager::InputSetup(InputMethod::controller, InputMethod::keyboard);
     dae::SoundSystem* soundSystem = new dae::SDL_SoundSystem();
     dae::ServiceLocator::RegisterSoundSystem(soundSystem);
     dae::ServiceLocator::GetSoundSystem().loadSound("../Data/RandomCoinSound.wav");
 
+    //std::shared_ptr<State> m_CurrentState = std::make_shared<MainMenuState>();
     std::shared_ptr<FirstScene> firstScene = std::make_shared<FirstScene>("Level1");
     std::shared_ptr<SecondScene> secondScene = std::make_shared<SecondScene>("Level2");
     std::shared_ptr<ThirdScene> thirdScene = std::make_shared<ThirdScene>("Level3");

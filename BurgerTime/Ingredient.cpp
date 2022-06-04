@@ -44,6 +44,7 @@ void Ingredient::Initialize()
     }
 }
 
+
 void Ingredient::Update(float)
 {
     int countTouchedPieces{ 0 };

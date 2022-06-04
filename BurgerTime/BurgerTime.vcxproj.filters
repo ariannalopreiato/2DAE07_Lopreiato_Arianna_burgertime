@@ -37,11 +37,11 @@
     <Filter Include="Scenes">
       <UniqueIdentifier>{45c09d9b-6f35-48bf-8d97-0403e7fb04ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="States">
+      <UniqueIdentifier>{bc8b3aa1-76e0-46b8-a062-31082b2b2ed9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BurgerTime.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AttackCommand.cpp">
       <Filter>Commands</Filter>
     </ClCompile>
@@ -108,11 +108,14 @@
     <ClCompile Include="GameManager.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="BurgerTime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStates.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BurgerTime.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AttackCommand.h">
       <Filter>Commands</Filter>
     </ClInclude>
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStates.h">
+      <Filter>States</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

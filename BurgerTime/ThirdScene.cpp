@@ -46,6 +46,5 @@ void ThirdScene::LoadSceneElements()
     
     GameManager::LoadUI(font);
     GameManager::LoadLevel("../Data/Level3.txt", scoreComponent);
-    GameManager::LoadEnemies("../Data/EnemiesLevel3.txt");
-    GameManager::LoadPlayers(glm::vec3{ 155.f, 470.f, 0.0f }, glm::vec3{ 443.0f, 470.f, 0.0f });
+    GameManager::LoadPlayersAndEnemies(glm::vec3{ 155.f, 470.f, 0.0f }, "../Data/EnemiesLevel3.txt", glm::vec3{ 443.0f, 470.f, 0.0f });
 }

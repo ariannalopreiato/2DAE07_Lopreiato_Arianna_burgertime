@@ -3,6 +3,12 @@
 #include "LevelCreator.h"
 #include "LevelReader.h"
 
+void GameManager::InputSetup(InputMethod inputOne, InputMethod inputTwo)
+{
+	m_InputOne = inputOne;
+	m_InputTwo = inputTwo;
+}
+
 void GameManager::AddIngredient()
 {
 	++m_CurrentAmountIngredientsOnPlate;
@@ -74,83 +80,58 @@ void GameManager::LoadEnemies(const std::string& enemiesPath)
 	}
 }
 
-void GameManager::LoadPlayers(const glm::vec3& pos1, const glm::vec3& pos2)
+void GameManager::LoadPlayersAndEnemies(const glm::vec3& pos1, const std::string& enemiesPath, const glm::vec3& pos2)
 {
 	auto& sceneManager = dae::SceneManager::GetInstance();
 	if (m_GameMode == GameMode::single)
 	{
 		auto player = InitializePlayer(0, pos1, "Sprites/PeterPepper.png", false);
 		auto playerComponent = player->GetComponent<PlayerComponent>();
-		auto attack = std::make_unique<AttackCommand>(playerComponent);
-		auto moveRight = std::make_unique<MoveCommand>(playerComponent, PlayerDirection::right);
-		auto moveUp = std::make_unique<MoveCommand>(playerComponent, PlayerDirection::up);
-		auto moveDown = std::make_unique<MoveCommand>(playerComponent, PlayerDirection::down);
-		auto moveLeft = std::make_unique<MoveCommand>(playerComponent, PlayerDirection::left);
-		playerComponent->AddCommand(std::move(attack), SDL_SCANCODE_E, false);
-		playerComponent->AddCommand(std::move(moveRight), SDL_SCANCODE_D, true);
-		playerComponent->AddCommand(std::move(moveDown), SDL_SCANCODE_S, true);
-		playerComponent->AddCommand(std::move(moveLeft), SDL_SCANCODE_A, true);
-		playerComponent->AddCommand(std::move(moveUp), SDL_SCANCODE_W, true);
+		if (m_InputOne == InputMethod::keyboard)
+			SetUpInputKeyboard(playerComponent, 0);
+		else
+			SetUpInputController(playerComponent);
+
 		sceneManager.AddToCurrentScene(player);
+		LoadEnemies(enemiesPath);
 	}
 	else if (m_GameMode == GameMode::multi)
 	{
 		auto player1 = InitializePlayer(0, pos1, "Sprites/PeterPepper.png", false);
 		auto playerComponent1 = player1->GetComponent<PlayerComponent>();
-		auto attack1 = std::make_unique<AttackCommand>(playerComponent1);
-		auto moveRight1 = std::make_unique<MoveCommand>(playerComponent1, PlayerDirection::right);
-		auto moveUp1 = std::make_unique<MoveCommand>(playerComponent1, PlayerDirection::up);
-		auto moveDown1 = std::make_unique<MoveCommand>(playerComponent1, PlayerDirection::down);
-		auto moveLeft1 = std::make_unique<MoveCommand>(playerComponent1, PlayerDirection::left);
-		playerComponent1->AddCommand(std::move(attack1), SDL_SCANCODE_E, false);
-		playerComponent1->AddCommand(std::move(moveRight1), SDL_SCANCODE_D, true);
-		playerComponent1->AddCommand(std::move(moveDown1), SDL_SCANCODE_S, true);
-		playerComponent1->AddCommand(std::move(moveLeft1), SDL_SCANCODE_A, true);
-		playerComponent1->AddCommand(std::move(moveUp1), SDL_SCANCODE_W, true);
+		if (m_InputOne == InputMethod::keyboard)
+			SetUpInputKeyboard(playerComponent1, 0);
+		else
+			SetUpInputController(playerComponent1);
 
 		auto player2 = InitializePlayer(1, pos2, "Sprites/MrsSalt.png", false, player1->GetComponent<HealthComponent>());
 		auto playerComponent2 = player2->GetComponent<PlayerComponent>();
-		auto attack2 = std::make_unique<AttackCommand>(playerComponent2);
-		auto moveRight2 = std::make_unique<MoveCommand>(playerComponent2, PlayerDirection::right);
-		auto moveUp2 = std::make_unique<MoveCommand>(playerComponent2, PlayerDirection::up);
-		auto moveDown2 = std::make_unique<MoveCommand>(playerComponent2, PlayerDirection::down);
-		auto moveLeft2 = std::make_unique<MoveCommand>(playerComponent2, PlayerDirection::left);
-		playerComponent2->AddCommand(std::move(attack2), SDL_SCANCODE_E, false);
-		playerComponent2->AddCommand(std::move(moveRight2), SDL_SCANCODE_RIGHT, true);
-		playerComponent2->AddCommand(std::move(moveDown2), SDL_SCANCODE_DOWN, true);
-		playerComponent2->AddCommand(std::move(moveLeft2), SDL_SCANCODE_LEFT, true);
-		playerComponent2->AddCommand(std::move(moveUp2), SDL_SCANCODE_UP, true);
+		if (m_InputTwo == InputMethod::keyboard)
+			SetUpInputKeyboard(playerComponent2, 1);
+		else
+			SetUpInputController(playerComponent2);
+		
 
 		sceneManager.AddToCurrentScene(player1);
 		sceneManager.AddToCurrentScene(player2);
+		LoadEnemies(enemiesPath);
 	}
 	else
 	{
 		auto player1 = InitializePlayer(0, pos1, "Sprites/PeterPepper.png", false);
 		auto playerComponent1 = player1->GetComponent<PlayerComponent>();
-		auto attack1 = std::make_unique<AttackCommand>(playerComponent1);
-		auto moveRight1 = std::make_unique<MoveCommand>(playerComponent1, PlayerDirection::right);
-		auto moveUp1 = std::make_unique<MoveCommand>(playerComponent1, PlayerDirection::up);
-		auto moveDown1 = std::make_unique<MoveCommand>(playerComponent1, PlayerDirection::down);
-		auto moveLeft1 = std::make_unique<MoveCommand>(playerComponent1, PlayerDirection::left);
-		playerComponent1->AddCommand(std::move(attack1), SDL_SCANCODE_E, false);
-		playerComponent1->AddCommand(std::move(moveRight1), SDL_SCANCODE_D, true);
-		playerComponent1->AddCommand(std::move(moveDown1), SDL_SCANCODE_S, true);
-		playerComponent1->AddCommand(std::move(moveLeft1), SDL_SCANCODE_A, true);
-		playerComponent1->AddCommand(std::move(moveUp1), SDL_SCANCODE_W, true);
+		if (m_InputOne == InputMethod::keyboard)
+			SetUpInputKeyboard(playerComponent1, 0);
+		else
+			SetUpInputController(playerComponent1);
 
-		auto player2 = InitializePlayer(1, pos2, "Sprites/MrHotDog.png", true);
+		auto player2 = InitializePlayer(1, pos2, "Sprites/MrHotDog.png", true, nullptr, player1);
 		auto playerComponent2 = player2->GetComponent<PlayerComponent>();
-		auto attack2 = std::make_unique<AttackCommand>(playerComponent2);
-		auto moveRight2 = std::make_unique<MoveCommand>(playerComponent2, PlayerDirection::right);
-		auto moveUp2 = std::make_unique<MoveCommand>(playerComponent2, PlayerDirection::up);
-		auto moveDown2 = std::make_unique<MoveCommand>(playerComponent2, PlayerDirection::down);
-		auto moveLeft2 = std::make_unique<MoveCommand>(playerComponent2, PlayerDirection::left);
-		playerComponent2->AddCommand(std::move(attack2), SDL_SCANCODE_E, false);
-		playerComponent2->AddCommand(std::move(moveRight2), SDL_SCANCODE_RIGHT, true);
-		playerComponent2->AddCommand(std::move(moveDown2), SDL_SCANCODE_DOWN, true);
-		playerComponent2->AddCommand(std::move(moveLeft2), SDL_SCANCODE_LEFT, true);
-		playerComponent2->AddCommand(std::move(moveUp2), SDL_SCANCODE_UP, true);
+		if (m_InputTwo == InputMethod::keyboard)
+			SetUpInputKeyboard(playerComponent2, 1);
+		else
+			SetUpInputController(playerComponent2);
+
 
 		sceneManager.AddToCurrentScene(player1);
 		sceneManager.AddToCurrentScene(player2);
@@ -171,6 +152,46 @@ void GameManager::LoadPlayers(const glm::vec3& pos1, const glm::vec3& pos2)
 //	}
 //}
 
+void GameManager::SetUpInputKeyboard(const std::shared_ptr<PlayerComponent>& player, int playerIdx)
+{
+	auto attack = std::make_unique<AttackCommand>(player);
+	auto moveRight = std::make_unique<MoveCommand>(player, PlayerDirection::right);
+	auto moveUp = std::make_unique<MoveCommand>(player, PlayerDirection::up);
+	auto moveDown = std::make_unique<MoveCommand>(player, PlayerDirection::down);
+	auto moveLeft = std::make_unique<MoveCommand>(player, PlayerDirection::left);
+	if (playerIdx == 0)
+	{
+		player->AddCommand(std::move(attack), SDL_SCANCODE_E, false);
+		player->AddCommand(std::move(moveRight), SDL_SCANCODE_D, true);
+		player->AddCommand(std::move(moveDown), SDL_SCANCODE_S, true);
+		player->AddCommand(std::move(moveLeft), SDL_SCANCODE_A, true);
+		player->AddCommand(std::move(moveUp), SDL_SCANCODE_W, true);
+	}
+	else
+	{
+		player->AddCommand(std::move(attack), SDL_SCANCODE_SPACE, false);
+		player->AddCommand(std::move(moveRight), SDL_SCANCODE_RIGHT, true);
+		player->AddCommand(std::move(moveDown), SDL_SCANCODE_DOWN, true);
+		player->AddCommand(std::move(moveLeft), SDL_SCANCODE_LEFT, true);
+		player->AddCommand(std::move(moveUp), SDL_SCANCODE_UP, true);
+	}
+}
+
+void GameManager::SetUpInputController(const std::shared_ptr<PlayerComponent>& player)
+{
+	auto attack = std::make_unique<AttackCommand>(player);
+	auto moveRight = std::make_unique<MoveCommand>(player, PlayerDirection::right);
+	auto moveUp = std::make_unique<MoveCommand>(player, PlayerDirection::up);
+	auto moveDown = std::make_unique<MoveCommand>(player, PlayerDirection::down);
+	auto moveLeft = std::make_unique<MoveCommand>(player, PlayerDirection::left);
+	player->AddCommand(std::move(attack), dae::ControllerButton::ButtonA, false);
+	player->AddCommand(std::move(moveRight), dae::ControllerButton::ButtonRight, true);
+	player->AddCommand(std::move(moveDown), dae::ControllerButton::ButtonDown, true);
+	player->AddCommand(std::move(moveLeft), dae::ControllerButton::ButtonLeft, true);
+	player->AddCommand(std::move(moveUp), dae::ControllerButton::ButtonUp, true);
+}
+
+
 void GameManager::NextScene()
 {
 
@@ -187,11 +208,11 @@ void GameManager::NextScene()
 		//m_StartWaiting = true;
 }
 
-std::shared_ptr<dae::GameObject> GameManager::InitializePlayer(int playerIdx, const glm::vec3& startPos, const std::string& texture, bool isEnemy, std::shared_ptr<HealthComponent> multiPlayer)
+std::shared_ptr<dae::GameObject> GameManager::InitializePlayer(int playerIdx, const glm::vec3& startPos, const std::string& texture, bool isEnemy, std::shared_ptr<HealthComponent> multiPlayer, std::shared_ptr<dae::GameObject> otherPlayer)
 {
 	int startLives{ 3 };
 	auto player = std::make_shared<dae::GameObject>();
-	auto playerComponent = std::make_shared<PlayerComponent>(player, startPos, playerIdx, isEnemy);
+	auto playerComponent = std::make_shared<PlayerComponent>(player, startPos, playerIdx, isEnemy, otherPlayer);
 
 	if (!isEnemy)
 	{

@@ -34,6 +34,9 @@
     <Filter Include="Observer">
       <UniqueIdentifier>{2ace8a3d-2204-40d1-8223-59fff532cad1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="State">
+      <UniqueIdentifier>{12551daa-e525-46fd-b766-6c24cefd0260}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationComponent.h">
@@ -123,6 +126,9 @@
     <ClInclude Include="Renderer.h">
       <Filter>EngineResources</Filter>
     </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>State</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationComponent.cpp">
@@ -196,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="Subject.cpp">
       <Filter>Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="State.cpp">
+      <Filter>State</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,17 +4,24 @@
 #include "InputManager.h"
 #include "Renderer.h"
 
-PlayerComponent::PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObject, glm::vec3 position, int playerIdx, bool isEnemy)
+PlayerComponent::PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObject, glm::vec3 position, int playerIdx, bool isEnemy, const std::shared_ptr<dae::GameObject>& otherPlayer)
 	:Component(gameObject)
 	, m_PlayerIdx(playerIdx)
 	, m_IsEnemy(isEnemy)
 	, m_StartPos(position)
+	, m_OtherPlayer(otherPlayer)
 {
 	m_Transform = m_GameObject.lock()->GetComponent<dae::Transform>();
 	m_Transform.lock()->SetSize(m_PlayerWidth, m_PlayerHeight, 0.0f);
 	m_Transform.lock()->SetPosition(position);
 	m_StartPos = m_Transform.lock()->GetPosition();
 	m_Behaviour = m_GameObject.lock()->GetComponent<CharacterBehaviour>();
+	if (isEnemy)
+	{
+		m_StartingColHorizontal = 2;
+		m_StartingColUp = 4;
+		m_StartingColDown = 0;
+	}
 }
 
 void PlayerComponent::Update(float)
@@ -42,10 +49,13 @@ void PlayerComponent::Update(float)
 	SDL_Rect source = m_Animation.lock()->GetSource();
 	m_Texture.lock()->SetSource(source);
 
-	IsWalkingOnIngredient();
-
-	if(!m_IsEnemy)
+	if (!m_IsEnemy)
+	{
 		CheckIsHitByEnemy();
+		IsWalkingOnIngredient();
+	}
+	else
+		CheckIsHitByOtherPlayer();
 
 	CheckStates();
 	
@@ -214,9 +224,10 @@ void PlayerComponent::CheckIsHitByEnemy()
 		auto enemyColl = enemies[i]->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
 		if (m_Collision.lock()->IsOverlapping(enemyColl) && !enemies[i]->GetComponentInheritance<EnemyComponent>()->GetIsDead())
 		{
-			m_GameObject.lock()->GetComponent<HealthComponent>()->RemoveLife();
-			m_Transform.lock()->SetPosition(m_StartPos);
-			enemies[i]->GetComponentInheritance<EnemyComponent>()->Die();
+			Respawn();
+			for(size_t j = 0; j < enemies.size(); ++j)
+				enemies[j]->GetComponentInheritance<EnemyComponent>()->Die();
+			break;
 		}
 	}
 }
@@ -234,6 +245,22 @@ void PlayerComponent::SnapToStair(const SDL_Rect& stairBox)
 {
 	auto playerBox = m_Collision.lock()->GetCollisionBox();
 	m_Transform.lock()->SetPosition(float(stairBox.x), float(playerBox.y), 0.0f);
+}
+
+void PlayerComponent::CheckIsHitByOtherPlayer()
+{
+	auto otherPlayer = m_OtherPlayer.lock()->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+	if (m_Collision.lock()->IsOverlapping(otherPlayer))
+	{
+		m_OtherPlayer.lock()->GetComponent<PlayerComponent>()->Respawn();
+		Respawn();
+	}
+}
+
+void PlayerComponent::Respawn()
+{
+	m_GameObject.lock()->GetComponent<HealthComponent>()->RemoveLife();
+	m_Transform.lock()->SetPosition(m_StartPos);
 }
 
 glm::vec2 PlayerComponent::GetVelocity() const

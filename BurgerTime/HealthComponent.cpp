@@ -7,8 +7,8 @@ HealthComponent::HealthComponent(std::shared_ptr<dae::GameObject> gameObject, in
 	, m_CurrentLives(lives)
 	, m_TopMostPos(pos)
 {
-	for (size_t i = 0; i < size_t(m_StartingLives); ++i)
-		SpawnLife();
+	//for (size_t i = 0; i < size_t(m_StartingLives); ++i)
+		//SpawnLife();
 }
 
 void HealthComponent::Update(float)
@@ -46,19 +46,19 @@ void HealthComponent::SpawnLife()
 
 void HealthComponent::RemoveLife()
 {
-	if (m_CurrentLives > 1)
-	{
-		--m_CurrentLives;
-		m_TopMostPos.y -= m_Distance + m_Size;
-		m_LivesDisplay[m_LivesDisplay.size() - 1]->m_MarkForDestruction = true;
-		m_GameObject.lock()->RemoveChild(m_LivesDisplay[m_LivesDisplay.size() - 1]);
-		m_LivesDisplay.pop_back();
-	}
-	else
-	{
-		m_IsDead = true;
-		std::cout << "dead" << std::endl;
-	}
+	//if (m_CurrentLives > 1)
+	//{
+	//	--m_CurrentLives;
+	//	m_TopMostPos.y -= m_Distance + m_Size;
+	//	//m_LivesDisplay[m_LivesDisplay.size() - 1]->m_MarkForDestruction = true;
+	//	//m_GameObject.lock()->RemoveChild(m_LivesDisplay[m_LivesDisplay.size() - 1]);
+	//	//m_LivesDisplay.pop_back();
+	//}
+	//else
+	//{
+	//	m_IsDead = true;
+	//	std::cout << "dead" << std::endl;
+	//}
 }
 
 std::shared_ptr<dae::Component> HealthComponent::Clone(const std::shared_ptr<dae::GameObject>& gameObject)

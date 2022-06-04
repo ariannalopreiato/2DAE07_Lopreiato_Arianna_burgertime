@@ -235,6 +235,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClInclude Include="ServiceLocator.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SoundSystem.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="TextObject.h" />
     <ClInclude Include="Texture2D.h" />
@@ -275,6 +276,7 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClCompile Include="SDL_SoundSystem.cpp" />
     <ClCompile Include="ServiceLocator.cpp" />
     <ClCompile Include="SoundSystem.cpp" />
+    <ClCompile Include="State.cpp" />
     <ClCompile Include="Subject.cpp" />
     <ClCompile Include="TextObject.cpp" />
     <ClCompile Include="Texture2D.cpp" />

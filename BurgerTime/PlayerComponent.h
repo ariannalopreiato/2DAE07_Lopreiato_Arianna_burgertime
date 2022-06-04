@@ -23,7 +23,7 @@ enum class PlayerState
 class PlayerComponent : public dae::Component
 {
 public:
-	PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObject, glm::vec3 position, int playerIdx, bool isEnemy = false);
+	PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObject, glm::vec3 position, int playerIdx, bool isEnemy = false, const std::shared_ptr<dae::GameObject>& otherPlayer = nullptr);
 	void Update(float elapsedSec);
 	void Render() const;
 	void AddCommand(std::unique_ptr<dae::Command> command, dae::ControllerButton button, bool executeOnPress);
@@ -39,6 +39,8 @@ private:
 	void CheckIsHitByEnemy();
 	void IsWalkingOnIngredient();
 	void SnapToStair(const SDL_Rect& stairBox);
+	void CheckIsHitByOtherPlayer();
+	void Respawn();
 
 	//Player info
 	int m_PlayerIdx{ 0 };
@@ -50,9 +52,9 @@ private:
 
 	//Handle animation
 	bool m_CanGoUp{ false };
-	const int m_StartingColHorizontal{ 3 };
-	const int m_StartingColUp{ 6 };
-	const int m_StartingColDown{ 0 };
+	int m_StartingColHorizontal{ 3 };
+	int m_StartingColUp{ 6 };
+	int m_StartingColDown{ 0 };
 	int m_CurrentCol{ 0 };
 
 	//Players state
@@ -68,6 +70,7 @@ private:
 	std::weak_ptr<HealthComponent> m_Health;
 	std::weak_ptr<dae::Transform> m_Transform;
 	std::weak_ptr<CharacterBehaviour> m_Behaviour;
+	std::weak_ptr<dae::GameObject> m_OtherPlayer;
 
 	SDL_Rect test{};
 	SDL_Rect m_PlatformColliding{};

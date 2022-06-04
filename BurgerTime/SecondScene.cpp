@@ -44,6 +44,5 @@ void SecondScene::LoadSceneElements()
 
     GameManager::LoadUI(font);
     GameManager::LoadLevel("../Data/Level2.txt", scoreComponent);
-    GameManager::LoadEnemies("../Data/EnemiesLevel2.txt");
-    GameManager::LoadPlayers(glm::vec3{ 155.f, 510.f, 0.0f }, glm::vec3{ 443.0f, 510.f, 0.0f });
+    GameManager::LoadPlayersAndEnemies(glm::vec3{ 155.f, 510.f, 0.0f }, "../Data/EnemiesLevel2.txt", glm::vec3{ 443.0f, 510.f, 0.0f });
 }

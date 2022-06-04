@@ -73,13 +73,6 @@ dae::GameObject& dae::GameObject::operator=(GameObject&& other) noexcept //move
 	m_Parent = std::move(other.m_Parent);
 	return *this;
 }
-
-dae::GameObject::~GameObject()
-{
-	m_Components.clear();
-	m_Children.clear();
-
-}
 //--------------------------------------------------------------------------------------------------------
 
 void dae::GameObject::Update(float elapsedTime)
@@ -122,7 +115,7 @@ int dae::GameObject::GetComponentAmount()
 
 
 //------------------------------------- Scenegraph handling ----------------------------------------------
-void dae::GameObject::SetParent(const std::shared_ptr<GameObject>& parent)
+void dae::GameObject::SetParent(const std::weak_ptr<GameObject>& parent)
 {
 	//if (parent)
 	//{
@@ -138,7 +131,7 @@ void dae::GameObject::SetParent(const std::shared_ptr<GameObject>& parent)
 	m_Parent = parent;
 }
 
-std::shared_ptr<dae::GameObject> dae::GameObject::GetParent() const
+std::weak_ptr<dae::GameObject> dae::GameObject::GetParent() const
 {
 	return m_Parent;
 }
@@ -148,9 +141,9 @@ std::shared_ptr<dae::GameObject> dae::GameObject::GetChildAt(int index) const
 	return m_Children.at(index);
 }
 
-void dae::GameObject::AddChild(const std::shared_ptr<GameObject>& child)
+void dae::GameObject::AddChild(std::shared_ptr<GameObject> child)
 {
-	auto oldParent = child->GetParent(); //get the current parent
+	auto oldParent = child->GetParent().lock(); //get the current parent
 	if (oldParent != nullptr)
 	{
 		//if it already has a parent it will be deleted and changed
