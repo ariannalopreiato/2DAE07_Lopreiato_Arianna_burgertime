@@ -6,7 +6,10 @@ HealthComponent::HealthComponent(std::shared_ptr<dae::GameObject> gameObject, in
 	,m_StartingLives(lives)
 	, m_CurrentLives(lives)
 	, m_TopMostPos(pos)
-{}
+{
+	for (size_t i = 0; i < size_t(m_StartingLives); ++i)
+		SpawnLife();
+}
 
 void HealthComponent::Update(float)
 {
@@ -22,7 +25,7 @@ int HealthComponent::GetCurrentLives() const
 	return m_CurrentLives;
 }
 
-std::shared_ptr<dae::GameObject> HealthComponent::SpawnLife()
+void HealthComponent::SpawnLife()
 {
 	auto gameObject = std::make_shared<dae::GameObject>();
 
@@ -38,7 +41,7 @@ std::shared_ptr<dae::GameObject> HealthComponent::SpawnLife()
 
 	m_LivesDisplay.emplace_back(gameObject);
 
-	return gameObject;
+	m_GameObject.lock()->AddChild(gameObject);
 }
 
 void HealthComponent::RemoveLife()
@@ -48,6 +51,7 @@ void HealthComponent::RemoveLife()
 		--m_CurrentLives;
 		m_TopMostPos.y -= m_Distance + m_Size;
 		m_LivesDisplay[m_LivesDisplay.size() - 1]->m_MarkForDestruction = true;
+		m_GameObject.lock()->RemoveChild(m_LivesDisplay[m_LivesDisplay.size() - 1]);
 		m_LivesDisplay.pop_back();
 	}
 	else

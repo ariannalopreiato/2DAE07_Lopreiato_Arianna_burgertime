@@ -15,6 +15,7 @@ namespace dae
 		GameObject(GameObject&& other) noexcept;
 		GameObject& operator=(const GameObject& other) noexcept;
 		GameObject& operator=(GameObject&& other) noexcept;
+		~GameObject();
 
 		void AddComponent(std::shared_ptr<Component> component);
 		

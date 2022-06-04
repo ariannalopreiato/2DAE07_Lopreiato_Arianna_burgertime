@@ -73,6 +73,12 @@ dae::GameObject& dae::GameObject::operator=(GameObject&& other) noexcept //move
 	m_Parent = std::move(other.m_Parent);
 	return *this;
 }
+
+dae::GameObject::~GameObject()
+{
+	m_Components.clear();
+	m_Children.clear();
+}
 //--------------------------------------------------------------------------------------------------------
 
 void dae::GameObject::Update(float elapsedTime)

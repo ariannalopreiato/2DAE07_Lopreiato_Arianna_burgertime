@@ -10,7 +10,7 @@ public:
 	void Update(float elapsedTime);
 	bool IsDead() const;
 	int GetCurrentLives() const;
-	std::shared_ptr<dae::GameObject> SpawnLife();
+	void SpawnLife();
 	void RemoveLife();
 	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 
