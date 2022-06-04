@@ -1,14 +1,14 @@
 #include "HealthComponent.h"
 #include "GameObject.h"
 
-HealthComponent::HealthComponent(std::shared_ptr<dae::GameObject> gameObject, int lives, const glm::vec3& pos)
+HealthComponent::HealthComponent(std::shared_ptr<dae::GameObject> gameObject, int lives)
 	:Component(gameObject)
 	,m_StartingLives(lives)
 	, m_CurrentLives(lives)
-	, m_TopMostPos(pos)
 {
 	//for (size_t i = 0; i < size_t(m_StartingLives); ++i)
 		//SpawnLife();
+	m_TopMostPos = m_GameObject.lock()->GetComponent<dae::Transform>()->GetPosition();
 }
 
 void HealthComponent::Update(float)
@@ -27,21 +27,12 @@ int HealthComponent::GetCurrentLives() const
 
 void HealthComponent::SpawnLife()
 {
-	auto gameObject = std::make_shared<dae::GameObject>();
-
 	auto picture = dae::ResourceManager::GetInstance().LoadTexture("../Data/Sprites/LifeIcon.png");
-	auto texture = std::make_shared<dae::TextureComponent>(gameObject, picture);
+	auto texture = std::make_shared<dae::TextureComponent>(m_GameObject.lock(), picture);
 
-	auto transform = gameObject->GetComponent<dae::Transform>();
-	transform->SetPosition(m_TopMostPos);
-	transform->SetSize(m_Size, m_Size, 0.0f);
-
-	gameObject->AddComponent(texture);
-	m_TopMostPos.y += (m_Distance + m_Size);
-
-	m_LivesDisplay.emplace_back(gameObject);
-
-	m_GameObject.lock()->AddChild(gameObject);
+	//auto transform = gameObject->GetComponent<dae::Transform>();
+	//transform->SetPosition(m_TopMostPos);
+	//transform->SetSize(m_Size, m_Size, 0.0f);
 }
 
 void HealthComponent::RemoveLife()

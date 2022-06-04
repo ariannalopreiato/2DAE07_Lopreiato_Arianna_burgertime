@@ -112,7 +112,7 @@ void Ingredient::ResetPieces()
     for (size_t i = 0; i < m_NumPieces; ++i)
     {
         auto pos = m_Transform.lock()->GetPosition();
-        m_Pieces.at(i).shapeSize.x = int(pos.x);
+        m_Pieces.at(i).shapeSize.x = int(pos.x + m_Pieces.at(i).shapeSize.w * i);
         m_Pieces.at(i).shapeSize.y = int(pos.y);
         m_Pieces.at(i).hasWalkedOnIt = false;
     }
@@ -216,6 +216,7 @@ void Ingredient::CheckHitIngredient()
         {
             if (box.x == ingredientBox.x && box.y + box.h >= ingredientBox.y) //if the current ingredient touches the next ingredient
                     m_LevelIngredients.at(i)->GetGameObject()->GetComponent<Ingredient>()->m_IsFalling = true;
+            ResetPieces();
         }
     }
 }

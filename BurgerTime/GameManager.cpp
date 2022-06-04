@@ -220,7 +220,7 @@ std::shared_ptr<dae::GameObject> GameManager::InitializePlayer(int playerIdx, co
 			player->AddComponent(multiPlayer);
 		else
 		{
-			auto healthComponent = std::make_shared<HealthComponent>(player, startLives, glm::vec3{ 10.f, 10.f, 0.0f });
+			auto healthComponent = std::make_shared<HealthComponent>(player, startLives);
 			player->AddComponent(healthComponent);
 		}
 

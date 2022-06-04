@@ -26,12 +26,10 @@ void FirstScene::LoadSceneElements()
     pepperGO->AddComponent(pepperComponent);
 
     //------------------------------------------------------Lives component
-    //auto livesGO = std::make_shared<dae::GameObject>();
-    //auto pepperComponent = std::make_shared<PointComponent>(pepperGO, 0, glm::vec3{ 600.f, 30.f, 0.0f });
-    //auto pepperAmount = std::make_shared<dae::TextObject>(pepperGO, "5", font);
-    //pepperAmount->SetColor(SDL_Color{ 255, 255, 255, 255 });
-    //pepperGO->AddComponent(pepperAmount);
-    //pepperGO->AddComponent(pepperComponent);
+    auto livesGO = std::make_shared<dae::GameObject>();
+    livesGO->GetComponent<dae::Transform>()->SetPosition(glm::vec3{ 600.f, 30.f, 0.0f });
+    auto livesComponent = std::make_shared<HealthComponent>(livesGO, 0);
+    livesGO->AddComponent(livesComponent);
 
     Add(pepperGO);
     Add(scoreGO);

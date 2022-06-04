@@ -6,7 +6,7 @@
 class HealthComponent : public dae::Component
 {
 public:
-	HealthComponent(std::shared_ptr<dae::GameObject> gameObject, int lives, const glm::vec3& pos = glm::vec3{0.0f, 0.0f, 0.0f});
+	HealthComponent(std::shared_ptr<dae::GameObject> gameObject, int lives);
 	void Update(float elapsedTime);
 	bool IsDead() const;
 	int GetCurrentLives() const;

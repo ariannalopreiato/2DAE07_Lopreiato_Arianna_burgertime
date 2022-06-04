@@ -92,7 +92,7 @@ void EnemyComponent::MoveHorizontal()
 {
 	auto enemyBox = m_Collision.lock()->GetCollisionBox();
 
-	m_Behaviour.lock()->SnapDown();
+	//m_Behaviour.lock()->SnapDown();
 
 	if (!m_IsMoving)
 	{
@@ -124,7 +124,7 @@ void EnemyComponent::MoveHorizontal()
 
 			}
 		}
-		m_Behaviour.lock()->SnapBack();
+		m_Behaviour.lock()->SnapDown();
 		m_IsMoving = true;
 	}
 	m_Animation.lock()->SetNewStartingCol(m_StartingColHorizontal);
@@ -180,13 +180,13 @@ void EnemyComponent::CheckIntersection()
 			else
 			{
 				MoveHorizontal();
-				m_Behaviour.lock()->SnapDown();
+				m_Behaviour.lock()->SnapBack();
 			}
 		}
 		else
 		{
 			MoveHorizontal();
-			m_Behaviour.lock()->SnapDown();
+			m_Behaviour.lock()->SnapBack();
 		}
 	}
 }
