@@ -26,7 +26,7 @@ int main(int, char* []) {
     sceneManager.AddScene(firstScene);
     sceneManager.AddScene(secondScene);
     sceneManager.AddScene(thirdScene);
-    sceneManager.LoadScene("Level1");
+    sceneManager.LoadScene("Level3");
     engine.Run();
     return 0;
 }
