@@ -1,7 +1,6 @@
 #pragma once
 #include "MiniginPCH.h"
 #include "Component.h"
-#include "Command.h"
 #include "ControllerButton.h"
 #include "CollisionComponent.h"
 #include "TextureComponent.h"

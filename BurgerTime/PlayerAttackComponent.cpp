@@ -18,14 +18,15 @@ void PlayerAttackComponent::Update(float elapsedSec)
 		if (m_CurrentTime >= m_SpawnTime)
 		{
 			m_IsPepperInitialized = false;
-			m_Pepper.lock()->m_MarkForDestruction = true;
+			m_GameObject.lock()->RemoveChildAt(0);
+			//m_Pepper.lock()->m_MarkForDestruction = true;
 		}
 	}
 }
 
 void PlayerAttackComponent::Attack()
 {
-	if (m_CurrentShots > 0)
+	if (m_CurrentShots > 0 && !m_IsPepperInitialized)
 	{
 		--m_CurrentShots;
 		SpawnPepper();
@@ -36,6 +37,7 @@ void PlayerAttackComponent::Attack()
 void PlayerAttackComponent::SpawnPepper()
 {
 	auto gameObj  = std::make_shared<dae::GameObject>();
+
 	auto picture = dae::ResourceManager::GetInstance().LoadTexture("../Data/Sprites/pepper.png");
 	auto texture = std::make_shared<dae::TextureComponent>(gameObj, picture);
 

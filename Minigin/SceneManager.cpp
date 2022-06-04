@@ -32,8 +32,8 @@ void dae::SceneManager::LoadScene(const std::string& name)
 	{
 		if (scene->GetName() == name)
 		{
-			scene->LoadSceneElements();
 			m_CurrentScene = scene;
+			scene->LoadSceneElements();
 			break;
 		}
 	}
@@ -49,4 +49,9 @@ void dae::SceneManager::DeleteScene(const std::string& name)
 			break;
 		}
 	}
+}
+
+void dae::SceneManager::AddToCurrentScene(const std::shared_ptr<dae::GameObject>& gameObject)
+{
+	m_CurrentScene.lock()->Add(gameObject);
 }

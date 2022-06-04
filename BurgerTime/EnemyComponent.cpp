@@ -91,33 +91,22 @@ void EnemyComponent::Move(float elapsedSec)
 void EnemyComponent::MoveHorizontal()
 {
 	auto enemyBox = m_Collision.lock()->GetCollisionBox();
-	bool canGoLeft = m_Behaviour.lock()->CanGoLeft();
-	bool canGoRight = m_Behaviour.lock()->CanGoRight();
 
-	SDL_Rect shapeCheck{ enemyBox };
 	m_Behaviour.lock()->SnapDown();
 
 	if (!m_IsMoving)
 	{
-		if (!canGoRight && canGoLeft)
+		if (!m_Behaviour.lock()->CanGoRight() && m_Behaviour.lock()->CanGoLeft())
 		{
-			shapeCheck.x = shapeCheck.x - shapeCheck.w;
-			if (m_Behaviour.lock()->IsCollidingWithPlatforms(shapeCheck))
-			{
-				m_Velocity.x = -1.0f;
-				m_Velocity.y = 0.0f;
-			}
+			m_Velocity.x = -1.0f;
+			m_Velocity.y = 0.0f;
 		}
-		if (canGoRight && !canGoLeft)
+		else if (m_Behaviour.lock()->CanGoRight() && !m_Behaviour.lock()->CanGoLeft())
 		{
-			shapeCheck.x = shapeCheck.x + shapeCheck.w;
-			if (m_Behaviour.lock()->IsCollidingWithPlatforms(shapeCheck))
-			{
-				m_Velocity.x = 1.0f;
-				m_Velocity.y = 0.0f;
-			}
+			m_Velocity.x = 1.0f;
+			m_Velocity.y = 0.0f;
 		}
-		if (canGoRight && canGoLeft)
+		else if (m_Behaviour.lock()->CanGoRight() && m_Behaviour.lock()->CanGoLeft())
 		{
 			m_Velocity.y = 0.0f;
 			if (m_PlayerPos.x > enemyBox.x)
@@ -128,19 +117,14 @@ void EnemyComponent::MoveHorizontal()
 			{
 				int randNum = rand() % 2;
 				if (randNum == 0)
-				{
-					shapeCheck.x = shapeCheck.x - shapeCheck.w;
-					if (m_Behaviour.lock()->IsCollidingWithPlatforms(shapeCheck))
-						m_Velocity.x = 1.0f;
-				}
+					m_Velocity.x = 1.0f;
+
 				else
-				{
-					shapeCheck.x = shapeCheck.x + shapeCheck.w;
-					if (m_Behaviour.lock()->IsCollidingWithPlatforms(shapeCheck))
-						m_Velocity.x = -1.0f;
-				}
+					m_Velocity.x = -1.0f;
+
 			}
 		}
+		m_Behaviour.lock()->SnapBack();
 		m_IsMoving = true;
 	}
 	m_Animation.lock()->SetNewStartingCol(m_StartingColHorizontal);
@@ -151,26 +135,24 @@ void EnemyComponent::MoveHorizontal()
 void EnemyComponent::CheckIntersection()
 {
 	auto enemyBox = m_Collision.lock()->GetCollisionBox();
-	bool canGoDown = m_Behaviour.lock()->CanGoDown();
-	bool canGoUp = m_Behaviour.lock()->CanGoUp();
 
 	if (m_Behaviour.lock()->CanGoLeft() || m_Behaviour.lock()->CanGoRight())
 	{
-		if ((canGoDown || canGoUp))
+		if ((m_Behaviour.lock()->CanGoDown() || m_Behaviour.lock()->CanGoUp()))
 		{
 			if (m_CanClimb)
 			{
-				if (canGoDown && !canGoUp)
+				if (m_Behaviour.lock()->CanGoDown() && !m_Behaviour.lock()->CanGoUp())
 				{
 					m_Velocity.x = 0.0f;
 					m_Velocity.y = 1.0f;
 				}
-				if (!canGoDown && canGoUp)
+				if (!m_Behaviour.lock()->CanGoDown() && m_Behaviour.lock()->CanGoUp())
 				{
 					m_Velocity.x = 0.0f;
 					m_Velocity.y = -1.0f;
 				}
-				if (canGoDown && canGoUp)
+				if (m_Behaviour.lock()->CanGoDown() && m_Behaviour.lock()->CanGoUp())
 				{
 					m_Velocity.x = 0.0f;
 					if (m_PlayerPos.y > enemyBox.y)
@@ -196,10 +178,16 @@ void EnemyComponent::CheckIntersection()
 				m_IsMoving = false;
 			}
 			else
+			{
 				MoveHorizontal();
+				m_Behaviour.lock()->SnapDown();
+			}
 		}
 		else
+		{
 			MoveHorizontal();
+			m_Behaviour.lock()->SnapDown();
+		}
 	}
 }
 

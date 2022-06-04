@@ -169,15 +169,9 @@ const std::vector<std::shared_ptr<dae::GameObject>>& dae::GameObject::GetChildre
 
 void dae::GameObject::RemoveChildAt(int index)
 {
-	m_Children.at(index)->SetParent(nullptr);
-	if (index != int(m_Children.size() - 1))
-	{
-		//move all children
-		for (size_t i = index; i < m_Children.size() - 1; ++i)
-			m_Children.at(i) = m_Children.at(i + 1);
-	}
-	m_Children.pop_back(); //delete the empty last spot
-	//remove itself from the parent of the child
+	//m_Children.at(index)->SetParent(nullptr);
+	RemoveChild(m_Children[index]);
+	//auto oldParent = m_Children.at(index)->GetParent();
 }
 
 void dae::GameObject::RemoveChild(const std::shared_ptr<GameObject>& child)

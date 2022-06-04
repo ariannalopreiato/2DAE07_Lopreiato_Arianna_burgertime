@@ -20,10 +20,11 @@ void Scene::Add(const std::shared_ptr<GameObject>& object)
 
 void dae::Scene::CleanUpScene()
 {
-	for (size_t i = 0; i < m_Objects.size(); ++i)
-	{
-		m_Objects[i]->m_MarkForDestruction = true;
-	}
+	//for (size_t i = 0; i < m_Objects.size(); ++i)
+	//{
+	//	m_Objects[i]->m_MarkForDestruction = true;
+	//}
+	m_Objects.clear();
 }
 
 const std::string& dae::Scene::GetName()

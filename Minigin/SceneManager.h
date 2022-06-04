@@ -1,5 +1,6 @@
 #pragma once
 #include "Singleton.h"
+#include "GameObject.h"
 
 namespace dae
 {
@@ -12,6 +13,8 @@ namespace dae
 		void DeleteScene(const std::string& name);
 		void Update(float elapsedTime);
 		void Render();
+		void AddToCurrentScene(const std::shared_ptr<dae::GameObject>& gameObject);
+
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;

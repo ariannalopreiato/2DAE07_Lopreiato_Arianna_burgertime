@@ -44,7 +44,8 @@ void PlayerComponent::Update(float)
 
 	IsWalkingOnIngredient();
 
-	CheckIsHitByEnemy();
+	if(!m_IsEnemy)
+		CheckIsHitByEnemy();
 
 	CheckStates();
 	

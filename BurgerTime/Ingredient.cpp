@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "CollisionComponent.h"
 #include "LevelCreator.h"
+#include "GameManager.h"
 
 Ingredient::Ingredient(const std::shared_ptr<dae::GameObject>& gameObject)
     : Component(gameObject)
@@ -187,6 +188,7 @@ bool Ingredient::CheckHitLevelObject()
                 m_Plates[m_PlateIdx]->GetGameObject()->GetComponent<Plate>()->AddIngredient(m_GameObject.lock());
                 m_IsFallingOnPlate = false;
                 m_ContinueFallingCount = int(m_EnemiesOnIngredient.size());
+                GameManager::AddIngredient();
             }         
             ResetPieces();
             return true;

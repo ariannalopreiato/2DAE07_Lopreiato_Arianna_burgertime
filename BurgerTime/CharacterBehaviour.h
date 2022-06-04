@@ -16,7 +16,6 @@ public:
 	bool CanGoDown();
 	void SnapBack();
 	void SnapDown();
-	bool IsCollidingWithPlatforms(const SDL_Rect& other);
 	const Line& GetLineLeft();
 	const Line& GetLineRight();
 	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
