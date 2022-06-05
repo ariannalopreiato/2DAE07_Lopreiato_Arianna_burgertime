@@ -183,6 +183,11 @@ void GameManager::LoadPlayersAndEnemies(const glm::vec3& pos1, const std::string
 	}
 }
 
+std::shared_ptr<PointComponent> GameManager::GetScoreComponent()
+{
+	return m_ScoreComponent.lock();
+}
+
 void GameManager::SetUpInputKeyboard(const std::shared_ptr<PlayerComponent>& player, int playerIdx)
 {
 	auto attack = std::make_unique<AttackCommand>(player);

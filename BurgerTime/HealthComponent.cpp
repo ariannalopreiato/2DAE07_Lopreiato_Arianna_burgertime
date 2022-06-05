@@ -1,5 +1,6 @@
 #include "HealthComponent.h"
 #include "GameObject.h"
+#include "GameStateHandler.h"
 
 HealthComponent::HealthComponent(std::shared_ptr<dae::GameObject> gameObject, int lives)
 	:Component(gameObject)
@@ -14,10 +15,7 @@ HealthComponent::HealthComponent(std::shared_ptr<dae::GameObject> gameObject, in
 void HealthComponent::Update(float)
 {
 	if (m_IsDead) 
-	{
-		m_CurrentLives = m_StartingLives;
-		m_IsDead = false;
-	};
+		GameStateHandler::GetInstance().ChangeState(GameState::gameOver);
 }
 
 int HealthComponent::GetCurrentLives() const
@@ -50,10 +48,7 @@ void HealthComponent::RemoveLife()
 		m_LivesDisplay.pop_back();
 	}
 	else
-	{
 		m_IsDead = true;
-		std::cout << "dead" << std::endl;
-	}
 }
 
 void HealthComponent::onNotify(const std::string&)

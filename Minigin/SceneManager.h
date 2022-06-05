@@ -15,8 +15,12 @@ namespace dae
 		void Update(float elapsedTime);
 		void Render();
 		void AddToCurrentScene(const std::shared_ptr<dae::GameObject>& gameObject);
+		const std::string& GetCurrentSceneName();
+		std::shared_ptr<Scene> GetCurrentScene();
+		std::shared_ptr<Scene> GetSceneByName(const std::string& name);
 		void SetLevelToLoad(const std::string& levelToLoad);
 		const std::vector<std::shared_ptr<dae::GameObject>>& GetSharedObjects();
+		virtual void OnSelect() {};
 
 	private:
 		friend class Singleton<SceneManager>;

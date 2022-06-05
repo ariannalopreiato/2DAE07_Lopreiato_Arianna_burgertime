@@ -92,8 +92,6 @@ void dae::Minigin::Cleanup()
 
 void dae::Minigin::Run()
 {
-	//Initialize();
-
 	LoadGame();
 
 	{

@@ -47,6 +47,25 @@ void dae::SceneManager::LoadScene(const std::string& name)
 	}
 }
 
+const std::string& dae::SceneManager::GetCurrentSceneName()
+{
+	return m_CurrentScene.lock()->GetName();
+}
+
+std::shared_ptr<dae::Scene> dae::SceneManager::GetCurrentScene()
+{
+	return m_CurrentScene.lock();
+}
+
+std::shared_ptr<dae::Scene> dae::SceneManager::GetSceneByName(const std::string& name)
+{
+	for (const auto& scene : m_Scenes)
+		if (scene->GetName() == name)
+			return scene;
+
+	return nullptr;
+}
+
 void dae::SceneManager::AddSharedObject(const std::shared_ptr<dae::GameObject>& sharedObject)
 {
 	m_SharedSceneObjects.emplace_back(sharedObject);

@@ -16,6 +16,7 @@ namespace dae
 		void Update(float elapsedTime);
 		void Render() const;
 		void SetIsLoading(bool isLoading);
+		virtual void OnSelect() {};
 
 	private: 
 		std::string m_Name;

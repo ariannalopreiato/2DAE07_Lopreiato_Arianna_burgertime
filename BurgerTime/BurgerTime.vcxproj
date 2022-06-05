@@ -206,11 +206,17 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="FirstScene.cpp" />
     <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="GameStates.cpp" />
+    <ClCompile Include="GameOverScene.cpp" />
+    <ClCompile Include="GameOverState.cpp" />
+    <ClCompile Include="GameStateHandler.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="Ingredient.cpp" />
     <ClCompile Include="LevelCreator.cpp" />
     <ClCompile Include="LevelReader.cpp" />
+    <ClCompile Include="MainMenuScene.cpp" />
+    <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="MoveArrowDown.cpp" />
+    <ClCompile Include="MoveArrowUp.cpp" />
     <ClCompile Include="MoveCommand.cpp" />
     <ClCompile Include="MrEggComponent.cpp" />
     <ClCompile Include="MrHotDogComponent.cpp" />
@@ -220,8 +226,10 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClCompile Include="PlayerAttackComponent.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PlayerMovementComponent.cpp" />
+    <ClCompile Include="PlayingState.cpp" />
     <ClCompile Include="PointComponent.cpp" />
     <ClCompile Include="SecondScene.cpp" />
+    <ClCompile Include="SelectCommand.cpp" />
     <ClCompile Include="ThirdScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -231,12 +239,18 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="FirstScene.h" />
     <ClInclude Include="GameManager.h" />
-    <ClInclude Include="GameStates.h" />
+    <ClInclude Include="GameOverScene.h" />
+    <ClInclude Include="GameOverState.h" />
+    <ClInclude Include="GameStateHandler.h" />
     <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="Ingredient.h" />
     <ClInclude Include="LevelCreator.h" />
     <ClInclude Include="LevelObjectType.h" />
     <ClInclude Include="LevelReader.h" />
+    <ClInclude Include="MainMenuScene.h" />
+    <ClInclude Include="MainMenuState.h" />
+    <ClInclude Include="MoveArrowDown.h" />
+    <ClInclude Include="MoveArrowUp.h" />
     <ClInclude Include="MoveCommand.h" />
     <ClInclude Include="MrEggComponent.h" />
     <ClInclude Include="MrHotDogComponent.h" />
@@ -246,8 +260,10 @@ xcopy $(SolutionDir)3rdParty\SDL2_mixer-2.0.4\lib\$(PlatformTarget)\*.dll $(Outp
     <ClInclude Include="PlayerAttackComponent.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PlayerMovementComponent.h" />
+    <ClInclude Include="PlayingState.h" />
     <ClInclude Include="PointComponent.h" />
     <ClInclude Include="SecondScene.h" />
+    <ClInclude Include="SelectCommand.h" />
     <ClInclude Include="Structs.h" />
     <ClInclude Include="ThirdScene.h" />
   </ItemGroup>

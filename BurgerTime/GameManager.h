@@ -29,6 +29,7 @@ public:
 	static void LoadUI();
 	static void LoadLevel(const std::string& levelPath);
 	static void LoadPlayersAndEnemies(const glm::vec3& pos1, const std::string& enemiesPath, const glm::vec3& pos2 = { 0.0f, 0.0f, 0.0f });
+	static std::shared_ptr<PointComponent> GetScoreComponent();
 
 private:
 	GameManager() {};

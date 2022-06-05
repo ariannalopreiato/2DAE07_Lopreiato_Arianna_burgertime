@@ -24,7 +24,6 @@ void EnemyComponent::Update(float elapsedSec)
 
 	if (!m_IsFalling && !m_IsDead)
 	{
-		m_Collision.lock()->m_IsBoxVisible = true;
 		m_Animation.lock()->m_CanAnimate = true;
 		m_Texture.lock()->m_IsImageShowing = true;
 

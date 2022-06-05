@@ -15,19 +15,6 @@ PointComponent::PointComponent(const std::shared_ptr<dae::GameObject>& gameObjec
     m_Transform.lock()->SetPosition(startPos);
 }
 
-PointComponent::~PointComponent()
-{
-    SavePointsToFile();
-}
-
-void PointComponent::SavePointsToFile()
-{
-    std::ofstream highScores;
-    highScores.open(m_HighScoresFile);
-    highScores << std::to_string(m_CurrentPoints) << '\n';
-    highScores.close();
-}
-
 void PointComponent::onNotify(const std::string& message)
 {
     m_CurrentPoints += std::stoi(message);
