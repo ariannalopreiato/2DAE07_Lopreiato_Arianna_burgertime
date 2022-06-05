@@ -14,13 +14,14 @@
 #include "EnemyManager.h"
 #include "Structs.h"
 #include "CharacterBehaviour.h"
+#include "Subject.h"
 
 enum class PlayerState
 {
 	idle, walking, attacking, climbing
 };
 
-class PlayerComponent : public dae::Component
+class PlayerComponent : public dae::Component, public dae::Subject
 {
 public:
 	PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObject, glm::vec3 position, int playerIdx, bool isEnemy = false, const std::shared_ptr<dae::GameObject>& otherPlayer = nullptr);

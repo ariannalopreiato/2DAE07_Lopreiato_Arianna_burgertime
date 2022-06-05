@@ -37,39 +37,66 @@ void GameManager::SetGameMode(GameMode gameMode)
 	m_GameMode = gameMode;
 }
 
-void GameManager::LoadUI(const std::shared_ptr<dae::Font>& font)
+void GameManager::LoadUI()
 {
-	auto highScore = std::make_shared<dae::GameObject>();
-	highScore->GetComponent<dae::Transform>()->SetPosition(150.f, 5.f, 0.0f);
-	auto hiScoreText = std::make_shared<dae::TextObject>(highScore, "HI-SCORE", font);
-	hiScoreText->SetColor(SDL_Color{ 255, 0, 0, 255 });
+	auto font = dae::ResourceManager::GetInstance().LoadFont("../Data/RetroGaming.ttf", 20);
 
 	auto up = std::make_shared<dae::GameObject>();
 	up->GetComponent<dae::Transform>()->SetPosition(50.f, 5.f, 0.0f);
 	auto upText = std::make_shared<dae::TextObject>(up, "1UP", font);
 	upText->SetColor(SDL_Color{ 255, 0, 0, 255 });
 
+	//------------------------------------------------------Score component
+	auto highScore = std::make_shared<dae::GameObject>();
+	highScore->GetComponent<dae::Transform>()->SetPosition(150.f, 5.f, 0.0f);
+	auto hiScoreText = std::make_shared<dae::TextObject>(highScore, "HI-SCORE", font);
+	hiScoreText->SetColor(SDL_Color{ 255, 0, 0, 255 });
+	auto scoreGO = std::make_shared<dae::GameObject>();
+	auto scoreComponent = std::make_shared<PointComponent>(scoreGO, 0, glm::vec3{ 170.f, 30.f, 0.0f });
+	auto textPoint = std::make_shared<dae::TextObject>(scoreGO, "0", font);
+	textPoint->SetColor(SDL_Color{ 255, 255, 255, 255 });
+	scoreGO->AddComponent(textPoint);
+	scoreGO->AddComponent(scoreComponent);
+
+	//------------------------------------------------------Pepper component
+	//text saying "pepper"
 	auto pepperText = std::make_shared<dae::GameObject>();
 	pepperText->GetComponent<dae::Transform>()->SetPosition(570.f, 10.f, 0.0f);
 	pepperText->GetComponent<dae::Transform>()->SetSize(50.f, 15.f, 0.0f);
 	auto pepperTextPic = dae::ResourceManager::GetInstance().LoadTexture("Sprites/PepperText.png");
 	auto pepperTexture = std::make_shared<dae::TextureComponent>(pepperText, pepperTextPic);
+	//amount of pepper
+	auto pepperGO = std::make_shared<dae::GameObject>();
+	auto pepperComponent = std::make_shared<PointComponent>(pepperGO, 0, glm::vec3{ 600.f, 30.f, 0.0f });
+	auto pepperAmount = std::make_shared<dae::TextObject>(pepperGO, "5", font);
+	pepperAmount->SetColor(SDL_Color{ 255, 255, 255, 255 });
+	pepperGO->AddComponent(pepperAmount);
+	pepperGO->AddComponent(pepperComponent);
+
+	//------------------------------------------------------Lives component
+	auto livesGO = std::make_shared<dae::GameObject>();
+	livesGO->GetComponent<dae::Transform>()->SetPosition(glm::vec3{ 10.f, 10.f, 0.0f });
+	auto livesComponent = std::make_shared<HealthComponent>(livesGO, 3);
+	livesGO->AddComponent(livesComponent);
 
 	pepperText->AddComponent(pepperTexture);
 	highScore->AddComponent(hiScoreText);
 	up->AddComponent(upText);
 
+	//This game objects need to stay the same through out the whole game without being reset when loading a new level
 	auto& sceneManager = dae::SceneManager::GetInstance();
-	//sceneManager.AddToCurrentScene(pepperText);
-	//sceneManager.AddToCurrentScene(highScore);
-	//sceneManager.AddToCurrentScene(up);
 	sceneManager.AddSharedObject(pepperText);
 	sceneManager.AddSharedObject(highScore);
 	sceneManager.AddSharedObject(up);
-
+	sceneManager.AddSharedObject(scoreGO);
+	sceneManager.AddSharedObject(pepperGO);
+	sceneManager.AddSharedObject(livesGO);
+	m_ScoreComponent = scoreComponent;
+	m_HealthComponent = livesComponent;
+	m_PepperComponent = pepperComponent;
 }
 
-void GameManager::LoadLevel(const std::string& levelPath, const std::shared_ptr<PointComponent> score)
+void GameManager::LoadLevel(const std::string& levelPath)
 {
 	auto levelReader = std::make_shared<LevelReader>();
 	levelReader->ReadLevel(levelPath);
@@ -78,13 +105,14 @@ void GameManager::LoadLevel(const std::string& levelPath, const std::shared_ptr<
 	for (size_t j = 0; j < ingredients.size(); ++j)
 	{
 		ingredients[j]->GetGameObject()->GetComponent<Ingredient>()->Initialize();
-		ingredients[j]->GetGameObject()->GetComponent<Ingredient>()->AddObserver(score);
+		ingredients[j]->GetGameObject()->GetComponent<Ingredient>()->AddObserver(m_ScoreComponent.lock());
 	}
 	for (size_t i = 0; i < levelObjects.size(); ++i)
 	{
 		dae::SceneManager::GetInstance().AddToCurrentScene(levelObjects.at(i));
 	}
-	m_AmountOfIngredients = int(ingredients.size());
+	//m_AmountOfIngredients = int(ingredients.size());
+	m_AmountOfIngredients = 1;
 }
 
 void GameManager::LoadEnemies(const std::string& enemiesPath)
@@ -121,7 +149,7 @@ void GameManager::LoadPlayersAndEnemies(const glm::vec3& pos1, const std::string
 		else
 			SetUpInputController(playerComponent1);
 
-		auto player2 = InitializePlayer(1, pos2, "Sprites/MrsSalt.png", false, player1->GetComponent<HealthComponent>());
+		auto player2 = InitializePlayer(1, pos2, "Sprites/MrsSalt.png", false);
 		auto playerComponent2 = player2->GetComponent<PlayerComponent>();
 		if (m_InputTwo == InputMethod::keyboard)
 			SetUpInputKeyboard(playerComponent2, 1);
@@ -142,7 +170,7 @@ void GameManager::LoadPlayersAndEnemies(const glm::vec3& pos1, const std::string
 		else
 			SetUpInputController(playerComponent1);
 
-		auto player2 = InitializePlayer(1, pos2, "Sprites/MrHotDog.png", true, nullptr, player1);
+		auto player2 = InitializePlayer(1, pos2, "Sprites/MrHotDog.png", true, player1);
 		auto playerComponent2 = player2->GetComponent<PlayerComponent>();
 		if (m_InputTwo == InputMethod::keyboard)
 			SetUpInputKeyboard(playerComponent2, 1);
@@ -194,27 +222,10 @@ void GameManager::SetUpInputController(const std::shared_ptr<PlayerComponent>& p
 	player->AddCommand(std::move(moveUp), dae::ControllerButton::ButtonUp, true);
 }
 
-std::shared_ptr<dae::GameObject> GameManager::InitializePlayer(int playerIdx, const glm::vec3& startPos, const std::string& texture, bool isEnemy, std::shared_ptr<HealthComponent> multiPlayer, std::shared_ptr<dae::GameObject> otherPlayer)
+std::shared_ptr<dae::GameObject> GameManager::InitializePlayer(int playerIdx, const glm::vec3& startPos, const std::string& texture, bool isEnemy, std::shared_ptr<dae::GameObject> otherPlayer)
 {
-	int startLives{ 3 };
 	auto player = std::make_shared<dae::GameObject>();
 	auto playerComponent = std::make_shared<PlayerComponent>(player, startPos, playerIdx, isEnemy, otherPlayer);
-
-	if (!isEnemy)
-	{
-		if (multiPlayer != nullptr)
-			player->AddComponent(multiPlayer);
-		else
-		{
-			auto healthComponent = std::make_shared<HealthComponent>(player, startLives);
-			player->AddComponent(healthComponent);
-		}
-
-		auto attackComponent = std::make_shared<PlayerAttackComponent>(player, 5);
-
-
-		player->AddComponent(attackComponent);
-	}
 
 	auto collisionComponent = std::make_shared<dae::CollisionComponent>(player);
 
@@ -227,6 +238,9 @@ std::shared_ptr<dae::GameObject> GameManager::InitializePlayer(int playerIdx, co
 	{
 		animationComponent = std::make_shared<dae::AnimationComponent>(player, 3, 6, 9, 1);
 		speed = 50.f;
+		auto attackComponent = std::make_shared<PlayerAttackComponent>(player, 5);
+		player->AddComponent(attackComponent);
+		playerComponent->AddObserver(m_HealthComponent.lock());
 	}
 	else
 	{

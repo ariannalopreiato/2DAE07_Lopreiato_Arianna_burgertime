@@ -67,6 +67,6 @@ namespace dae
 		std::weak_ptr<GameObject> m_Parent{};
 		std::vector<std::shared_ptr<Component>> m_Components{};
 		std::shared_ptr<Transform> m_Transform{}; //every game object NEEDS to have a transform component
-		void SetParent(const std::weak_ptr<GameObject>& parent);
+		void SetParent(const std::shared_ptr<GameObject>& parent);
 	};
 }

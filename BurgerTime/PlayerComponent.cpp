@@ -253,13 +253,13 @@ void PlayerComponent::CheckIsHitByOtherPlayer()
 	if (m_Collision.lock()->IsOverlapping(otherPlayer))
 	{
 		m_OtherPlayer.lock()->GetComponent<PlayerComponent>()->Respawn();
-		Respawn();
+		m_Transform.lock()->SetPosition(m_StartPos);
 	}
 }
 
 void PlayerComponent::Respawn()
 {
-	m_GameObject.lock()->GetComponent<HealthComponent>()->RemoveLife();
+	notify("");
 	m_Transform.lock()->SetPosition(m_StartPos);
 }
 

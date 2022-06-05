@@ -26,8 +26,8 @@ public:
 	static void InputSetup(InputMethod inputOne = InputMethod::keyboard, InputMethod inputTwo = InputMethod::keyboard);
 	static void AddIngredient();
 	static void SetGameMode(GameMode gameMode);
-	static void LoadUI(const std::shared_ptr<dae::Font>& font);
-	static void LoadLevel(const std::string& levelPath, const std::shared_ptr<PointComponent> score);
+	static void LoadUI();
+	static void LoadLevel(const std::string& levelPath);
 	static void LoadPlayersAndEnemies(const glm::vec3& pos1, const std::string& enemiesPath, const glm::vec3& pos2 = { 0.0f, 0.0f, 0.0f });
 
 private:
@@ -36,7 +36,7 @@ private:
 	static void SetUpInputController(const std::shared_ptr<PlayerComponent>& player);
 	static void NextScene();
 	static void LoadEnemies(const std::string& enemiesPath);
-	static std::shared_ptr<dae::GameObject> InitializePlayer(int playerIdx, const glm::vec3& startPos, const std::string& texture, bool isEnemy, std::shared_ptr<HealthComponent> multiPlayer = nullptr, std::shared_ptr<dae::GameObject> otherPlayer = nullptr);
+	static std::shared_ptr<dae::GameObject> InitializePlayer(int playerIdx, const glm::vec3& startPos, const std::string& texture, bool isEnemy, std::shared_ptr<dae::GameObject> otherPlayer = nullptr);
 
 	inline static GameMode m_GameMode;
 	inline static bool m_StartWaiting{ false };
@@ -47,4 +47,7 @@ private:
 	inline static float m_TotaWaitTime{ 2.f };
 	inline static InputMethod m_InputOne{};
 	inline static InputMethod m_InputTwo{};
+	inline static std::weak_ptr<PointComponent> m_ScoreComponent{};
+	inline static std::weak_ptr<HealthComponent> m_HealthComponent{};
+	inline static std::weak_ptr<PointComponent> m_PepperComponent{};
 };

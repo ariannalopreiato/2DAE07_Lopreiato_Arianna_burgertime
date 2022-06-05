@@ -5,12 +5,11 @@
 #include "Renderer.h"
 #include "GameObject.h"
 
-PointComponent::PointComponent(const std::shared_ptr<dae::GameObject>& gameObject, int startingPoints, glm::vec3 startPos, const std::string& path)
+PointComponent::PointComponent(const std::shared_ptr<dae::GameObject>& gameObject, int startingPoints, glm::vec3 startPos)
 	:Component(gameObject)
 	, m_StartingPoints(startingPoints)
 	, m_CurrentPoints(startingPoints)
     , m_StartingPos(startPos)
-    , m_HighScoresFile(path)
 {
     m_Transform = m_GameObject.lock()->GetComponent<dae::Transform>();
     m_Transform.lock()->SetPosition(startPos);
@@ -37,5 +36,5 @@ void PointComponent::onNotify(const std::string& message)
 
 std::shared_ptr<dae::Component> PointComponent::Clone(const std::shared_ptr<dae::GameObject>& gameObject)
 {
-	return std::make_shared<PointComponent>(gameObject, m_StartingPoints, m_StartingPos, m_HighScoresFile);
+	return std::make_shared<PointComponent>(gameObject, m_StartingPoints, m_StartingPos);
 }

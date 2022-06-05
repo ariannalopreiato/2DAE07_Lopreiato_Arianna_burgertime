@@ -122,7 +122,6 @@ std::shared_ptr<dae::GameObject> LevelCreator::CreateObject(const std::string& t
 
 	auto collision = std::make_shared<dae::CollisionComponent>(object);
 
-	collision->m_IsBoxVisible = true;
 	object->AddComponent(texture);
 	object->AddComponent(collision);
 	m_LevelObjects.emplace_back(object);

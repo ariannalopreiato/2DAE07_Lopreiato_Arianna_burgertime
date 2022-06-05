@@ -8,7 +8,7 @@
 class PointComponent : public dae::Component, public dae::Observer
 {
 public:
-	PointComponent(const std::shared_ptr<dae::GameObject>& gameObject, int startingPoints, glm::vec3 startPos, const std::string& path);
+	PointComponent(const std::shared_ptr<dae::GameObject>& gameObject, int startingPoints, glm::vec3 startPos);
 	~PointComponent();
 	void SavePointsToFile();
 	virtual void onNotify(const std::string& message);

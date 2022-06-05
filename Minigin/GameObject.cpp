@@ -115,7 +115,7 @@ int dae::GameObject::GetComponentAmount()
 
 
 //------------------------------------- Scenegraph handling ----------------------------------------------
-void dae::GameObject::SetParent(const std::weak_ptr<GameObject>& parent)
+void dae::GameObject::SetParent(const std::shared_ptr<GameObject>& parent)
 {
 	//if (parent)
 	//{
@@ -158,7 +158,7 @@ void dae::GameObject::AddChild(std::shared_ptr<GameObject> child)
 			}
 		}
 	}
-	child->SetParent(std::shared_ptr<dae::GameObject>(this));
+	child->SetParent(std::make_shared<dae::GameObject>(*this));
 	m_Children.emplace_back(child); //added to the list
 }
 

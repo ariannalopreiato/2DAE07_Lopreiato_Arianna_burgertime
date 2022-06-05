@@ -2,8 +2,9 @@
 #include "MiniginPCH.h"
 #include "Component.h"
 #include "TextureComponent.h"
+#include "Observer.h"
 
-class HealthComponent : public dae::Component
+class HealthComponent : public dae::Component, public dae::Observer
 {
 public:
 	HealthComponent(std::shared_ptr<dae::GameObject> gameObject, int lives);
@@ -12,6 +13,7 @@ public:
 	int GetCurrentLives() const;
 	void SpawnLife();
 	void RemoveLife();
+	virtual void onNotify(const std::string& message);
 	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 
 private:

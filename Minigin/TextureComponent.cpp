@@ -8,6 +8,9 @@ dae::TextureComponent::TextureComponent(const std::shared_ptr<GameObject>& gameO
 	, m_Texture(texture) 
 {
 	m_Transform = m_GameObject.lock()->GetComponent<dae::Transform>();
+	auto size = m_Transform.lock()->GetSize();
+	m_DstHeight = size.y;
+	m_DstWidth = size.x;
 }
 
 void dae::TextureComponent::Render() const
@@ -28,7 +31,7 @@ void dae::TextureComponent::Update(float)
 	if (m_SrcRect.w == 0)
 		m_SrcRect.w = int(texture->m_Width);
 
-	if(m_SrcRect.h == 0)
+	if (m_SrcRect.h == 0)
 		m_SrcRect.h = int(texture->m_Height);
 }
 

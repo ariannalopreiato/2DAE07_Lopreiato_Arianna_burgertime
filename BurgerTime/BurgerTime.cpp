@@ -30,8 +30,7 @@ int main(int, char* []) {
     sceneManager.AddScene(secondScene);
     sceneManager.AddScene(thirdScene);
 
-    auto font = dae::ResourceManager::GetInstance().LoadFont("../Data/RetroGaming.ttf", 20);
-    GameManager::LoadUI(font);
+    GameManager::LoadUI();
     sceneManager.LoadScene("Level1");
 
     engine.Run();
