@@ -114,3 +114,12 @@ void dae::InputManager::AddCommandKeyboard(std::unique_ptr<Command> command, SDL
 {
 	m_KeyboardCommands.emplace_back(std::make_unique<FullCommandKeyboard>(std::move(command), key, executeOnPress));
 }
+
+void dae::InputManager::CleanCommands()
+{
+	m_KeyboardCommands.clear();
+	for (size_t i = 0; i < m_NrOfPlayers; ++i)
+	{
+		m_ControllerCommands[i].clear();
+	}
+}

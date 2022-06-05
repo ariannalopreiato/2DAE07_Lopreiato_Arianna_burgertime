@@ -34,6 +34,7 @@ protected:
 
 	bool m_UseTimer{ true };
 	bool m_IsMoving{ false };
+	bool m_CanFlip{ false };
 	float m_MaxWaitTime{ 2.f };
 	float m_CurrentTime{ 0.0f };
 	float m_RespawnTime{ 2.f };

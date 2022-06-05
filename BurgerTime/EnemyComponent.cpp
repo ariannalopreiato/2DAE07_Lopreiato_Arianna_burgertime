@@ -92,21 +92,19 @@ void EnemyComponent::MoveHorizontal()
 {
 	auto enemyBox = m_Collision.lock()->GetCollisionBox();
 
-	//m_Behaviour.lock()->SnapDown();
-
-	if (!m_IsMoving)
+	if (!m_Behaviour.lock()->CanGoRight() && m_Behaviour.lock()->CanGoLeft())
 	{
-		if (!m_Behaviour.lock()->CanGoRight() && m_Behaviour.lock()->CanGoLeft())
-		{
-			m_Velocity.x = -1.0f;
-			m_Velocity.y = 0.0f;
-		}
-		else if (m_Behaviour.lock()->CanGoRight() && !m_Behaviour.lock()->CanGoLeft())
-		{
-			m_Velocity.x = 1.0f;
-			m_Velocity.y = 0.0f;
-		}
-		else if (m_Behaviour.lock()->CanGoRight() && m_Behaviour.lock()->CanGoLeft())
+		m_Velocity.x = -1.0f;
+		m_Velocity.y = 0.0f;
+	}
+	else if (m_Behaviour.lock()->CanGoRight() && !m_Behaviour.lock()->CanGoLeft())
+	{
+		m_Velocity.x = 1.0f;
+		m_Velocity.y = 0.0f;
+	}
+	else if (m_Behaviour.lock()->CanGoRight() && m_Behaviour.lock()->CanGoLeft())
+	{
+		if (!m_IsMoving)
 		{
 			m_Velocity.y = 0.0f;
 			if (m_PlayerPos.x > enemyBox.x)
@@ -121,12 +119,11 @@ void EnemyComponent::MoveHorizontal()
 
 				else
 					m_Velocity.x = -1.0f;
-
 			}
 		}
-		m_Behaviour.lock()->SnapDown();
-		m_IsMoving = true;
 	}
+	m_Behaviour.lock()->SnapDown();
+	m_IsMoving = true;
 	m_Animation.lock()->SetNewStartingCol(m_StartingColHorizontal);
 	m_UseTimer = true;
 	m_CanClimb = true;
@@ -138,50 +135,42 @@ void EnemyComponent::CheckIntersection()
 
 	if (m_Behaviour.lock()->CanGoLeft() || m_Behaviour.lock()->CanGoRight())
 	{
-		if ((m_Behaviour.lock()->CanGoDown() || m_Behaviour.lock()->CanGoUp()))
+		if ((m_Behaviour.lock()->CanGoDown() || m_Behaviour.lock()->CanGoUp()) && m_CanClimb)
 		{
-			if (m_CanClimb)
+			if (m_Behaviour.lock()->CanGoDown() && !m_Behaviour.lock()->CanGoUp())
 			{
-				if (m_Behaviour.lock()->CanGoDown() && !m_Behaviour.lock()->CanGoUp())
-				{
-					m_Velocity.x = 0.0f;
+				m_Velocity.x = 0.0f;
+				m_Velocity.y = 1.0f;
+			}
+			if (!m_Behaviour.lock()->CanGoDown() && m_Behaviour.lock()->CanGoUp())
+			{
+				m_Velocity.x = 0.0f;
+				m_Velocity.y = -1.0f;
+			}
+			if (m_Behaviour.lock()->CanGoDown() && m_Behaviour.lock()->CanGoUp())
+			{
+				m_Velocity.x = 0.0f;
+				if (m_PlayerPos.y > enemyBox.y)
 					m_Velocity.y = 1.0f;
-				}
-				if (!m_Behaviour.lock()->CanGoDown() && m_Behaviour.lock()->CanGoUp())
-				{
-					m_Velocity.x = 0.0f;
+				else if (m_PlayerPos.y < enemyBox.y)
 					m_Velocity.y = -1.0f;
-				}
-				if (m_Behaviour.lock()->CanGoDown() && m_Behaviour.lock()->CanGoUp())
+				else if (m_PlayerPos.y == enemyBox.y)
 				{
-					m_Velocity.x = 0.0f;
-					if (m_PlayerPos.y > enemyBox.y)
+					int randNum = rand() % 2;
+					if (randNum == 0)
 						m_Velocity.y = 1.0f;
-					else if (m_PlayerPos.y < enemyBox.y)
+					else
 						m_Velocity.y = -1.0f;
-					else if (m_PlayerPos.y == enemyBox.y)
-					{
-						int randNum = rand() % 2;
-						if (randNum == 0)
-							m_Velocity.y = 1.0f;
-						else
-							m_Velocity.y = -1.0f;
-					}
 				}
-				if (m_Velocity.y > 0.0f)
-					m_Animation.lock()->SetNewStartingCol(m_StartingColDown);
-				else
-					m_Animation.lock()->SetNewStartingCol(m_StartingColUp);
-
-				m_UseTimer = true;
-				m_CanClimb = false;
-				m_IsMoving = false;
 			}
+			if (m_Velocity.y > 0.0f)
+				m_Animation.lock()->SetNewStartingCol(m_StartingColDown);
 			else
-			{
-				MoveHorizontal();
-				m_Behaviour.lock()->SnapBack();
-			}
+				m_Animation.lock()->SetNewStartingCol(m_StartingColUp);
+
+			m_UseTimer = true;
+			m_CanClimb = false;
+			m_IsMoving = false;
 		}
 		else
 		{

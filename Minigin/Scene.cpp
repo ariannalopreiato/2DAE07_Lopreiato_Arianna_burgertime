@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include <ranges>
+#include <algorithm>
 
 using namespace dae;
 
@@ -18,12 +19,23 @@ void Scene::Add(const std::shared_ptr<GameObject>& object)
 	m_Objects.emplace_back(object);
 }
 
+void dae::Scene::LoadSceneElements()
+{
+	for (const std::shared_ptr<dae::GameObject>& object : SceneManager::GetInstance().GetSharedObjects())
+	{
+		Add(object);
+	}
+}
+
 void dae::Scene::CleanUpScene()
 {
-	//for (size_t i = 0; i < m_Objects.size(); ++i)
-	//{
-	//	m_Objects[i]->m_MarkForDestruction = true;
-	//}
+	auto sharedObj = SceneManager::GetInstance().GetSharedObjects();
+	for (const auto& object : m_Objects)
+	{
+		if (std::find(sharedObj.begin(), sharedObj.end(), object) == sharedObj.end())
+			object->m_MarkForDestruction = true;
+	}
+
 	m_Objects.clear();
 }
 
@@ -34,9 +46,19 @@ const std::string& dae::Scene::GetName()
 
 void Scene::Update(float elapsedTime)
 {
-	for(std::shared_ptr<GameObject>& object : m_Objects)
+	if (!m_IsLoading)
 	{
-		object->Update(elapsedTime);
+		for (const std::shared_ptr<GameObject>& object : m_Objects)
+		{
+			object->Update(elapsedTime);
+		}
+	}
+	else
+	{
+		for (const std::shared_ptr<GameObject>& object : SceneManager::GetInstance().GetSharedObjects())
+		{
+			object->Update(elapsedTime);
+		}
 	}
 
 	//new feature in C++20 -> like erase(std::remove)
@@ -52,4 +74,9 @@ void Scene::Render() const
 	{
 		object->Render();
 	}
+}
+
+void dae::Scene::SetIsLoading(bool isLoading)
+{
+	m_IsLoading = isLoading;
 }

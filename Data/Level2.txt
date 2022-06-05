@@ -4,16 +4,16 @@
 
 
 
-xxxbbbbbxxxbbbbbxxxbbbbbxxxbbbbbxxx
+xxxbbbbbxxxbbbbbxxxoooooxxxbbbbbxxx
  H       H   H   H   H   H   H   H
  H       H   H   H   H   H   H   H
 xxxlllllxxxcccccxxx  H   H   H   H
  H       H   H   H   H   H   H   H
  H       H   H   H   H   H   H   H
-xxxcccccxxx  H  xxxtttttxxxlllllxxx
+xxxcccccxxx  H  xxxbbbbbxxxlllllxxx
  H   H   H   H   H   H   H   H   H 
  H   H   H   H   H   H   H   H   H 
-xxxBBBBBxxxlllllxxxpppppxxxBBBBBxxx
+xxxBBBBBxxxoooooxxxpppppxxxBBBBBxxx
              H   H   H     
              H   H   H           
              H  xxxcccccxxx
@@ -22,11 +22,11 @@ xxxBBBBBxxxlllllxxxpppppxxxBBBBBxxx
         xxxpppppxxx  H
              H   H   H
              H   H   H
-             H  xxxlllllxxx
-             H   H   H
+             H  xxxoooooxxx
              H   H   H
         xxxBBBBBxxxBBBBBxxx
    -----         H         -----
                  H
                 xxx
+
            -----   -----

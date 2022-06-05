@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "LevelCreator.h"
 #include "LevelReader.h"
+#include "InputManager.h"
 
 void GameManager::InputSetup(InputMethod inputOne, InputMethod inputTwo)
 {
@@ -17,6 +18,18 @@ void GameManager::AddIngredient()
 		NextScene();
 		m_CurrentAmountIngredientsOnPlate = 0;
 	}
+}
+
+void GameManager::NextScene()
+{
+	dae::InputManager::GetInstance().CleanCommands();
+	LevelCreator::CleanLevel();
+	EnemyManager::CleanEnemies();
+	auto& sceneManager = dae::SceneManager::GetInstance();
+	++m_NrScenes;
+	if (m_NrScenes == 4)
+		m_NrScenes = 1;
+	sceneManager.SetLevelToLoad("Level" + std::to_string(m_NrScenes));
 }
 
 void GameManager::SetGameMode(GameMode gameMode)
@@ -47,9 +60,13 @@ void GameManager::LoadUI(const std::shared_ptr<dae::Font>& font)
 	up->AddComponent(upText);
 
 	auto& sceneManager = dae::SceneManager::GetInstance();
-	sceneManager.AddToCurrentScene(pepperText);
-	sceneManager.AddToCurrentScene(highScore);
-	sceneManager.AddToCurrentScene(up);
+	//sceneManager.AddToCurrentScene(pepperText);
+	//sceneManager.AddToCurrentScene(highScore);
+	//sceneManager.AddToCurrentScene(up);
+	sceneManager.AddSharedObject(pepperText);
+	sceneManager.AddSharedObject(highScore);
+	sceneManager.AddSharedObject(up);
+
 }
 
 void GameManager::LoadLevel(const std::string& levelPath, const std::shared_ptr<PointComponent> score)
@@ -138,20 +155,6 @@ void GameManager::LoadPlayersAndEnemies(const glm::vec3& pos1, const std::string
 	}
 }
 
-//void GameManager::Update(float elapsedSec)
-//{
-//	if (m_StartWaiting)
-//	{
-//		m_CurrentTime += elapsedSec;
-//		if (m_CurrentTime >= m_TotaWaitTime)
-//		{
-//			NextScene();
-//			m_StartWaiting = false;
-//			m_CurrentTime = 0.0f;
-//		}
-//	}
-//}
-
 void GameManager::SetUpInputKeyboard(const std::shared_ptr<PlayerComponent>& player, int playerIdx)
 {
 	auto attack = std::make_unique<AttackCommand>(player);
@@ -191,23 +194,6 @@ void GameManager::SetUpInputController(const std::shared_ptr<PlayerComponent>& p
 	player->AddCommand(std::move(moveUp), dae::ControllerButton::ButtonUp, true);
 }
 
-
-void GameManager::NextScene()
-{
-
-	//if (m_CurrentTime >= m_TotaWaitTime)
-	//{
-	auto& sceneManager = dae::SceneManager::GetInstance();
-	++m_NrScenes;
-	//sceneManager.DeleteScene("Level " + std::to_string(m_NrScenes - 1));
-	if (m_NrScenes == 4)
-		m_NrScenes = 1;
-	sceneManager.LoadScene("Level" + std::to_string(m_NrScenes));
-	//}
-	//else
-		//m_StartWaiting = true;
-}
-
 std::shared_ptr<dae::GameObject> GameManager::InitializePlayer(int playerIdx, const glm::vec3& startPos, const std::string& texture, bool isEnemy, std::shared_ptr<HealthComponent> multiPlayer, std::shared_ptr<dae::GameObject> otherPlayer)
 {
 	int startLives{ 3 };
@@ -236,12 +222,19 @@ std::shared_ptr<dae::GameObject> GameManager::InitializePlayer(int playerIdx, co
 	auto textureComponent = std::make_shared<dae::TextureComponent>(player, picture);
 
 	std::shared_ptr<dae::AnimationComponent> animationComponent;
-	if(!isEnemy)
+	float speed{};
+	if (!isEnemy)
+	{
 		animationComponent = std::make_shared<dae::AnimationComponent>(player, 3, 6, 9, 1);
+		speed = 50.f;
+	}
 	else
+	{
 		animationComponent = std::make_shared<dae::AnimationComponent>(player, 2, 6, 8, 1);
+		speed = 40.f;
+	}
 
-	auto movementComponent = std::make_shared<PlayerMovementComponent>(player, 50.0f);
+	auto movementComponent = std::make_shared<PlayerMovementComponent>(player, speed);
 
 	auto behaviourComponent = std::make_shared<CharacterBehaviour>(player);
 
@@ -250,7 +243,6 @@ std::shared_ptr<dae::GameObject> GameManager::InitializePlayer(int playerIdx, co
 	player->AddComponent(textureComponent);
 	player->AddComponent(movementComponent);
 	player->AddComponent(behaviourComponent);
-
 	player->AddComponent(playerComponent);
 
 	return player;

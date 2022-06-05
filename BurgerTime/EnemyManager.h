@@ -17,6 +17,7 @@ public:
 	static void SpawnAllLevelEnemies(const std::string& path);
 	static const std::vector<std::shared_ptr<dae::GameObject>>& GetEnemies();
 	static void SetPlayerPos(const SDL_Rect& playerPos);
+	static void CleanEnemies();
 
 private:
 	EnemyManager();

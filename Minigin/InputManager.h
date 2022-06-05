@@ -39,6 +39,7 @@ namespace dae
 		bool IsReleased(SDL_Scancode key, int playerIdx = 0) const;
 		void AddCommandController(std::unique_ptr<Command> command, ControllerButton button, bool executeOnPress, int playerIdx = 0);
 		void AddCommandKeyboard(std::unique_ptr<Command> command, SDL_Scancode key, bool executeOnPress);
+		void CleanCommands();
 
 	private:
 		friend Singleton<InputManager>;

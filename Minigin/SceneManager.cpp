@@ -4,10 +4,18 @@
 
 void dae::SceneManager::Update(float elapsedTime)
 {
-	for(auto& scene : m_Scenes)
+	if (m_CanLoadNewScene)
 	{
-		scene->Update(elapsedTime);
+		m_Wait += elapsedTime;
+		if (m_Wait >= m_TotalWaitTime)
+		{
+			m_CanLoadNewScene = false;
+			m_Wait = 0.0f;
+			LoadScene(m_LevelToLoad);
+		}
 	}
+
+	m_CurrentScene.lock()->Update(elapsedTime);
 }
 
 void dae::SceneManager::Render()
@@ -39,8 +47,14 @@ void dae::SceneManager::LoadScene(const std::string& name)
 	}
 }
 
+void dae::SceneManager::AddSharedObject(const std::shared_ptr<dae::GameObject>& sharedObject)
+{
+	m_SharedSceneObjects.emplace_back(sharedObject);
+}
+
 void dae::SceneManager::DeleteScene(const std::string& name)
 {
+
 	for (const auto& scene : m_Scenes)
 	{
 		if (scene->GetName() == name)
@@ -54,4 +68,16 @@ void dae::SceneManager::DeleteScene(const std::string& name)
 void dae::SceneManager::AddToCurrentScene(const std::shared_ptr<dae::GameObject>& gameObject)
 {
 	m_CurrentScene.lock()->Add(gameObject);
+}
+
+void dae::SceneManager::SetLevelToLoad(const std::string& levelToLoad)
+{
+	m_LevelToLoad = levelToLoad;
+	m_CanLoadNewScene = true;
+	m_CurrentScene.lock()->SetIsLoading(true);
+}
+
+const std::vector<std::shared_ptr<dae::GameObject>>& dae::SceneManager::GetSharedObjects()
+{
+	return m_SharedSceneObjects;
 }

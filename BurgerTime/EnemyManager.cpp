@@ -142,3 +142,9 @@ void EnemyManager::SetPlayerPos(const SDL_Rect& playerPos)
 			enemy->SetPlayerPos(playerPos);
 	}
 }
+
+void EnemyManager::CleanEnemies()
+{
+	m_Enemies.clear();
+	m_Ingredients.clear();
+}

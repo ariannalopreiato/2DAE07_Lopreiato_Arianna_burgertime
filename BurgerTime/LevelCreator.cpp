@@ -183,3 +183,13 @@ std::vector<std::shared_ptr<dae::CollisionComponent>> LevelCreator::GetPlatforms
 
 	return platforms;
 }
+
+void LevelCreator::CleanLevel()
+{
+	m_Ingredients.clear();
+	m_LevelObjects.clear();
+	m_Plates.clear();
+	m_Platforms.clear();
+	m_Stairs.clear();
+	m_Grid.clear();
+}

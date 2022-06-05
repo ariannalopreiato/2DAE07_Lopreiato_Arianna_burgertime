@@ -13,6 +13,13 @@ MrPickleComponent::MrPickleComponent(const std::shared_ptr<dae::GameObject>& gam
 	m_Points = 200;
 }
 
+void MrPickleComponent::ImplementedMovement()
+{
+	if((m_Behaviour.lock()->CanGoLeft() || m_Behaviour.lock()->CanGoRight())
+		&&(!m_Behaviour.lock()->CanGoDown() && !m_Behaviour.lock()->CanGoUp()))
+		m_IsMoving = true;
+}
+
 std::shared_ptr<dae::Component> MrPickleComponent::Clone(const std::shared_ptr<dae::GameObject>&gameObject)
 {
 	return std::make_shared<MrPickleComponent>(gameObject);

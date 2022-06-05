@@ -28,6 +28,7 @@ public:
 	static std::vector<std::shared_ptr<dae::CollisionComponent>> GetStairs();
 	static std::vector<std::shared_ptr<dae::CollisionComponent>> GetIngredients();
 	static std::vector<std::shared_ptr<dae::CollisionComponent>> GetPlatforms();
+	static void CleanLevel();
 
 private:
 	LevelCreator(); //no one can make an instance of it

@@ -7,7 +7,7 @@ ThirdScene::ThirdScene(const std::string& name)
 
 void ThirdScene::LoadSceneElements()
 {
-
+    Scene::LoadSceneElements();
     //----------------------------------------Lives display
     //for (size_t i = 0; i < size_t(startLives); ++i)
     //{
@@ -44,7 +44,7 @@ void ThirdScene::LoadSceneElements()
     Add(pepperGO);
     Add(scoreGO);
     
-    GameManager::LoadUI(font);
+    //GameManager::LoadUI(font);
     GameManager::LoadLevel("../Data/Level3.txt", scoreComponent);
     GameManager::LoadPlayersAndEnemies(glm::vec3{ 155.f, 470.f, 0.0f }, "../Data/EnemiesLevel3.txt", glm::vec3{ 443.0f, 470.f, 0.0f });
 }

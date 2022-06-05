@@ -13,8 +13,9 @@ int main(int, char* []) {
     dae::Minigin engine;
     engine.Initialize();
     
-    GameManager::SetGameMode(GameMode::multi);
+    GameManager::SetGameMode(GameMode::single);
     //GameManager::InputSetup(InputMethod::controller, InputMethod::keyboard);
+
     dae::SoundSystem* soundSystem = new dae::SDL_SoundSystem();
     dae::ServiceLocator::RegisterSoundSystem(soundSystem);
     dae::ServiceLocator::GetSoundSystem().loadSound("../Data/RandomCoinSound.wav");
@@ -28,7 +29,11 @@ int main(int, char* []) {
     sceneManager.AddScene(firstScene);
     sceneManager.AddScene(secondScene);
     sceneManager.AddScene(thirdScene);
+
+    auto font = dae::ResourceManager::GetInstance().LoadFont("../Data/RetroGaming.ttf", 20);
+    GameManager::LoadUI(font);
     sceneManager.LoadScene("Level1");
+
     engine.Run();
     return 0;
 }

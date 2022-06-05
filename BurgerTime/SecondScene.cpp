@@ -7,13 +7,7 @@ SecondScene::SecondScene(const std::string& name)
 
 void SecondScene::LoadSceneElements()
 {
-    ////----------------------------------------Lives display
-    //for (size_t i = 0; i < size_t(startLives); ++i)
-    //{
-    //    auto health = pHealthComponentOne->SpawnLife();
-    //    Add(health);
-    //}
-
+    Scene::LoadSceneElements();
     auto font = dae::ResourceManager::GetInstance().LoadFont("../Data/RetroGaming.ttf", 20);
     //------------------------------------------------------Score component
     auto scoreGO = std::make_shared<dae::GameObject>();
@@ -42,7 +36,6 @@ void SecondScene::LoadSceneElements()
     Add(pepperGO);
     Add(scoreGO);
 
-    GameManager::LoadUI(font);
     GameManager::LoadLevel("../Data/Level2.txt", scoreComponent);
-    GameManager::LoadPlayersAndEnemies(glm::vec3{ 155.f, 510.f, 0.0f }, "../Data/EnemiesLevel2.txt", glm::vec3{ 443.0f, 510.f, 0.0f });
+    GameManager::LoadPlayersAndEnemies(glm::vec3{ 155.f, 490.f, 0.0f }, "../Data/EnemiesLevel2.txt", glm::vec3{ 443.0f, 490.f, 0.0f });
 }
