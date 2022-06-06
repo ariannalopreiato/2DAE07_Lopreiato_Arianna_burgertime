@@ -20,6 +20,7 @@ public:
 	bool GetIsDead();
 	virtual void Die();
 	void SetPlayerPos(const SDL_Rect& playerPos);
+	bool m_IsStunned{ false };
 
 protected:
 
@@ -35,12 +36,17 @@ protected:
 	bool m_UseTimer{ true };
 	bool m_IsMoving{ false };
 	bool m_CanFlip{ false };
+
 	float m_MaxWaitTime{ 2.f };
 	float m_CurrentTime{ 0.0f };
+
 	float m_RespawnTime{ 2.f };
 	float m_CurrentRespawnTime{ 0.0f };
+
+	float m_StunnedTime{ 2.f };
+	float m_CurrentStunnedTime{ 0.0f };
+
 	bool m_IsDead{ false };
-	bool m_IsStunned{ false };
 	bool m_IsFalling{ false };
 
 	const float m_EnemyWidth{ 25.f };
@@ -50,6 +56,7 @@ protected:
 	const int m_StartingColHorizontal{ 2 };
 	const int m_StartingColUp{ 4 };
 	const int m_StartingColDown{ 0 };
+	const int m_StartingColStunned{ 6 };
 
 	std::weak_ptr<dae::Transform> m_Transform;
 	std::weak_ptr<dae::TextureComponent> m_Texture;

@@ -11,6 +11,7 @@ public:
 	Pepper(const std::shared_ptr<dae::GameObject>& gameObject, const std::shared_ptr<dae::GameObject>& player);
 	void SetPosition();
 	void Update(float elapsedSec);
+	void CheckIsHitByEnemies();
 	virtual std::shared_ptr<Component> Clone(const std::shared_ptr<dae::GameObject>& gameObject) override;
 
 private:

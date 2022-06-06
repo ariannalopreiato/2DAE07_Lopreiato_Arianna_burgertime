@@ -238,7 +238,7 @@ void GameManager::SetUpInputController(const std::shared_ptr<PlayerComponent>& p
 	auto moveUp = std::make_unique<MoveCommand>(player, PlayerDirection::up);
 	auto moveDown = std::make_unique<MoveCommand>(player, PlayerDirection::down);
 	auto moveLeft = std::make_unique<MoveCommand>(player, PlayerDirection::left);
-	player->AddCommand(std::move(attack), dae::ControllerButton::ButtonA, false);
+	player->AddCommand(std::move(attack), dae::ControllerButton::ButtonB, false);
 	player->AddCommand(std::move(moveRight), dae::ControllerButton::ButtonRight, true);
 	player->AddCommand(std::move(moveDown), dae::ControllerButton::ButtonDown, true);
 	player->AddCommand(std::move(moveLeft), dae::ControllerButton::ButtonLeft, true);
@@ -264,6 +264,7 @@ std::shared_ptr<dae::GameObject> GameManager::InitializePlayer(int playerIdx, co
 		auto attackComponent = std::make_shared<PlayerAttackComponent>(player, 5);
 		player->AddComponent(attackComponent);
 		playerComponent->AddObserver(m_HealthComponent.lock());
+		player->GetComponent<PlayerAttackComponent>()->AddObserver(m_PepperComponent.lock());
 	}
 	else
 	{

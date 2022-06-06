@@ -6,7 +6,6 @@ namespace dae
 	class GameObject;
 	class Scene
 	{
-		//friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
 		Scene(const std::string& name);
 		void Add(const std::shared_ptr<GameObject>& object);

@@ -6,8 +6,9 @@
 #include "CollisionComponent.h"
 #include "TextureComponent.h"
 #include "AnimationComponent.h"
+#include "Subject.h"
 
-class PlayerAttackComponent : public dae::Component
+class PlayerAttackComponent : public dae::Component, public dae::Subject
 {
 public:
 	PlayerAttackComponent(const std::shared_ptr<dae::GameObject>& gameObject, int pepperShots);

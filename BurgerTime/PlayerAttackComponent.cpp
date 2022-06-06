@@ -18,8 +18,8 @@ void PlayerAttackComponent::Update(float elapsedSec)
 		if (m_CurrentTime >= m_SpawnTime)
 		{
 			m_IsPepperInitialized = false;
+			m_Pepper.lock()->m_MarkForDestruction = true;
 			m_GameObject.lock()->RemoveChildAt(0);
-			//m_Pepper.lock()->m_MarkForDestruction = true;
 		}
 	}
 }
@@ -31,6 +31,7 @@ void PlayerAttackComponent::Attack()
 		--m_CurrentShots;
 		SpawnPepper();
 		m_IsPepperInitialized = true;
+		notify(std::to_string(m_CurrentShots));
 	}
 }
 
@@ -44,12 +45,12 @@ void PlayerAttackComponent::SpawnPepper()
 	auto pepper = std::make_shared<Pepper>(gameObj, m_GameObject.lock());
 
 	auto collision = std::make_shared<dae::CollisionComponent>(gameObj);
-	//auto animation = std::make_shared<dae::AnimationComponent>(gameObj, ); //todo
+	auto animation = std::make_shared<dae::AnimationComponent>(gameObj, 4, 3, 4, 1); 
 
 	gameObj->AddComponent(pepper);
 	gameObj->AddComponent(texture);
 	gameObj->AddComponent(collision);
-	//pepper->AddComponent(animation);
+	gameObj->AddComponent(animation);
 	m_Pepper = gameObj;
 	m_GameObject.lock()->AddChild(m_Pepper.lock());
 }

@@ -44,6 +44,23 @@ void EnemyComponent::Update(float elapsedSec)
 		else
 			m_CurrentRespawnTime += elapsedSec;
 	}
+	else if (m_IsStunned)
+	{
+		m_Animation.lock()->m_CanAnimate = true;
+		m_Texture.lock()->m_IsImageShowing = true;
+
+		SDL_Rect source = m_Animation.lock()->GetSource();
+		m_Texture.lock()->SetSource(source);
+
+		m_Animation.lock()->SetNewStartingCol(m_StartingColStunned);
+
+		m_CurrentStunnedTime += elapsedSec;
+		if (m_CurrentStunnedTime >= m_StunnedTime)
+		{
+			m_CurrentStunnedTime = 0.0f;
+			m_IsStunned = false;
+		}
+	}
 
 	if (m_UseTimer)
 	{

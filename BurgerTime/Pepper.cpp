@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Renderer.h"
 #include "PlayerComponent.h"
+#include "EnemyManager.h"
 
 Pepper::Pepper(const std::shared_ptr<dae::GameObject>& gameObject, const std::shared_ptr<dae::GameObject>& player)
 	:Component(gameObject)
@@ -38,10 +39,23 @@ void Pepper::Update(float)
 	if (m_Animation.lock() == nullptr)
 		m_Animation = m_GameObject.lock()->GetComponent<dae::AnimationComponent>();
 	
-	//if (m_Collision.lock() == nullptr)
-		//m_Collision = m_GameObject.lock()->GetComponent<dae::CollisionComponent>();
+	if (m_Collision.lock() == nullptr)
+		m_Collision = m_GameObject.lock()->GetComponent<dae::CollisionComponent>();
 
-	//m_Animation.lock()->m_CanAnimate = true;
+	m_Animation.lock()->m_CanAnimate = true;
+
+	CheckIsHitByEnemies();
+}
+
+void Pepper::CheckIsHitByEnemies()
+{
+	auto enemies = EnemyManager::GetEnemies();
+	for (size_t i = 0; i < enemies.size(); ++i)
+	{
+		auto enemyBox = enemies[i]->GetComponent<dae::CollisionComponent>()->GetCollisionBox();
+		if (m_Collision.lock()->IsOverlapping(enemyBox))
+			enemies[i]->GetComponentInheritance<EnemyComponent>()->m_IsStunned = true;
+	}
 }
 
 std::shared_ptr<dae::Component> Pepper::Clone(const std::shared_ptr<dae::GameObject>& gameObject)
