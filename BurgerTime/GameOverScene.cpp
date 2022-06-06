@@ -14,7 +14,8 @@ GameOverScene::GameOverScene(const std::string& name)
 
 GameOverScene::~GameOverScene()
 {
-	WriteToFile();
+	if (!m_Scores.empty())
+		WriteToFile();
 }
 
 void GameOverScene::SetPoints(int points)
@@ -55,7 +56,7 @@ void GameOverScene::LoadSceneElements()
 
 	auto input = GameManager::GetInputMethodOne();
 	if(input == InputMethod::controller)
-		dae::InputManager::GetInstance().AddCommandController(std::move(select), dae::ControllerButton::ButtonA, false);
+		dae::InputManager::GetInstance().AddCommandController(std::move(select), dae::ControllerButton::ButtonX, false);
 	else
 		dae::InputManager::GetInstance().AddCommandKeyboard(std::move(select), SDL_SCANCODE_RSHIFT, true);
 

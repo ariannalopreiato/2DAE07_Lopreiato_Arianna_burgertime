@@ -14,6 +14,7 @@ void PlayingState::OnLeaveState()
 	auto points = GameManager::GetScoreComponent()->m_CurrentPoints;
 	gameOverScene->SetPoints(points);
 	
+	dae::SceneManager::GetInstance().CleanSharedSceneObjects();
 	dae::InputManager::GetInstance().CleanCommands();
 	LevelCreator::CleanLevel();
 	EnemyManager::CleanEnemies();

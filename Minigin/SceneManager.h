@@ -11,6 +11,7 @@ namespace dae
 		void AddScene(const std::shared_ptr<Scene>& scene);
 		void LoadScene(const std::string& name);
 		void AddSharedObject(const std::shared_ptr<dae::GameObject>& sharedObject);
+		void CleanSharedSceneObjects();
 		void DeleteScene(const std::string& name);
 		void Update(float elapsedTime);
 		void Render();

@@ -71,6 +71,11 @@ void dae::SceneManager::AddSharedObject(const std::shared_ptr<dae::GameObject>& 
 	m_SharedSceneObjects.emplace_back(sharedObject);
 }
 
+void dae::SceneManager::CleanSharedSceneObjects()
+{
+	m_SharedSceneObjects.clear();
+}
+
 void dae::SceneManager::DeleteScene(const std::string& name)
 {
 

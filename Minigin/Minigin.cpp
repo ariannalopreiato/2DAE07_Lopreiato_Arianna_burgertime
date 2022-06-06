@@ -100,7 +100,6 @@ void dae::Minigin::Run()
 		auto& input = InputManager::GetInstance();
 		auto& eventQueue = EventQueue::GetInstance();
 
-		// todo: this update loop could use some work.
 		bool doContinue = true;
 		auto lastTime = chrono::high_resolution_clock::now();
 		while (doContinue)

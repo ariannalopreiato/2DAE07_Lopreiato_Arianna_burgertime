@@ -24,7 +24,7 @@ PlayerComponent::PlayerComponent(const std::shared_ptr<dae::GameObject>& gameObj
 	}
 }
 
-void PlayerComponent::Update(float)
+void PlayerComponent::Update(float elapsedSec)
 {
 	if (m_Texture.lock() == nullptr)
 		m_Texture = m_GameObject.lock()->GetComponent<dae::TextureComponent>();
@@ -57,7 +57,17 @@ void PlayerComponent::Update(float)
 	else
 		CheckIsHitByOtherPlayer();
 
-	CheckStates();
+	if (m_PlayerState == PlayerState::attacking)
+	{
+		m_AttackTime += elapsedSec;
+		if (m_AttackTime >= m_TotalAttackTime)
+		{
+			m_PlayerState = PlayerState::idle;
+			m_AttackTime = 0.0f;
+		}
+	}
+	else
+		CheckStates();
 	
 	EnemyManager::SetPlayerPos(m_Collision.lock()->GetCollisionBox());
 }

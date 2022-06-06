@@ -10,9 +10,7 @@ unsigned int Scene::m_IdCounter = 0;
 
 Scene::Scene(const std::string& name) 
 	: m_Name(name) 
-{
-	//SceneManager::CreateScene(name);
-}
+{}
 
 void Scene::Add(const std::shared_ptr<GameObject>& object)
 {
@@ -50,7 +48,8 @@ void Scene::Update(float elapsedTime)
 	{
 		for (const std::shared_ptr<GameObject>& object : m_Objects)
 		{
-			object->Update(elapsedTime);
+			if(object->m_MarkForDestruction == false)
+				object->Update(elapsedTime);
 		}
 	}
 	else

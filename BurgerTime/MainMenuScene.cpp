@@ -75,9 +75,9 @@ void MainMenuScene::LoadSceneElements()
 	auto input = GameManager::GetInputMethodOne();
 	if (input == InputMethod::controller)
 	{
-		dae::InputManager::GetInstance().AddCommandController(std::move(moveUp), dae::ControllerButton::ButtonUp, false);
-		dae::InputManager::GetInstance().AddCommandController(std::move(moveDown), dae::ControllerButton::ButtonDown, false);
-		dae::InputManager::GetInstance().AddCommandController(std::move(select), dae::ControllerButton::ButtonA, false);
+		dae::InputManager::GetInstance().AddCommandController(std::move(moveUp), dae::ControllerButton::ButtonUp, true);
+		dae::InputManager::GetInstance().AddCommandController(std::move(moveDown), dae::ControllerButton::ButtonDown, true);
+		dae::InputManager::GetInstance().AddCommandController(std::move(select), dae::ControllerButton::ButtonA, true);
 	}
 	else
 	{

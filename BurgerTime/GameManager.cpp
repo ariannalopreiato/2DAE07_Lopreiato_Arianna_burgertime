@@ -20,8 +20,8 @@ void GameManager::AddIngredient()
 	++m_CurrentAmountIngredientsOnPlate;
 	if (m_CurrentAmountIngredientsOnPlate == m_AmountOfIngredients)
 	{
-		NextScene();
 		m_CurrentAmountIngredientsOnPlate = 0;
+		NextScene();
 	}
 }
 

@@ -61,6 +61,8 @@ private:
 	//Players state
 	PlayerState m_PlayerState{ PlayerState::idle };
 	PlayerDirection m_PlayerDirection{ PlayerDirection::down };
+	float m_AttackTime{ 0.0f };
+	float m_TotalAttackTime{ 2.f };
 
 	//Components
 	std::weak_ptr<dae::CollisionComponent> m_Collision;
