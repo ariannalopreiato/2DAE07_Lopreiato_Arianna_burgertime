@@ -24,6 +24,7 @@ class GameManager
 {
 public:
 	static void InputSetup(InputMethod inputOne = InputMethod::keyboard, InputMethod inputTwo = InputMethod::keyboard);
+	static InputMethod GetInputMethodOne();
 	static void AddIngredient();
 	static void SetGameMode(GameMode gameMode);
 	static void LoadUI();

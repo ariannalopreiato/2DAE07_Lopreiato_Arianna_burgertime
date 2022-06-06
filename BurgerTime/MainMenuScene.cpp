@@ -65,19 +65,26 @@ void MainMenuScene::LoadSceneElements()
 	m_Arrow = arrow;
 
 	auto moveUp = std::make_unique<MoveArrowUp>();
-	//dae::InputManager::GetInstance().AddCommandController(std::move(moveUp), dae::ControllerButton::ButtonUp, false);
 
 	auto moveDown = std::make_unique<MoveArrowDown>();
-	//dae::InputManager::GetInstance().AddCommandController(std::move(moveDown), dae::ControllerButton::ButtonDown, false);
+
 
 	auto select = std::make_unique<SelectCommand>();
-	//dae::InputManager::GetInstance().AddCommandController(std::move(select), dae::ControllerButton::ButtonA, false);
 
-	dae::InputManager::GetInstance().AddCommandKeyboard(std::move(moveUp), SDL_SCANCODE_UP, true);
 
-	dae::InputManager::GetInstance().AddCommandKeyboard(std::move(moveDown), SDL_SCANCODE_DOWN, true);
-
-	dae::InputManager::GetInstance().AddCommandKeyboard(std::move(select), SDL_SCANCODE_ESCAPE, true);
+	auto input = GameManager::GetInputMethodOne();
+	if (input == InputMethod::controller)
+	{
+		dae::InputManager::GetInstance().AddCommandController(std::move(moveUp), dae::ControllerButton::ButtonUp, false);
+		dae::InputManager::GetInstance().AddCommandController(std::move(moveDown), dae::ControllerButton::ButtonDown, false);
+		dae::InputManager::GetInstance().AddCommandController(std::move(select), dae::ControllerButton::ButtonA, false);
+	}
+	else
+	{
+		dae::InputManager::GetInstance().AddCommandKeyboard(std::move(moveUp), SDL_SCANCODE_UP, true);
+		dae::InputManager::GetInstance().AddCommandKeyboard(std::move(moveDown), SDL_SCANCODE_DOWN, true);
+		dae::InputManager::GetInstance().AddCommandKeyboard(std::move(select), SDL_SCANCODE_ESCAPE, true);
+	}
 	
 	Add(onePlayer);
 	Add(twoPlayer);

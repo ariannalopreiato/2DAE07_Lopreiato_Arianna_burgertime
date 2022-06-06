@@ -10,6 +10,11 @@ void GameManager::InputSetup(InputMethod inputOne, InputMethod inputTwo)
 	m_InputTwo = inputTwo;
 }
 
+InputMethod GameManager::GetInputMethodOne()
+{
+	return m_InputOne;
+}
+
 void GameManager::AddIngredient()
 {
 	++m_CurrentAmountIngredientsOnPlate;

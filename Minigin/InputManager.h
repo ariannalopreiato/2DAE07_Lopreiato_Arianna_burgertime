@@ -31,23 +31,25 @@ namespace dae
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
+
+		inline static constexpr int m_NrOfPlayers{ 2 }; //constant expression at compile time that cannot be changed, inline -> initialize static variable in the header
 		~InputManager();
 		bool ProcessInput();
 		bool IsPressed(ControllerButton button, int playerIdx = 0) const;
 		bool IsReleased(ControllerButton button, int playerIdx = 0) const;
-		bool IsPressed(SDL_Scancode key, int playerIdx = 0) const;
-		bool IsReleased(SDL_Scancode key, int playerIdx = 0) const;
 		void AddCommandController(std::unique_ptr<Command> command, ControllerButton button, bool executeOnPress, int playerIdx = 0);
 		void AddCommandKeyboard(std::unique_ptr<Command> command, SDL_Scancode key, bool executeOnPress);
+		const std::array<bool, InputManager::m_NrOfPlayers>& GetConnectedControllers();
 		void CleanCommands();
+
 
 	private:
 		friend Singleton<InputManager>;
 		InputManager();
-		inline static constexpr int m_NrOfPlayers{ 2 }; //constant expression at compile time that cannot be changed, inline -> initialize static variable in the header
 		inline static constexpr int m_NrOfKeys{ 122 };
 
 		std::array<int, m_NrOfPlayers> m_Players{};
+		std::array<bool, m_NrOfPlayers> m_ConnectedControllers{};
 		std::array<int, m_NrOfPlayers> m_ButtonsPressedThisFrame{};
 		std::array<int, m_NrOfPlayers> m_ButtonsReleasedThisFrame{};
 

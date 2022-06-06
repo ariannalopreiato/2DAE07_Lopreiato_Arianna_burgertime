@@ -53,9 +53,11 @@ void GameOverScene::LoadSceneElements()
 		++currentPlayer;
 	}
 
-	//dae::InputManager::GetInstance().AddCommandController(std::move(select), dae::ControllerButton::ButtonA, false);
-
-	dae::InputManager::GetInstance().AddCommandKeyboard(std::move(select), SDL_SCANCODE_RSHIFT, true);
+	auto input = GameManager::GetInputMethodOne();
+	if(input == InputMethod::controller)
+		dae::InputManager::GetInstance().AddCommandController(std::move(select), dae::ControllerButton::ButtonA, false);
+	else
+		dae::InputManager::GetInstance().AddCommandKeyboard(std::move(select), SDL_SCANCODE_RSHIFT, true);
 
 
 	Add(highScore);
