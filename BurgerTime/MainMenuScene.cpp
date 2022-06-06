@@ -77,7 +77,7 @@ void MainMenuScene::LoadSceneElements()
 
 	dae::InputManager::GetInstance().AddCommandKeyboard(std::move(moveDown), SDL_SCANCODE_DOWN, true);
 
-	dae::InputManager::GetInstance().AddCommandKeyboard(std::move(select), SDL_SCANCODE_SPACE, true);
+	dae::InputManager::GetInstance().AddCommandKeyboard(std::move(select), SDL_SCANCODE_ESCAPE, true);
 	
 	Add(onePlayer);
 	Add(twoPlayer);

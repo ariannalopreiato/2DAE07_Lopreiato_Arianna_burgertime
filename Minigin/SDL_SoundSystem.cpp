@@ -31,28 +31,8 @@ public:
 		{
 			//-1 : infinite looping
 			Mix_PlayMusic(it->second, looping);
-			//Mix_VolumeMusic(volume);
 		}
 	}
-		//ProcessQueue
-		//{ do
-		//{
-		//	if (!m_requests.empty())
-		//	{
-		//		std::unique_lock<std::mutex> lock{ m_mutex };
-		//		auto request = m_request.front();
-		//		m_request.pop();
-		//		lock.unlock();
-		//		auto audioclip = audioclips[request.first];
-		//		if (!audioclip->is_loaded())
-		//			audioclip->load();
-		//		audioclip->set_volume(request.second);
-		//		audioclip->play();
-		//	std::lock_guard<std::mutex> lock{ mutex };
-		//	if (m_requests.empty())
-		//		m_work.available.wait(lock);
-		//}while (!m_Requests.empty());
-		//}
 
 	void stopMusic()
 	{

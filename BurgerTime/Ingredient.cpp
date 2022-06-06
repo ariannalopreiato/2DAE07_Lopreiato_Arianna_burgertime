@@ -3,6 +3,7 @@
 #include "CollisionComponent.h"
 #include "LevelCreator.h"
 #include "GameManager.h"
+#include "ServiceLocator.h"
 
 Ingredient::Ingredient(const std::shared_ptr<dae::GameObject>& gameObject)
     : Component(gameObject)
@@ -81,6 +82,7 @@ void Ingredient::Update(float)
             else
             {
                 notify("50");
+                dae::ServiceLocator::GetSoundSystem().playSound(0);
                 m_IsFalling = false; //if there are no enemies on top, it stops
             }
         }

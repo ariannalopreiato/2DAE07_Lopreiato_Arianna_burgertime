@@ -1,7 +1,6 @@
 #include "MiniginPCH.h"
 #include "EventQueue.h"
 #include "IEventListener.h"
-
 #include <functional>
 
 namespace dae

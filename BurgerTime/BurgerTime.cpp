@@ -20,7 +20,9 @@ int main(int, char* []) {
 
     dae::SoundSystem* soundSystem = new dae::SDL_SoundSystem();
     dae::ServiceLocator::RegisterSoundSystem(soundSystem);
-    dae::ServiceLocator::GetSoundSystem().loadSound("../Data/RandomCoinSound.wav");
+    dae::ServiceLocator::GetSoundSystem().loadSound("../Data/Sounds/ingredientDrop.mp3");
+    dae::ServiceLocator::GetSoundSystem().loadMusic("../Data/Sounds/background.wav");
+    dae::ServiceLocator::GetSoundSystem().loadSound("../Data/Sounds/start.mp3");
 
     std::shared_ptr<MainMenuScene> mainMenuScene = std::make_shared<MainMenuScene>("MainMenu");
     std::shared_ptr<FirstScene> firstScene = std::make_shared<FirstScene>("Level1");
@@ -35,7 +37,7 @@ int main(int, char* []) {
     sceneManager.AddScene(thirdScene);
     sceneManager.AddScene(gameOverScene);
    
-    GameStateHandler::GetInstance().ChangeState(GameState::playing);
+    GameStateHandler::GetInstance().ChangeState(GameState::mainMenu);
 
     engine.Run();
     return 0;
