@@ -42,6 +42,13 @@ void MainMenuScene::LoadSceneElements()
 {
 	auto font = dae::ResourceManager::GetInstance().LoadFont("../Data/RetroGaming.ttf", 20);
 
+	auto logo = std::make_shared<dae::GameObject>();
+	logo->GetComponent<dae::Transform>()->SetPosition(120.f, 30.f, 0.0f);
+	logo->GetComponent<dae::Transform>()->SetSize(400.f, 200.f, 0.0f);
+	auto logoPic = dae::ResourceManager::GetInstance().LoadTexture("Sprites/logo.png");
+	auto texture = std::make_shared<dae::TextureComponent>(logo, logoPic);
+	logo->AddComponent(texture);
+
 	auto onePlayer = std::make_shared<dae::GameObject>();
 	onePlayer->GetComponent<dae::Transform>()->SetPosition(270.f, m_StartPos, 0.0f);
 	auto onePlayerText = std::make_shared<dae::TextObject>(onePlayer, "1 PLAYER", font);
@@ -68,7 +75,6 @@ void MainMenuScene::LoadSceneElements()
 
 	auto moveDown = std::make_unique<MoveArrowDown>();
 
-
 	auto select = std::make_unique<SelectCommand>();
 
 
@@ -90,4 +96,5 @@ void MainMenuScene::LoadSceneElements()
 	Add(twoPlayer);
 	Add(versus);
 	Add(arrow);
+	Add(logo);
 }

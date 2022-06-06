@@ -14,7 +14,7 @@ public:
 private:
 	int m_SelectedMode{};
 	float m_Space{ 50.f };
-	float m_StartPos{ 260.f };
+	float m_StartPos{ 320.f };
 	std::shared_ptr<dae::GameObject> m_Arrow{};
 };
 
