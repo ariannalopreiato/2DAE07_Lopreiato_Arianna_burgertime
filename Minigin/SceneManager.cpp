@@ -20,10 +20,15 @@ void dae::SceneManager::Update(float elapsedTime)
 
 void dae::SceneManager::Render()
 {
-	for (const auto& scene : m_Scenes)
-	{
-		scene->Render();
-	}
+	m_CurrentScene.lock()->Render();
+}
+
+void dae::SceneManager::RemoveScene(const std::string& name)
+{
+	for (size_t i = 0; i < m_Scenes.size(); ++i)
+		if (m_Scenes[i]->GetName() == name)
+			m_Scenes[i] = m_Scenes.back();
+	m_Scenes.pop_back();
 }
 
 void dae::SceneManager::AddScene(const std::shared_ptr<Scene>& scene)

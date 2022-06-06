@@ -3,6 +3,9 @@
 #include "LevelCreator.h"
 #include "LevelReader.h"
 #include "InputManager.h"
+#include "FirstScene.h"
+#include "SecondScene.h"
+#include "ThirdScene.h"
 
 void GameManager::InputSetup(InputMethod inputOne, InputMethod inputTwo)
 {
@@ -33,7 +36,18 @@ void GameManager::NextScene()
 	auto& sceneManager = dae::SceneManager::GetInstance();
 	++m_NrScenes;
 	if (m_NrScenes == 4)
+	{
 		m_NrScenes = 1;
+		sceneManager.RemoveScene("Level1");
+		sceneManager.RemoveScene("Level2");
+		sceneManager.RemoveScene("Level3");
+		std::shared_ptr<FirstScene> firstScene = std::make_shared<FirstScene>("Level1");
+		std::shared_ptr<SecondScene> secondScene = std::make_shared<SecondScene>("Level2");
+		std::shared_ptr<ThirdScene> thirdScene = std::make_shared<ThirdScene>("Level3");
+		sceneManager.AddScene(firstScene);
+		sceneManager.AddScene(secondScene);
+		sceneManager.AddScene(thirdScene);
+	}
 	sceneManager.SetLevelToLoad("Level" + std::to_string(m_NrScenes));
 }
 
@@ -116,8 +130,7 @@ void GameManager::LoadLevel(const std::string& levelPath)
 	{
 		dae::SceneManager::GetInstance().AddToCurrentScene(levelObjects.at(i));
 	}
-	//m_AmountOfIngredients = int(ingredients.size());
-	m_AmountOfIngredients = 1;
+	m_AmountOfIngredients = int(ingredients.size());
 }
 
 void GameManager::LoadEnemies(const std::string& enemiesPath)

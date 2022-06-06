@@ -32,10 +32,11 @@ int main(int, char* []) {
     dae::ServiceLocator::GetSoundSystem().loadMusic("../Data/Sounds/background.wav");
 
     std::shared_ptr<MainMenuScene> mainMenuScene = std::make_shared<MainMenuScene>("MainMenu");
+    std::shared_ptr<GameOverScene> gameOverScene = std::make_shared<GameOverScene>("GameOver");
+
     std::shared_ptr<FirstScene> firstScene = std::make_shared<FirstScene>("Level1");
     std::shared_ptr<SecondScene> secondScene = std::make_shared<SecondScene>("Level2");
     std::shared_ptr<ThirdScene> thirdScene = std::make_shared<ThirdScene>("Level3");
-    std::shared_ptr<GameOverScene> gameOverScene = std::make_shared<GameOverScene>("GameOver");
 
     auto& sceneManager = dae::SceneManager::GetInstance();
     sceneManager.AddScene(mainMenuScene);

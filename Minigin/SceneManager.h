@@ -15,6 +15,7 @@ namespace dae
 		void DeleteScene(const std::string& name);
 		void Update(float elapsedTime);
 		void Render();
+		void RemoveScene(const std::string& name);
 		void AddToCurrentScene(const std::shared_ptr<dae::GameObject>& gameObject);
 		const std::string& GetCurrentSceneName();
 		std::shared_ptr<Scene> GetCurrentScene();
